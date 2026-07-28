@@ -1,0 +1,12 @@
+{
+  "name": "opencode-core-public",
+  "version": "1.0.0",
+  "description": "OpenCode Core by Rede Integrativa — 43 agents, 33 skills, 110 rules",
+  "author": "Rede Integrativa",
+  "repository": "github:redeintegrativa-bot/opencode-core-public",
+  "license": "MIT",
+  "agent_dir": "../agents",
+  "skill_dir": "../skills",
+  "rule_dir": "../rules",
+  "hook_dir": "../hooks"
+}

@@ -2,9 +2,30 @@
 
 Repositório central com definições de agentes, skills, regras e serviços compartilhados do ecossistema **Rede Integrativa**.
 
-> 🚀 Este é um **template reutilizável** — use todo o poder do core nos seus projetos!
->
+> 🚀 Este é um **template reutilizável** — use todo o poder do core nos seus projetos!  
 > 💡 Precisa de controle financeiro? O app **My Money Track** (`/my-money-track`) já está aqui como um template pré-pronto pra você adaptar!
+
+---
+
+## ⚡ Instalação rápida (1 comando)
+
+```bash
+git clone --depth 1 https://github.com/redeintegrativa-bot/opencode-core-public.git
+cd opencode-core-public
+bash setup.sh        # Linux/macOS
+# ou
+.\setup.ps1          # Windows PowerShell
+```
+
+Isso instala automaticamente skills, agentes, regras e hooks no seu ambiente.
+
+### Instalação por plataforma
+
+| Plataforma | Comando |
+|-----------|---------|
+| **Claude Code** | `claude plugin install redeintegrativa-bot/opencode-core-public` |
+| **OpenCode** | Clone + `bash setup.sh` |
+| **Codex** | `codex plugin install redeintegrativa-bot/opencode-core-public` |
 
 ---
 
@@ -25,39 +46,38 @@ Repositório central com definições de agentes, skills, regras e serviços com
 | `telegram-bot/` | Bot Telegram (desativado — configure seu token) |
 | `my-money-track/` | 📊 App de controle financeiro **template** |
 | `patterns/` | Padrões de pipeline de conteúdo |
+| `.github/` | GitHub Actions CI/CD workflows |
+| `.claude-plugin/` | Plugin manifest para Claude Code marketplace |
+| `.opencode/` | Configuração do OpenCode |
+| `.codex-plugin/` | Plugin manifest para Codex |
 
 ---
 
 ## 🚀 Como usar
 
-### 1. Clone o repositório
+### 1. Instale (já fez? pule)
 ```bash
-git clone https://github.com/redeintegrativa-bot/opencode-core.git
-cd opencode-core
+bash setup.sh --skills
 ```
 
-### 2. Explore os agentes e skills
+### 2. Explore agentes e skills
 ```bash
-# Listar agentes disponíveis
 ls agents/core/
-ls agents/experts/
-
-# Ver skills registradas
-cat skills/registry.json | head -50
+ls skills/ | head -20
+cat skills/registry.json | python3 -m json.tool | head -30
 ```
 
-### 3. Use o terminal chat
+### 3. Terminal chat
 ```bash
 cd terminal-chat
 pip install rich prompt_toolkit
 python3 opencode_chat.py
 ```
 
-### 4. Configure o My Money Track (opcional)
+### 4. My Money Track (opcional)
 ```bash
 cd my-money-track
 cp .env.example .env
-# Edite .env com seus dados
 npm install
 npm run dev
 ```
@@ -66,15 +86,14 @@ npm run dev
 
 ## 🧠 My Money Track — Template Financeiro
 
-O `my-money-track` é um **app de controle financeiro pré-pronto** da **Rede Integrativa**.
+App de controle financeiro **pré-pronto** da **Rede Integrativa**.
 
 **Para usar:**
 1. Edite `src/data.js` com seus próprios dados financeiros
 2. Personalize as categorias de despesas e receitas
-3. Faça deploy onde quiser (Vercel, Netlify, etc.)
+3. Faça deploy (Vercel, Netlify, etc.)
 
-💡 **Precisa de ajuda?** Peça ao assistente OpenCode:
-> "Me ajuda a configurar o My Money Track com minhas finanças"
+💡 Peça ao assistente: *"Me ajuda a configurar o My Money Track com minhas finanças"*
 
 ---
 

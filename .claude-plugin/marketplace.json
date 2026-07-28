@@ -1,0 +1,13 @@
+{
+  "$schema": "https://claude.ai/plugin-marketplace.json",
+  "name": "opencode-core-public",
+  "title": "OpenCode Core",
+  "description": "43 agents, 33 skills, 110 rules — complete AI development toolkit by Rede Integrativa. Includes code review, TDD, security scanning, debugging, planning, and a finance app template.",
+  "categories": ["development", "security", "workflow", "code-review", "testing"],
+  "tags": ["agents", "skills", "rules", "security", "tdd", "code-review", "scaffolding"],
+  "icon": "https://raw.githubusercontent.com/redeintegrativa-bot/opencode-core-public/main/assets/icon.png",
+  "install_url": "https://github.com/redeintegrativa-bot/opencode-core-public",
+  "install": {
+    "bash": "git clone --depth 1 https://github.com/redeintegrativa-bot/opencode-core-public.git ~/.claude/skills/opencode-core && cd ~/.claude/skills/opencode-core && bash setup.sh"
+  }
+}

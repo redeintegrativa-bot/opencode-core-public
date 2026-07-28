@@ -1,0 +1,27 @@
+{
+  "name": "opencode-core-public",
+  "version": "1.0.0",
+  "description": "OpenCode Core by Rede Integrativa — 43 agents, 33 skills, 110 rules, and shared services for AI-powered development",
+  "author": "Rede Integrativa",
+  "repository": "github:redeintegrativa-bot/opencode-core-public",
+  "license": "MIT",
+  "skills": {
+    "source": "../skills",
+    "registry": "../skills/registry.json"
+  },
+  "agents": {
+    "source": "../agents"
+  },
+  "rules": {
+    "source": "../rules"
+  },
+  "hooks": {
+    "source": "../hooks",
+    "validate_security": "python3 ../hooks/validate_security.py"
+  },
+  "platforms": ["claude-code", "opencode", "codex", "gemini-cli"],
+  "install": {
+    "command": "bash setup.sh",
+    "command_ps": "powershell -ExecutionPolicy Bypass -File setup.ps1"
+  }
+}

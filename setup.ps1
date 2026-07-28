@@ -1,0 +1,205 @@
+# =============================================================================
+# OpenCode Core — Setup Script (Windows PowerShell)
+# =============================================================================
+# Instala skills, agentes, regras e hooks no ambiente do usuário.
+#
+# Uso:
+#   .\setup.ps1              # Instalação completa
+#   .\setup.ps1 -Skills      # Apenas skills
+#   .\setup.ps1 -Agents      # Apenas agentes
+#   .\setup.ps1 -Rules       # Apenas regras
+#   .\setup.ps1 -Hooks       # Apenas hooks
+#   .\setup.ps1 -Help        # Esta mensagem
+# =============================================================================
+
+param(
+  [switch]$Skills,
+  [switch]$Agents,
+  [switch]$Rules,
+  [switch]$Hooks,
+  [switch]$Workflows,
+  [switch]$CI,
+  [switch]$All,
+  [switch]$Help
+)
+
+$RepoDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$SkillsDir = Join-Path $RepoDir "skills"
+$AgentsDir = Join-Path $RepoDir "agents"
+$RulesDir = Join-Path $RepoDir "rules"
+$HooksDir = Join-Path $RepoDir "hooks"
+$WorkflowsDir = Join-Path $RepoDir "workflows"
+$ServicesDir = Join-Path $RepoDir "services"
+
+function Write-Log { Write-Host "✓ $($args[0])" -ForegroundColor Green }
+function Write-Warn { Write-Host "! $($args[0])" -ForegroundColor Yellow }
+function Write-Err { Write-Host "✗ $($args[0])" -ForegroundColor Red }
+function Write-Info { Write-Host "i $($args[0])" -ForegroundColor Cyan }
+
+function Get-ConfigDir {
+  if (Get-Command opencode -ErrorAction SilentlyContinue) { return "$env:USERPROFILE\.config\opencode" }
+  if (Get-Command claude -ErrorAction SilentlyContinue)   { return "$env:USERPROFILE\.claude" }
+  return "$env:USERPROFILE\.opencode-core"
+}
+
+function Install-Skills {
+  param($Target)
+  $skillsTarget = Join-Path $Target "skills"
+  New-Item -ItemType Directory -Path $skillsTarget -Force | Out-Null
+
+  $count = 0
+  Get-ChildItem -Path $SkillsDir -Directory | ForEach-Object {
+    $skillMd = Join-Path $_.FullName "SKILL.md"
+    if (Test-Path $skillMd) {
+      $dest = Join-Path $skillsTarget $_.Name
+      New-Item -ItemType Directory -Path $dest -Force | Out-Null
+      Copy-Item -Path "$($_.FullName)\*" -Destination $dest -Recurse -Force -ErrorAction SilentlyContinue
+      $count++
+    }
+  }
+
+  $regSrc = Join-Path $SkillsDir "registry.json"
+  if (Test-Path $regSrc) {
+    Copy-Item -Path $regSrc -Destination (Join-Path $skillsTarget "registry.json") -Force
+  }
+
+  Write-Log "$count skills installed → $skillsTarget"
+}
+
+function Install-Agents {
+  param($Target)
+  $agentsTarget = Join-Path $Target "agents"
+  New-Item -ItemType Directory -Path $agentsTarget -Force | Out-Null
+  Copy-Item -Path "$AgentsDir\*" -Destination $agentsTarget -Recurse -Force -ErrorAction SilentlyContinue
+  Write-Log "Agents installed → $agentsTarget"
+}
+
+function Install-Rules {
+  param($Target)
+  $rulesTarget = Join-Path $Target "rules"
+  New-Item -ItemType Directory -Path $rulesTarget -Force | Out-Null
+  Copy-Item -Path "$RulesDir\*" -Destination $rulesTarget -Recurse -Force -ErrorAction SilentlyContinue
+  Write-Log "Rules installed → $rulesTarget"
+}
+
+function Install-Hooks {
+  param($Target)
+  $hooksTarget = Join-Path $Target "hooks"
+  New-Item -ItemType Directory -Path $hooksTarget -Force | Out-Null
+  Copy-Item -Path "$HooksDir\*" -Destination $hooksTarget -Recurse -Force -ErrorAction SilentlyContinue
+  Write-Log "Hooks installed → $hooksTarget"
+}
+
+function Install-Workflows {
+  param($Target)
+  $wfTarget = Join-Path $Target "workflows"
+  New-Item -ItemType Directory -Path $wfTarget -Force | Out-Null
+  Copy-Item -Path "$WorkflowsDir\*" -Destination $wfTarget -Recurse -Force -ErrorAction SilentlyContinue
+  Write-Log "Workflows installed → $wfTarget"
+}
+
+function Install-Services {
+  param($Target)
+  $svcTarget = Join-Path $Target "services"
+  New-Item -ItemType Directory -Path $svcTarget -Force | Out-Null
+  Copy-Item -Path "$ServicesDir\*" -Destination $svcTarget -Recurse -Force -ErrorAction SilentlyContinue
+  Write-Log "Services installed → $svcTarget"
+}
+
+function Install-GitHubActions {
+  $actionsDir = Join-Path $RepoDir ".github\workflows"
+  New-Item -ItemType Directory -Path $actionsDir -Force | Out-Null
+
+  @'
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Security validation
+        run: |
+          if [ -f hooks/validate_security.py ]; then
+            python3 hooks/validate_security.py .
+          fi
+      - name: Check SKILL.md files
+        run: |
+          for skill in skills/*/SKILL.md; do
+            if [ -f "$skill" ]; then echo "✓ $skill"; fi
+          done
+      - name: Validate registry
+        run: |
+          if [ -f skills/registry.json ]; then
+            python3 -m json.tool skills/registry.json > /dev/null && echo "✓ registry.json OK"
+          fi
+'@ | Out-File -FilePath (Join-Path $actionsDir "ci.yml") -Encoding utf8
+
+  Write-Log "GitHub Actions workflow installed"
+}
+
+function Show-Banner {
+  Write-Host ""
+  Write-Host "  ╔══════════════════════════════════════════╗" -ForegroundColor Cyan
+  Write-Host "  ║      OpenCode Core — Setup               ║" -ForegroundColor Cyan
+  Write-Host "  ║      by Rede Integrativa 🚀              ║" -ForegroundColor Cyan
+  Write-Host "  ╚══════════════════════════════════════════╝" -ForegroundColor Cyan
+  Write-Host ""
+}
+
+function Show-Summary {
+  param($Target)
+  $skillCount = (Get-ChildItem -Path (Join-Path $Target "skills") -Recurse -Filter "SKILL.md" -ErrorAction SilentlyContinue).Count
+  $agentCount = (Get-ChildItem -Path (Join-Path $Target "agents") -Recurse -Filter "*.md" -ErrorAction SilentlyContinue).Count
+  $ruleCount = (Get-ChildItem -Path (Join-Path $Target "rules") -Recurse -Filter "*.md" -ErrorAction SilentlyContinue).Count
+
+  Write-Host ""
+  Write-Host "  ╔══════════════════════════════════════════╗" -ForegroundColor Green
+  Write-Host "  ║  Instalação concluída!                    ║" -ForegroundColor Green
+  Write-Host "  ╠══════════════════════════════════════════╣" -ForegroundColor Green
+  Write-Host "  ║  Destino:    $Target" -ForegroundColor Green
+  Write-Host "  ║  Skills:     $skillCount" -ForegroundColor Green
+  Write-Host "  ║  Agentes:    $agentCount" -ForegroundColor Green
+  Write-Host "  ║  Regras:     $ruleCount" -ForegroundColor Green
+  Write-Host "  ╚══════════════════════════════════════════╝" -ForegroundColor Green
+  Write-Host ""
+  Write-Info "Pronto! Seu assistente AI está equipado com o OpenCode Core."
+  Write-Info "Compartilhe: https://github.com/redeintegrativa-bot/opencode-core-public"
+  Write-Host ""
+}
+
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
+Show-Banner
+
+if ($Help) {
+  Write-Host "Uso: .\setup.ps1 [-Skills] [-Agents] [-Rules] [-Hooks] [-Workflows] [-CI] [-All]"
+  exit 0
+}
+
+$target = Get-ConfigDir
+$mode = if ($All -or (-not $Skills -and -not $Agents -and -not $Rules -and -not $Hooks -and -not $Workflows -and -not $CI)) { "all" } else { "partial" }
+
+New-Item -ItemType Directory -Path $target -Force | Out-Null
+
+if ($mode -eq "all" -or $Skills)    { Install-Skills $target }
+if ($mode -eq "all" -or $Agents)    { Install-Agents $target }
+if ($mode -eq "all" -or $Rules)     { Install-Rules $target }
+if ($mode -eq "all" -or $Hooks)     { Install-Hooks $target }
+if ($mode -eq "all" -or $Workflows) { Install-Workflows $target }
+if ($mode -eq "all" -or $CI)        { Install-GitHubActions }
+
+# Always install services and CI if all
+if ($mode -eq "all") {
+  Install-Services $target
+  Install-GitHubActions
+}
+
+Show-Summary $target

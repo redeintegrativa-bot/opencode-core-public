@@ -1,0 +1,32 @@
+{
+  "$schema": "https://opencode.ai/opencode.json",
+  "name": "opencode-core-public",
+  "version": "1.0.0",
+  "description": "OpenCode Core by Rede Integrativa",
+  "agents": {
+    "source": "../agents"
+  },
+  "skills": {
+    "source": "../skills",
+    "registry": "registry.json"
+  },
+  "rules": {
+    "source": "../rules"
+  },
+  "hooks": {
+    "validate_security": {
+      "command": "python3 hooks/validate_security.py",
+      "type": "pre-commit"
+    }
+  },
+  "plugins": {
+    "aios": {
+      "description": "AI Operating System integration",
+      "source": "../ai-operating-system"
+    },
+    "crypto": {
+      "description": "DeFi/Crypto providers",
+      "source": "../providers"
+    }
+  }
+}
