@@ -1,0 +1,8 @@
+{
+  "name": "coder",
+  "description": "Agente de codificação universal — implementa features, corrige bugs, refatora",
+  "model": "sonnet",
+  "instructions": "Implemente seguindo os planos do orchestrator. Use type hints, segurança primeiro.",
+  "skills": ["python-patterns", "typescript-patterns", "go-patterns", "fix", "refactor-clean"],
+  "allowed_tools": ["read", "write", "edit", "grep", "glob", "bash"]
+}

@@ -39,7 +39,7 @@ err()  { echo -e "${RED}[✗]${NC} $1"; }
 info() { echo -e "${CYAN}[i]${NC} $1"; }
 
 # ---------------------------------------------------------------------------
-# Detect AI platform
+# Detect platform
 # ---------------------------------------------------------------------------
 detect_platform() {
   if command -v claude &>/dev/null; then
@@ -53,6 +53,41 @@ detect_platform() {
   else
     echo "unknown"
   fi
+}
+
+detect_os() {
+  case "$(uname -s)" in
+    Linux*)
+      if [ -d "/data/data/com.termux" ] || uname -r | grep -qi "android"; then
+        echo "termux"
+      else
+        echo "linux"
+      fi
+      ;;
+    Darwin*) echo "macos" ;;
+    CYGWIN*|MINGW*|MSYS*) echo "windows" ;;
+    *) echo "unknown" ;;
+  esac
+}
+
+install_deps_termux() {
+  warn "Termux detectado! Instalando dependências..."
+  pkg update -y 2>/dev/null || true
+  pkg install -y python git nodejs 2>/dev/null || true
+  pip install rich prompt_toolkit 2>/dev/null || true
+  log "Dependências Termux instaladas"
+}
+
+install_deps_linux() {
+  if command -v apt &>/dev/null; then
+    info "Debian/Ubuntu detectado"
+    sudo apt update -qq 2>/dev/null || true
+    sudo apt install -y python3 python3-pip git 2>/dev/null || true
+  elif command -v pkg &>/dev/null; then
+    info "Detectado gerenciador pkg"
+    pkg install -y python git 2>/dev/null || true
+  fi
+  pip3 install rich prompt_toolkit 2>/dev/null || true
 }
 
 get_config_dir() {
@@ -230,6 +265,17 @@ show_summary() {
 main() {
   show_banner
 
+  local os
+  os=$(detect_os)
+
+  # OS-specific setup
+  case "$os" in
+    termux) install_deps_termux ;;
+    linux)  install_deps_linux ;;
+    macos)  pip3 install rich prompt_toolkit 2>/dev/null || true ;;
+    *)      info "SO não detectado automaticamente. Pulando instalação de dependências." ;;
+  esac
+
   local platform
   platform=$(detect_platform)
   local target
@@ -251,6 +297,10 @@ main() {
     --rules)      install_rules "$target" ;;
     --hooks)      install_hooks "$target" ;;
     --workflows)  install_workflows "$target" ;;
+    --deps)
+      info "Dependências já instaladas durante o setup"
+      exit 0
+      ;;
     --all|*)
       mkdir -p "$target"
       install_skills "$target"
@@ -264,6 +314,14 @@ main() {
   esac
 
   show_summary "$platform" "$target"
+
+  # Tip for Termux users
+  if [ "$os" = "termux" ]; then
+    echo ""
+    info "💡 Dica Termux: para usar o terminal-chat, rode:"
+    info "   cd terminal-chat && python opencode_chat.py"
+    echo ""
+  fi
 }
 
 main "$@"

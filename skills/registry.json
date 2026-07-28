@@ -1,13 +1,14 @@
 {
   "version": "1.1.0",
   "generated_at": "2026-07-28",
-  "total_skills": 34,
+  "total_skills": 36,
   "categories": {
-    "Core": 10,
+    "Core": 11,
     "Utility": 6,
     "Workflow": 12,
     "Language": 4,
-    "Learning": 2
+    "Learning": 2,
+    "Scaffolding": 1
   },
   "skills": {
     "api-design": {
@@ -300,6 +301,24 @@
       "allowed_tools": ["read", "write", "bash"],
       "category": "Workflow",
       "slash_command": "/telegram"
+    },
+    "scaffold": {
+      "description": "Gera projetos do zero com estrutura pronta: Next.js, Vite, FastAPI, Express, CLI Python, HTML/CSS",
+      "keywords": ["scaffold", "projeto", "criar", "gerar", "new", "create", "init", "start", "template", "boilerplate"],
+      "agent": "DevOps Expert",
+      "user_invokable": true,
+      "allowed_tools": ["bash", "read", "write", "edit", "glob"],
+      "category": "Scaffolding",
+      "slash_command": "/scaffold"
+    },
+    "database": {
+      "description": "Ajuda com banco de dados: SQL queries, models, migrations, otimização e design de schema",
+      "keywords": ["database", "sql", "query", "model", "migration", "orm", "schema", "db", "banco", "dados", "sqlite", "postgres", "mysql", "mongodb"],
+      "agent": "Database Expert",
+      "user_invokable": true,
+      "allowed_tools": ["read", "write", "edit", "grep", "glob", "bash"],
+      "category": "Core",
+      "slash_command": "/database"
     }
   },
   "routing": {
@@ -434,7 +453,27 @@
     "copilot": "ui-ux-system",
     "telegram": "telegram-bot",
     "remote": "telegram-bot",
-    "daemon": "telegram-bot"
+    "daemon": "telegram-bot",
+    "scaffold": "scaffold",
+    "criar": "scaffold",
+    "gerar": "scaffold",
+    "new project": "scaffold",
+    "create": "scaffold",
+    "init": "scaffold",
+    "boilerplate": "scaffold",
+    "template": "scaffold",
+    "nextjs": "scaffold",
+    "fastapi": "scaffold",
+    "vite": "scaffold",
+    "database": "database",
+    "sql": "database",
+    "query": "database",
+    "migration": "database",
+    "orm": "database",
+    "schema": "database",
+    "sqlite": "database",
+    "postgres": "database",
+    "mongodb": "database"
   },
   "metadata": {
     "orchestrator_version": "13.0",
@@ -469,7 +508,9 @@
       "/tdd": "tdd-workflow",
       "/test": "testing-strategy",
       "/ui-design": "ui-ux-system",
-      "/telegram": "telegram-bot"
+      "/telegram": "telegram-bot",
+      "/scaffold": "scaffold",
+      "/database": "database"
     }
   }
 }

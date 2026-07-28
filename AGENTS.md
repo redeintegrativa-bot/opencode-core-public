@@ -1,81 +1,108 @@
-# AGENTS.md — OpenCode Core
+# OpenCode Core — Canivete Suíço para OpenCode
 
-Infrastructure hub: agent definitions, skills, rules, shared services. Not a typical app repo — most files are **markdown definitions** consumed by orchestrators, not executable code.
+43 agentes · 33 skills · 110 regras · hooks · serviços · templates
 
-## Quick Commands
+> Use com OpenCode no **Termux**, **Linux** ou **Windows Shell**.
+> Tudo funciona em terminal — sem GUI, sem browser.
+
+## ⚡ Instalação
 
 ```bash
-# Terminal chat (main active project)
-cd terminal-chat && python3 opencode_chat.py
+# Android (Termux)
+pkg install git python3 nodejs
+git clone --depth 1 https://github.com/redeintegrativa-bot/opencode-core-public
+cd opencode-core-public
+bash setup.sh
 
-# Telegram agent (deactivated)
-cd telegram-bot && ./daemon.sh start|stop|status|logs
+# Linux
+git clone --depth 1 https://github.com/redeintegrativa-bot/opencode-core-public
+cd opencode-core-public
+bash setup.sh
 
-# Install dependencies
-pip install rich prompt_toolkit  # terminal chat
-pip install python-telegram-bot python-dotenv  # telegram agent
-
-# Validate hooks
-python3 hooks/validate_security.py /path/to/dir
-python3 hooks/validate_agent.py <agent_name>
-python3 hooks/validate_skill.py <skill_name>
+# Windows (PowerShell)
+git clone --depth 1 https://github.com/redeintegrativa-bot/opencode-core-public
+cd opencode-core-public
+.\setup.ps1
 ```
 
-## Repo Structure
+Depois de instalar, o OpenCode já reconhece skills, agentes e regras automaticamente.
 
-| Dir | What it is | Format |
-|-----|-----------|--------|
-| `agents/` | Agent definitions (43 total) | **Markdown** (.md), not code |
-| `skills/` | Skill definitions (33 total) | Markdown SKILL.md + registry.json |
-| `rules/` | Security & language rules (110 rules) | Markdown |
-| `hooks/` | Validation & security scripts | Python + Bash |
-| `terminal-chat/` | Chat TUI (active) | Python (rich + prompt_toolkit) |
-| `telegram-bot/` | Telegram agent (deactivated) | Python (python-telegram-bot) |
-| `providers/` | DeFi/crypto data providers | Python |
-| `memory/` | Memory persistence layer | Python |
-| `services/` | Scoring, learning services | Python |
-| `workflows/` | Standard workflows | Markdown + Bash |
-| `templates/` | Reusable templates | Markdown |
-| `chat/` | Chat and mission matching | Python |
-| `patterns/` | Content pipeline patterns | Python |
+## 🎯 Comandos Rápidos
 
-## Key Facts
+```bash
+# Terminal chat (funciona no Termux!)
+cd terminal-chat
+pip install rich prompt_toolkit
+python opencode_chat.py         # ou python3 no Linux
 
-- **33 skills** registered in `skills/registry.json` — edit registry when adding/removing skills
-- **110 security rules** in `rules/common/security.md` — mandatory for all code
-- **Agent definitions are markdown**, not executable — they define behavior for orchestrator routing
-- **`.env` is gitignored** — never commit secrets
-- **`__pycache__/` is gitignored** — clean with `find . -type d -name __pycache__ -exec rm -rf {} +`
+# Validar segurança
+python hooks/validate_security.py .   # ou python3 no Linux
 
-## Security (Mandatory)
+# Ver agentes disponíveis
+ls agents/core/
+ls agents/experts/
 
-All code must pass security validation before commit. Key rules:
-- No hardcoded secrets (api_key, password, token, sk-, ghp_, AKIA)
-- No eval()/exec(), no shell injection, no SQL injection
-- `.env` files must be in `.gitignore`
-- CORS: no wildcard `*` in production configs
-
-Run security scan: `python3 hooks/validate_security.py .`
-
-## Terminal Chat Architecture
-
-```
-opencode_chat.py  →  streaming.py  →  opencode run --format json
-                       ↓
-                    agents.py (6 agents: default, coder, reviewer, architect, security, teacher)
-                       ↓
-                    session.py (auto-saves to ~/.opencode-chat/sessions/)
-                       ↓
-                    ui.py (Rich panels, spinner, markdown rendering)
+# Ver skills
+ls skills/ | head -20
+cat skills/registry.json | python -m json.tool | head -30
 ```
 
-Commands: `/help`, `/status`, `/agents`, `/agent <name>`, `/sessions`, `/save`, `/clear`, `/quit`
+## 🤖 Agentes (43)
 
-## Conventions
+| Nível | Qtd | Descrição |
+|-------|-----|-----------|
+| **L0 Core** | 8 | orchestrator, analyzer, coder, reviewer, documenter, system_coordinator |
+| **L1 Experts** | 20+ | security, devops, database, browser, UI/UX, trading, MQL, n8n... |
+| **L2 Specialists** | 15 | auth, db-query, gui-layout, test-unit, trading-risk... |
 
-- Skills: each skill is a directory under `skills/` with `SKILL.md`
-- Agents: each agent is a `.md` file under `agents/` (L0 core, L1 experts, L2 specialists)
-- Rules: grouped by language under `rules/{common,python,typescript,go}/`
-- Hooks: Python scripts in `hooks/` with `validate_` prefix
-- All Python: use type hints, no external deps unless necessary
-- Telegram bot: daemon mode via `daemon.sh`, PID at `/tmp/opencode-agent.pid`
+## 🧠 Skills (33)
+
+Pra usar qualquer skill, o OpenCode roteia automaticamente. Skills principais:
+
+| Skill | O que faz | Atalho |
+|-------|-----------|--------|
+| `code-review` | Revisão de código como staff engineer | `/review` |
+| `debugging` | Debug sistemático com análise de causa raiz | `/debug` |
+| `plan` | Planejamento de implementação | `/plan` |
+| `tdd-workflow` | Desenvolvimento orientado a testes | `/tdd` |
+| `security-scan` | Auditoria de segurança OWASP | `/security-scan` |
+| `fix` | Correção de bugs | `/fix` |
+| `refactor-clean` | Refatoração e clean code | `/refactor` |
+| `testing-strategy` | Estratégia de testes e cobertura | `/test` |
+| `orchestrator` | Coordenação multi-agente | `/orchestrator` |
+| `clone-on-demand` | Clona repositórios automaticamente | `/clone` |
+| `ui-ux-system` | Design system com Tailwind + Radix | `/ui-design` |
+| `browser-agent` | Automação de browser | — |
+
+## 📁 Estrutura
+
+```
+opencode-core-public/
+├── agents/          → 43 agentes (.md)
+├── skills/          → 33 skills + registry.json
+├── rules/           → 110 regras de segurança
+├── hooks/           → scripts de validação
+├── workflows/       → bugfix, feature, refactoring
+├── services/        → ranking, fallback, learning
+├── providers/       → DeFi/crypto data providers
+├── memory/          → persistência de memória
+├── terminal-chat/   → chat TUI (funciona no Termux!)
+├── my-money-track/  → app financeiro template
+├── .opencode/       → config + agentes OpenCode
+├── .claude-plugin/  → plugin Claude Code
+├── .codex-plugin/   → plugin Codex
+├── setup.sh         → instalador Linux/Termux
+└── setup.ps1        → instalador Windows
+```
+
+## 🔒 Segurança (obrigatório)
+
+- Sem tokens hardcoded
+- `.env` no `.gitignore`
+- Rode `python hooks/validate_security.py .` antes de todo commit
+
+## 🚀 Rede Integrativa
+
+Este repositório faz parte do ecossistema **Rede Integrativa**.
+
+[https://github.com/redeintegrativa-bot](https://github.com/redeintegrativa-bot)

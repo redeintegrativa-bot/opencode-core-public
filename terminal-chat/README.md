@@ -1,11 +1,22 @@
-# OpenCode Terminal Chat
+# Terminal Chat — OpenCode Core
 
-Interface de chat no estilo BotFather que conecta direto ao motor OpenCode.
+Chat TUI que conecta direto ao motor OpenCode. Funciona em **Termux**, **Linux** e **Windows**.
 
-## Uso
+## Instalação
 
 ```bash
+# Termux (Android)
+pkg install python
+pip install rich prompt_toolkit
+python opencode_chat.py
+
+# Linux
+pip3 install rich prompt_toolkit
 python3 opencode_chat.py
+
+# Windows
+pip install rich prompt_toolkit
+python opencode_chat.py
 ```
 
 ## Comandos
@@ -14,11 +25,16 @@ python3 opencode_chat.py
 |---------|------|
 | `/help` | Lista de comandos |
 | `/status` | Status do agente |
+| `/agents` | Lista e troca de agentes |
+| `/agent <nome>` | Troca para agente específico |
+| `/sessions` | Sessões salvas |
+| `/save` | Salva sessão |
 | `/clear` | Limpa a tela |
-| `/quit` | Sair do chat |
+| `/quit` | Sair |
 
-## Dependências
+## Funciona em qualquer terminal
 
-```bash
-pip install rich prompt_toolkit
-```
+- Android (Termux) ✅
+- Linux ✅
+- macOS ✅
+- Windows PowerShell ✅
