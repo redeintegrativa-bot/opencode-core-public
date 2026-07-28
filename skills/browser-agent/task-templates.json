@@ -1,0 +1,304 @@
+{
+  "browse": {
+    "description": "Navigate to URL and extract page content",
+    "template": {
+      "type": "browse",
+      "url": "https://example.com",
+      "extract_links": false,
+      "extract_images": false,
+      "extract_meta": false,
+      "proxy": null,
+      "session": null
+    },
+    "examples": [
+      {
+        "name": "Basic browse",
+        "task": {
+          "type": "browse",
+          "url": "https://example.com"
+        }
+      },
+      {
+        "name": "Full extraction with session",
+        "task": {
+          "type": "browse",
+          "url": "https://example.com",
+          "extract_links": true,
+          "extract_images": true,
+          "extract_meta": true,
+          "session": "my_session"
+        }
+      },
+      {
+        "name": "Browse with proxy",
+        "task": {
+          "type": "browse",
+          "url": "https://example.com",
+          "proxy": "socks5://proxy:1080"
+        }
+      }
+    ]
+  },
+  "scrape": {
+    "description": "Structured data extraction with selectors",
+    "template": {
+      "type": "scrape",
+      "url": "https://example.com",
+      "selector": "",
+      "selector_type": "css",
+      "extract": "text",
+      "proxy": null
+    },
+    "examples": [
+      {
+        "name": "Extract table",
+        "task": {
+          "type": "scrape",
+          "url": "https://example.com/data",
+          "selector": "table.data",
+          "extract": "table"
+        }
+      },
+      {
+        "name": "Extract links",
+        "task": {
+          "type": "scrape",
+          "url": "https://example.com",
+          "extract": "links"
+        }
+      },
+      {
+        "name": "XPath extraction",
+        "task": {
+          "type": "scrape",
+          "url": "https://example.com",
+          "selector": "//div[@class='content']",
+          "selector_type": "xpath"
+        }
+      }
+    ]
+  },
+  "ocr": {
+    "description": "Extract text from images or PDFs",
+    "template": {
+      "type": "ocr",
+      "file_path": null,
+      "url": null,
+      "lang": "eng",
+      "preprocess": null,
+      "backend": "auto",
+      "proxy": null
+    },
+    "examples": [
+      {
+        "name": "OCR local image",
+        "task": {
+          "type": "ocr",
+          "file_path": "/path/to/image.png"
+        }
+      },
+      {
+        "name": "OCR PDF from URL",
+        "task": {
+          "type": "ocr",
+          "url": "https://example.com/document.pdf",
+          "lang": "eng"
+        }
+      },
+      {
+        "name": "OCR with preprocessing",
+        "task": {
+          "type": "ocr",
+          "file_path": "/path/to/sketch.png",
+          "preprocess": "threshold",
+          "backend": "tesseract"
+        }
+      },
+      {
+        "name": "Multi-language OCR",
+        "task": {
+          "type": "ocr",
+          "url": "https://example.com/italian.pdf",
+          "lang": "ita+eng",
+          "backend": "easyocr"
+        }
+      }
+    ]
+  },
+  "screenshot": {
+    "description": "Capture web page screenshot",
+    "template": {
+      "type": "screenshot",
+      "url": "https://example.com",
+      "output_path": "./screenshots",
+      "full_page": true,
+      "width": 1280,
+      "height": 720
+    },
+    "examples": [
+      {
+        "name": "Basic screenshot",
+        "task": {
+          "type": "screenshot",
+          "url": "https://example.com"
+        }
+      },
+      {
+        "name": "Viewport only",
+        "task": {
+          "type": "screenshot",
+          "url": "https://example.com",
+          "full_page": false,
+          "width": 1920,
+          "height": 1080
+        }
+      },
+      {
+        "name": "Custom output",
+        "task": {
+          "type": "screenshot",
+          "url": "https://example.com",
+          "output_path": "/tmp/screenshots",
+          "full_page": true
+        }
+      }
+    ]
+  },
+  "download": {
+    "description": "Download file from URL",
+    "template": {
+      "type": "download",
+      "url": "https://example.com/file.pdf",
+      "output_dir": "./downloads",
+      "filename": null,
+      "proxy": null
+    },
+    "examples": [
+      {
+        "name": "Basic download",
+        "task": {
+          "type": "download",
+          "url": "https://example.com/report.pdf"
+        }
+      },
+      {
+        "name": "Download with custom name",
+        "task": {
+          "type": "download",
+          "url": "https://example.com/data.csv",
+          "output_dir": "/tmp",
+          "filename": "export.csv"
+        }
+      },
+      {
+        "name": "Download via proxy",
+        "task": {
+          "type": "download",
+          "url": "https://example.com/file.zip",
+          "proxy": "http://proxy:8080"
+        }
+      }
+    ]
+  },
+  "search": {
+    "description": "Automated web search",
+    "template": {
+      "type": "search",
+      "query": "",
+      "num_results": 5,
+      "proxy": null
+    },
+    "examples": [
+      {
+        "name": "Basic search",
+        "task": {
+          "type": "search",
+          "query": "python web scraping"
+        }
+      },
+      {
+        "name": "Search with more results",
+        "task": {
+          "type": "search",
+          "query": "best practices for data extraction",
+          "num_results": 10
+        }
+      },
+      {
+        "name": "Search via proxy",
+        "task": {
+          "type": "search",
+          "query": "competitor analysis tools",
+          "proxy": "socks5://proxy:1080"
+        }
+      }
+    ]
+  },
+  "extract_json": {
+    "description": "Extract structured JSON data from web pages",
+    "template": {
+      "type": "extract_json",
+      "url": "https://example.com",
+      "selectors": {},
+      "proxy": null
+    },
+    "examples": [
+      {
+        "name": "Extract structured data",
+        "task": {
+          "type": "extract_json",
+          "url": "https://example.com/product/123",
+          "selectors": {
+            "name": "h1.product-title",
+            "price": ".price",
+            "description": ".product-description"
+          }
+        }
+      },
+      {
+        "name": "Extract list",
+        "task": {
+          "type": "extract_json",
+          "url": "https://example.com/list",
+          "selectors": {
+            "items": ".list-item"
+          }
+        }
+      }
+    ]
+  },
+  "proxy_formats": {
+    "string": "protocol://[user:pass@]host:port",
+    "object": {
+      "protocol": "socks5",
+      "host": "proxy.example.com",
+      "port": 1080,
+      "username": "user",
+      "password": "pass"
+    },
+    "protocols": ["http", "https", "socks4", "socks5"]
+  },
+  "session_example": {
+    "description": "Sessions persist cookies and browser state",
+    "workflow": [
+      {
+        "step": 1,
+        "task": {
+          "type": "browse",
+          "url": "https://example.com/login",
+          "session": "auth_session"
+        },
+        "note": "Login page - credentials entered manually or via form"
+      },
+      {
+        "step": 2,
+        "task": {
+          "type": "browse",
+          "url": "https://example.com/dashboard",
+          "session": "auth_session"
+        },
+        "note": "Dashboard - session restores cookies automatically"
+      }
+    ]
+  }
+}

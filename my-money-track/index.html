@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Money | Controle Financeiro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="/src/styles/variables.css">
+  <link rel="stylesheet" href="/src/styles/layout.css">
+  <link rel="stylesheet" href="/src/styles/components.css">
+  <link rel="stylesheet" href="/src/styles/responsive.css">
+  <link rel="stylesheet" href="/src/styles/consultant.css">
+</head>
+<body>
+  <!-- Login Screen -->
+  <div id="loginScreen" class="login-screen">
+    <div class="login-card glass-card">
+      <div class="login-logo">💰</div>
+      <h2>My Money Track</h2>
+      <p>Controle Financeiro Pessoal</p>
+      <input type="password" id="password" placeholder="Senha" class="login-input" autofocus>
+      <button onclick="handleLogin()" class="login-btn">Entrar</button>
+      <div id="loginError" class="login-error" style="display:none;">Senha incorreta</div>
+      <div style="margin-top: 20px; font-size: 11px; color: var(--text-muted);">
+        Feito com 🚀 pela <a href="https://github.com/redeintegrativa-bot" target="_blank" style="color: var(--accent-green); text-decoration: none;">Rede Integrativa</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- App Container -->
+  <div id="appContainer" class="app-container" style="display:none;">
+    <!-- Sidebar Overlay (mobile) -->
+    <div class="sidebar-overlay" id="menuOverlay" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="logo">💰 My Money</div>
+      <div id="navMenu"></div>
+      <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border);">
+        <div class="sidebar-stat">
+          <span>Renda Semanal</span>
+          <span id="menuRendaDiaria" style="color: var(--accent-green); font-weight: 600;">R$ 0</span>
+        </div>
+        <div class="sidebar-stat">
+          <span>Patrimônio</span>
+          <span id="menuPatrimonio" style="color: var(--accent-cyan); font-weight: 600;">R$ 0</span>
+        </div>
+      </div>
+      <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border); text-align: center;">
+        <a href="https://github.com/redeintegrativa-bot" target="_blank" style="font-size: 10px; color: var(--text-muted); text-decoration: none;">
+          🚀 Rede Integrativa
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Bar -->
+      <div class="top-bar">
+        <button class="mobile-menu-btn" onclick="toggleSidebar()">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div id="currentDateTime" style="font-size: 13px; color: var(--text-muted);"></div>
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <button onclick="togglePrivacyMode()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:16px;">
+            <i id="privacyIcon" class="fas fa-eye"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Pages Container -->
+      <div id="pagesContainer"></div>
+    </main>
+
+    <!-- Bottom Navigation (mobile) -->
+    <nav class="bottom-nav" id="bottomNav">
+      <div class="bottom-nav-items">
+        <button class="bottom-nav-item active" onclick="showPageMobile('dashboard', this)">
+          <i class="fas fa-home"></i>
+          <span>Resumo</span>
+        </button>
+        <button class="bottom-nav-item" onclick="showPageMobile('plataformas', this)">
+          <i class="fas fa-coins"></i>
+          <span>Renda</span>
+        </button>
+        <button class="bottom-nav-item" onclick="showPageMobile('novidades', this)">
+          <i class="fas fa-bell"></i>
+          <span>Novidades</span>
+        </button>
+        <button class="bottom-nav-item" onclick="showPageMobile('consultor', this)">
+          <i class="fas fa-brain"></i>
+          <span>Consultor</span>
+        </button>
+        <button class="bottom-nav-item" onclick="showPageMobile('analise', this)">
+          <i class="fas fa-chart-pie"></i>
+          <span>Análise</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- FAB -->
+    <button class="fab" onclick="openQuickActions()">
+      <i class="fas fa-plus"></i>
+    </button>
+
+    <!-- Notification Container -->
+    <div class="notification-container" id="notificationContainer"></div>
+  </div>
+
+  <style>
+    .login-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: var(--bg-primary);
+    }
+    .login-card {
+      padding: 40px;
+      text-align: center;
+      max-width: 360px;
+      width: 90%;
+    }
+    .login-logo { font-size: 48px; margin-bottom: 16px; }
+    .login-card h2 { font-size: 24px; margin-bottom: 8px; }
+    .login-card p { color: var(--text-muted); font-size: 14px; margin-bottom: 24px; }
+    .login-input {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-size: 14px;
+      margin-bottom: 16px;
+      outline: none;
+    }
+    .login-input:focus { border-color: var(--accent-green); }
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--accent-green);
+      color: var(--bg-primary);
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .login-btn:hover { opacity: 0.9; }
+    .login-error { color: var(--accent-red); font-size: 13px; margin-top: 12px; }
+  </style>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

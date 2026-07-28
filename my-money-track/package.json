@@ -1,0 +1,14 @@
+{
+  "name": "my-money-track",
+  "version": "2.0.0",
+  "description": "Controle Financeiro Pessoal",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 8000",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 8000"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}

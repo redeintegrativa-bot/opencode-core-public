@@ -1,0 +1,26 @@
+.consultor-insight {
+  padding: 12px; border-radius: var(--radius-md); margin-bottom: 8px;
+  background: var(--bg-secondary); border-left: 3px solid var(--accent-cyan);
+}
+.consultor-insight.positivo { border-left-color: var(--accent-green); }
+.consultor-insight.alerta { border-left-color: var(--accent-red); }
+.consultor-insight.dica { border-left-color: var(--accent-orange); }
+
+.consultor-section-title {
+  font-size: 16px; font-weight: 600; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+.alocacao-card {
+  background: var(--bg-secondary); padding: 16px;
+  border-radius: var(--radius-md); text-align: center;
+  border: 1px solid var(--border);
+}
+.alocacao-card .pct { font-size: 24px; font-weight: 700; color: var(--accent-cyan); }
+.alocacao-card .label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.alocacao-card .valor { font-size: 11px; color: var(--text-secondary); }
+.alocacao-card .destino { font-size: 10px; color: var(--text-muted); margin-top: 4px; }
+
+@media (max-width: 768px) {
+  .alocacao-grid { grid-template-columns: 1fr 1fr !important; }
+}
