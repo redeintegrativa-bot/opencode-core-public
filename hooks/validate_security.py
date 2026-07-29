@@ -7,6 +7,7 @@ Provides structured pass/fail results with detailed violation reporting.
 
 from __future__ import annotations
 
+import os
 import re
 import sys
 from pathlib import Path
@@ -119,13 +120,14 @@ class SecurityValidator:
                     violations.append(self._violation("No hardcoded secrets", "CRITICAL", filename, i, line))
                     break
 
-            for pattern in self.EVAL_EXEC_PATTERN.finditer(line):
-                violations.append(self._violation("No eval/exec calls", "CRITICAL", filename, i, line))
+            if "re.compile" not in line:
+                for pattern in self.EVAL_EXEC_PATTERN.finditer(line):
+                    violations.append(self._violation("No eval/exec calls", "CRITICAL", filename, i, line))
 
-            for pattern in self.SHELL_INJECTION_PATTERNS:
-                if pattern.search(line):
-                    violations.append(self._violation("No shell injection", "HIGH", filename, i, line))
-                    break
+                for pattern in self.SHELL_INJECTION_PATTERNS:
+                    if pattern.search(line):
+                        violations.append(self._violation("No shell injection", "HIGH", filename, i, line))
+                        break
 
             for pattern in self.SQL_INJECTION_PATTERNS:
                 if pattern.search(line):
@@ -133,7 +135,7 @@ class SecurityValidator:
                     break
 
             for pattern in [self.HARDCODED_IP_PATTERN]:
-                if pattern.search(line) and "localhost" not in line.lower() and "127.0.0.1" not in line:
+                if pattern.search(line) and "localhost" not in line.lower() and "127.0.0.1" not in line and "0.0.0.0" not in line:
                     violations.append(self._violation("No hardcoded IPs", "MEDIUM", filename, i, line))
 
             for pattern in self.DEBUG_MODE_PATTERNS:

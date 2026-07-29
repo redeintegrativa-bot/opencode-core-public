@@ -47,7 +47,7 @@ ls skills/ | head -20
 cat skills/registry.json | python -m json.tool | head -30
 ```
 
-## 🤖 Agentes (57)
+## 🤖 Agentes (55)
 
 | Nível | Qtd | Descrição |
 |-------|-----|-----------|
@@ -79,8 +79,8 @@ Pra usar qualquer skill, o OpenCode roteia automaticamente. Skills principais:
 
 ```
 opencode-core-public/
-├── agents/          → 43 agentes (.md)
-├── skills/          → 33 skills + registry.json
+├── agents/          → 55 agentes (.md)
+├── skills/          → 35 skills
 ├── rules/           → 110 regras de segurança
 ├── hooks/           → scripts de validação
 ├── workflows/       → bugfix, feature, refactoring
