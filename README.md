@@ -19,18 +19,30 @@ bash setup.sh        # Linux/macOS/Termux
 
 Isso instala automaticamente skills, agentes, regras e hooks no seu ambiente.
 
-### 🎯 Onboarding (3 perguntas, 10 segundos)
+### 🎯 Onboarding — configure o assistente do SEU jeito
 
-Personalize o estilo do assistente antes de começar:
+Antes de comecar, personalize como o assistente vai falar com voce:
 
 ```bash
-python onboarding.py      # Recomendado (mais bonito)
+python onboarding.py      # Recomendado (cores, dialogo passo a passo)
 # ou
-bash onboarding.sh        # Alternativa pra Termux sem Python
+bash onboarding.sh        # Alternativa pro Termux
 ```
 
-São 3 perguntas: **estilo**, **foco** e **nível**. Gera uma config de 1 linha (menos de 20 tokens).
-O assistente se adapta automaticamente. Pra mudar depois, é só digitar `/config` no chat.
+**Como funciona:** Sao 3 perguntas com exemplos visuais.
+Voce ve na pratica como o assistente vai responder em cada estilo antes de escolher.
+
+```
+[1] DIRETO     → "Cria routes/users.js com handler GET."
+[2] EQUILIBRADO → "Cria routes/users.js. Recomendo express.Router()."  ← recomendado
+[3] DIDATICO   → "Passo 1: crie o arquivo... Passo 2: adicione a rota..."
+[4] RELAXADO   → "Bora! Cria o arquivo e bota a rota la!"
+```
+
+Gera uma config de 2 linhas (~20 tokens).
+Pra mudar depois, digite `/config` no chat.
+
+📖 Quer entender a estrutura completa? Veja `docs/estrutura.md`.
 
 ### Instalação por plataforma
 
