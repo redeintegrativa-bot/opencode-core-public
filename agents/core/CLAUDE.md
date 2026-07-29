@@ -240,7 +240,7 @@ T6: Risposta finale
 |------------|--------|
 | Task indipendenti | Lancia in PARALLELO |
 | Task dipendenti | Lancia in SEQUENZA |
-| Stesso modulo | 1 agent alla volta |
+| Stesso modulo | 2 agent alla volta |
 | Moduli diversi | N agent paralleli |
 
 ---
