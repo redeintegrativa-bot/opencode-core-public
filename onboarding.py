@@ -254,23 +254,22 @@ def check_version():
         return
     local = vf.read_text(encoding="utf-8").strip()
     try:
-        req = urllib.request.Request(
-            "https://api.github.com/repos/redeintegrativa-bot/opencode-core-public/git/ref/heads/master",
-            headers={"User-Agent": "opencode-core/1.0", "Accept": "application/json"}
-        )
+        url = "https://raw.githubusercontent.com/redeintegrativa-bot/opencode-core-public/master/VERSION"
+        req = urllib.request.Request(url, headers={"User-Agent": "opencode-core/1.0"})
         with urllib.request.urlopen(req, timeout=3) as resp:
-            data = json.loads(resp.read())
-            sha = data.get("object", {}).get("sha", "")
-            fetch_url = f"https://raw.githubusercontent.com/redeintegrativa-bot/opencode-core-public/master/VERSION"
-        req2 = urllib.request.Request(fetch_url, headers={"User-Agent": "opencode-core/1.0"})
-        with urllib.request.urlopen(req2, timeout=3) as resp2:
-            remote = resp2.read().decode().strip()
-            def v(s):
-                return tuple(int(x) for x in s.split("."))
-            if v(remote) > v(local):
-                cprint(f"Nova versao {remote} disponivel! (voce tem {local})", A)
-                cprint(f"Rode: make update", G)
+            remote = resp.read().decode().strip()
+        def v(s):
+            return tuple(int(x) for x in s.split("."))
+        if v(remote) > v(local):
+            print()
+            cprint(f"[!] Atualizacao disponivel: {local} -> {remote}", A)
+            try:
+                choice = input(f"  {C}Atualizar agora?{S} [S/n] ").strip().lower()
+                if choice in ("", "s", "sim", "y", "yes"):
+                    subprocess.run([sys.executable, str(REPO_DIR / "scripts" / "update.py")])
+            except (EOFError, KeyboardInterrupt):
                 print()
+            print()
     except Exception:
         pass
 

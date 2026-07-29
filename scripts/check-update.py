@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import json
-import os
+import subprocess
 import sys
 import urllib.request
 import urllib.error
@@ -8,11 +8,9 @@ from pathlib import Path
 
 REPO_DIR = Path(__file__).resolve().parent.parent
 VERSION_FILE = REPO_DIR / "VERSION"
-REPO = "redeintegrativa-bot/opencode-core-public"
-API_URL = f"https://api.github.com/repos/{REPO}/releases/latest"
-BRANCH_URL = f"https://api.github.com/repos/{REPO}/git/ref/heads/master"
+RAW_URL = "https://raw.githubusercontent.com/redeintegrativa-bot/opencode-core-public/master/VERSION"
 
-V = '\033[32m'; C = '\033[36m'; A = '\033[33m'; R = '\033[31m'; B = '\033[1m'; S = '\033[0m'
+V = '\033[32m'; C = '\033[36m'; A = '\033[33m'; R = '\033[31m'; B = '\033[1m'; S = '\033[0m'; G = '\033[90m'
 
 
 def get_local_version():
@@ -23,32 +21,37 @@ def get_local_version():
 
 def get_remote_version():
     try:
-        req = urllib.request.Request(API_URL, headers={"User-Agent": "opencode-core/1.0", "Accept": "application/json"})
+        req = urllib.request.Request(RAW_URL, headers={"User-Agent": "opencode-core/1.0"})
         with urllib.request.urlopen(req, timeout=5) as resp:
-            data = json.loads(resp.read())
-            return data.get("tag_name", "").lstrip("v")
-    except (urllib.error.HTTPError, urllib.error.URLError, json.JSONDecodeError):
-        pass
-
-    try:
-        req = urllib.request.Request(BRANCH_URL, headers={"User-Agent": "opencode-core/1.0", "Accept": "application/json"})
-        with urllib.request.urlopen(req, timeout=5) as resp:
-            data = json.loads(resp.read())
-            sha = data.get("object", {}).get("sha", "")
-            return f"dev-{sha[:7]}" if sha else None
+            return resp.read().decode().strip()
     except Exception:
         return None
 
 
-def compare_versions(local, remote):
-    def parse(v):
-        try:
-            parts = v.split(".")
-            return tuple(int(p) for p in parts)
-        except (ValueError, AttributeError):
-            return (0, 0, 0)
+def parse(v):
+    try:
+        return tuple(int(x) for x in v.split("."))
+    except (ValueError, AttributeError):
+        return (0, 0, 0)
 
-    return parse(remote) > parse(local)
+
+def ask_update(local, remote):
+    print()
+    print(f"  {A}{B}[!] Atualizacao disponivel!{S}")
+    print(f"  {G}  {local}{S} {C}→{S} {V}{remote}{S}")
+    print()
+    try:
+        choice = input(f"  {C}Deseja atualizar agora?{S} [S/n] ").strip().lower()
+        if choice in ("", "s", "sim", "y", "yes"):
+            print()
+            subprocess.run([sys.executable, str(REPO_DIR / "scripts" / "update.py")])
+        else:
+            print()
+            print(f"  {G}Depois rode:  make update{S}")
+            print(f"  {G}Ou:          python scripts/update.py{S}")
+            print()
+    except (EOFError, KeyboardInterrupt):
+        print()
 
 
 def main():
@@ -58,29 +61,20 @@ def main():
     if not remote:
         return
 
-    has_update = compare_versions(local, remote)
-
-    result = {
-        "local": local,
-        "remote": remote,
-        "has_update": has_update,
-        "update_available": has_update,
-    }
+    has_update = parse(remote) > parse(local)
 
     if "--json" in sys.argv:
-        print(json.dumps(result))
+        print(json.dumps({
+            "local": local,
+            "remote": remote,
+            "has_update": has_update,
+            "update_available": has_update,
+        }))
         return
 
     if has_update:
-        print(f"\n  {A}{B}[!] Atualizacao disponivel!{S}")
-        print(f"  {G}{local}{S} → {C}{remote}{S}")
-        print(f"  {G}Rode: make update{S}")
-        print(f"  {G}Ou:   python scripts/update.py{S}")
-        print()
-
-    return result
+        ask_update(local, remote)
 
 
 if __name__ == "__main__":
-    G = '\033[90m'
     main()
