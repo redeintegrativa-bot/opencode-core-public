@@ -91,6 +91,8 @@ version: 12.0
 
 | Keyword | Agent | Model | Use Case |
 |---------|-------|-------|----------|
+| help, assistente, comportamento | core/opencode-assistant.md | - | Meta-agent: direct responses, PT-BR |
+| orchestrator, coordena, delega | core/orchestrator.md | opus | Multi-agent coordination |
 | cerca, trova, esplora | core/analyzer.md | haiku | File search, exploration |
 | implementa, fix, codifica | core/coder.md | inherit | Coding, implementation |
 | review, valida, quality | core/reviewer.md | inherit | Code review |

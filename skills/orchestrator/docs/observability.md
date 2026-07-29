@@ -159,7 +159,7 @@ logging:
     retention_days: 30
   output:
     - type: file
-      path: ~/.claude/logs/orchestrator.log
+      path: ~/.config/opencode/logs/orchestrator.log
       format: json
     - type: console
       format: pretty
@@ -996,7 +996,7 @@ orchestrator dashboard start --port 3000
 ### 9.1 Full Configuration Schema
 
 ```yaml
-# ~/.claude/config/observability.yaml
+# ~/.config/opencode/config/observability.yaml
 observability:
   enabled: true
   version: "12.0"
@@ -1016,7 +1016,7 @@ observability:
     format: json
     output:
       - type: file
-        path: ~/.claude/logs/orchestrator.log
+        path: ~/.config/opencode/logs/orchestrator.log
       - type: console
         format: pretty
     rotation:
@@ -1034,7 +1034,7 @@ observability:
   # Alerting configuration
   alerting:
     enabled: true
-    rules_file: ~/.claude/config/alert_rules.yaml
+    rules_file: ~/.config/opencode/config/alert_rules.yaml
     receivers:
       - name: slack_alerts
         type: slack
@@ -1162,3 +1162,4 @@ orchestrator config validate observability.yaml
 ---
 
 **End of Observability Module V12.0**
+

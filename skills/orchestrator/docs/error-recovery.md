@@ -121,7 +121,7 @@ All L2 specialists fall back to their L1 parent agent, then to Coder.
 
 All recovery attempts logged to:
 ```
-~/.claude/logs/orchestrator/recovery.log
+~/.config/opencode/logs/orchestrator/recovery.log
 ```
 
 Format:
@@ -150,3 +150,4 @@ After max retries, task is marked FAILED and user is notified.
 ---
 
 *Error Recovery Module V12.0 - Orchestrator Extension*
+

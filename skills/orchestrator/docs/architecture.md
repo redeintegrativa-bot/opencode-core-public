@@ -333,7 +333,7 @@ TRIGGER: Context ~70% -> STEP X: COMPACT (save checkpoint, notify user)
 ## File Structure
 
 ```
-~/.claude/
+~/.config/opencode/
 |
 +-- CLAUDE.md                    # Global instructions (orchestrator mandate)
 +-- VERSION.json                 # Single source of truth for versions
@@ -531,3 +531,4 @@ context7, github, gitlab, serena, playwright, stripe, supabase, greptile, linear
 
 **ORCHESTRATOR SYSTEM ARCHITECTURE V12.0 DEEP AUDIT**
 *Shorter prompts. Better compliance. Continuous learning.*
+

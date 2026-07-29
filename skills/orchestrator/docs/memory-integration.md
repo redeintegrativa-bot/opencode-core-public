@@ -27,7 +27,7 @@ The Memory Integration Module enables the Orchestrator V12.0 to maintain persist
 
 ### Settings
 
-Add to `~/.claude/settings.json`:
+Add to `~/.config/opencode/settings.json`:
 
 ```json
 {
@@ -62,7 +62,7 @@ Add to `~/.claude/settings.json`:
 ### Directory Structure
 
 ```
-~/.claude/
+~/.config/opencode/
 ├── settings.json                    # Global settings
 ├── CLAUDE.md                        # Global instructions
 ├── MEMORY.md                        # Global memory (legacy)
@@ -81,10 +81,10 @@ Add to `~/.claude/settings.json`:
 
 | Memory Type | Location | Priority |
 |-------------|----------|----------|
-| Global Instructions | `~/.claude/CLAUDE.md` | 1 (lowest) |
-| Global Memory | `~/.claude/MEMORY.md` | 2 |
-| Project Instructions | `~/.claude/projects/{hash}/CLAUDE.md` | 3 |
-| Project Memory | `~/.claude/projects/{hash}/memory/MEMORY.md` | 4 (highest) |
+| Global Instructions | `~/.config/opencode/CLAUDE.md` | 1 (lowest) |
+| Global Memory | `~/.config/opencode/MEMORY.md` | 2 |
+| Project Instructions | `~/.config/opencode/projects/{hash}/CLAUDE.md` | 3 |
+| Project Memory | `~/.config/opencode/projects/{hash}/memory/MEMORY.md` | 4 (highest) |
 
 ### Memory Hierarchy Visualization
 
@@ -95,25 +95,25 @@ Add to `~/.claude/settings.json`:
 |                                                     |
 |  Priority 4 (HIGHEST)                               |
 |  +---------------------------------------------+   |
-|  | ~/.claude/projects/{hash}/memory/MEMORY.md  |   |
+|  | ~/.config/opencode/projects/{hash}/memory/MEMORY.md  |   |
 |  | Project-specific memory (session context)   |   |
 |  +---------------------------------------------+   |
 |                      | overrides                    |
 |  Priority 3                                         |
 |  +---------------------------------------------+   |
-|  | ~/.claude/projects/{hash}/CLAUDE.md         |   |
+|  | ~/.config/opencode/projects/{hash}/CLAUDE.md         |   |
 |  | Project instructions                         |   |
 |  +---------------------------------------------+   |
 |                      | overrides                    |
 |  Priority 2                                         |
 |  +---------------------------------------------+   |
-|  | ~/.claude/MEMORY.md                          |   |
+|  | ~/.config/opencode/MEMORY.md                          |   |
 |  | Global memory (cross-project patterns)       |   |
 |  +---------------------------------------------+   |
 |                      | overrides                    |
 |  Priority 1 (LOWEST)                                |
 |  +---------------------------------------------+   |
-|  | ~/.claude/CLAUDE.md                          |   |
+|  | ~/.config/opencode/CLAUDE.md                          |   |
 |  | Global instructions (always loaded)          |   |
 |  +---------------------------------------------+   |
 |                                                     |
@@ -766,3 +766,4 @@ class OrchestratorV10:
 
 *Memory Integration Module V12.0 - Orchestrator Extension*
 *Compatible with Orchestrator V8.0+ and V12.0*
+

@@ -8,6 +8,7 @@
   "icon": "https://raw.githubusercontent.com/redeintegrativa-bot/opencode-core-public/main/assets/icon.png",
   "install_url": "https://github.com/redeintegrativa-bot/opencode-core-public",
   "install": {
-    "bash": "git clone --depth 1 https://github.com/redeintegrativa-bot/opencode-core-public.git ~/.claude/skills/opencode-core && cd ~/.claude/skills/opencode-core && bash setup.sh"
+    "bash": "git clone --depth 1 https://github.com/redeintegrativa-bot/opencode-core-public.git ~/.config/opencode/skills/opencode-core && cd ~/.config/opencode/skills/opencode-core && bash setup.sh"
   }
 }
+

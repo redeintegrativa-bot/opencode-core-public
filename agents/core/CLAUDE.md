@@ -126,7 +126,7 @@ OGNI RICHIESTA → ORCHESTRATOR V7.0 → DELEGA → AGENT SPECIALIZZATI
 └───────────────┘   └───────┬───────┘   └───────────────┘
                             │
         ┌───────────────────┴───────────────────┐
-        │           EXPERTS (20)                │
+        │           EXPERTS (22)                │
         │       (Chiamati al bisogno)           │
         ├───────────────────────────────────────┤
         │ • GUI Expert (PyQt5)                  │
@@ -155,9 +155,9 @@ OGNI RICHIESTA → ORCHESTRATOR V7.0 → DELEGA → AGENT SPECIALIZZATI
 
 ---
 
-## 👥 AGENT DISPONIBILI (41 Totali)
+## 👥 AGENT DISPONIBILI (44 Totali)
 
-### Core Agents (6)
+### Core Agents (7)
 | Agent | File | Ruolo | Model | Istanze |
 |-------|------|-------|-------|---------|
 | Orchestrator | `core/orchestrator.md` | Coordinamento V7.0 SLIM | - | 1 |
@@ -166,8 +166,9 @@ OGNI RICHIESTA → ORCHESTRATOR V7.0 → DELEGA → AGENT SPECIALIZZATI
 | Reviewer | `core/reviewer.md` | Validazione | sonnet | N parallele |
 | Documenter | `core/documenter.md` | Documentazione | haiku | 1-2 |
 | System Coordinator | `core/system_coordinator.md` | Resource/Token management | haiku | 1 |
+| OpenCode Assistant | `core/opencode-assistant.md` | Meta-agent: direct, concise, PT-BR | - | 1 |
 
-### Expert Agents (23)
+### Expert Agents (22)
 | Expert | File | Specializzazione | Model |
 |--------|------|------------------|-------|
 | GUI Super Expert | `experts/gui-super-expert.md` | PyQt5, Qt, Widget, Layout | sonnet |
@@ -188,6 +189,10 @@ OGNI RICHIESTA → ORCHESTRATOR V7.0 → DELEGA → AGENT SPECIALIZZATI
 | Reverse Engineering | `experts/reverse_engineering_expert.md` | Binary Analysis, IDA Pro, Ghidra | sonnet |
 | Offensive Security | `experts/offensive_security_expert.md` | Pentesting, Exploit Development | sonnet |
 | MQL Decompilation | `experts/mql_decompilation_expert.md` | MetaTrader reverse engineering, .ex4/.ex5 | sonnet |
+| Browser Automation | `experts/browser_automation_expert.md` | Playwright, E2E, web scraping | sonnet |
+| MCP Integration | `experts/mcp_integration_expert.md` | MCP Protocol, tool discovery | sonnet |
+| Notification | `experts/notification_expert.md` | Slack, Discord, messaging | sonnet |
+| Payment Integration | `experts/payment_integration_expert.md` | Stripe, PayPal, checkout | sonnet |
 
 ### L2 Sub-Agents (15)
 Vedi: [INDEX.md](INDEX.md) sezione L2 SUB-AGENTS per lista completa.
@@ -249,15 +254,16 @@ agents/
 ├── CLAUDE.md                 # Questo file (indice principale)
 ├── INDEX.md                  # Indice navigazione
 │
-├── core/                     # Agent fondamentali (6)
+├── core/                     # Agent fondamentali (7)
 │   ├── orchestrator.md       # 🎯 Coordinatore centrale
 │   ├── analyzer.md           # 🔍 Analisi codebase
 │   ├── coder.md              # 👨‍💻 Implementazione
 │   ├── reviewer.md           # ✅ Code review
 │   ├── documenter.md         # 📝 Documentazione
-│   └── system_coordinator.md # 💰 Resource/Token management
+│   ├── system_coordinator.md # 💰 Resource/Token management
+│   └── opencode-assistant.md # 🤖 Meta-agent
 │
-├── experts/                  # Agent specializzati (20)
+├── experts/                  # Agent specializzati (22)
 │   ├── gui-super-expert.md       # 🎨 PyQt5/Qt/UI
 │   ├── tester_expert.md          # 🧪 Testing/QA/Debug
 │   ├── database_expert.md        # 🗄️ SQL/SQLite/PostgreSQL
@@ -272,18 +278,14 @@ agents/
 │   ├── claude_systems_expert.md  # 🎛️ Claude Ecosystem
 │   ├── mobile_expert.md          # 📱 iOS/Android/Flutter
 │   ├── n8n_expert.md             # 🔄 N8N/Workflow
-│   └── social_identity_expert.md # 🔑 OAuth/OIDC/Social
-│
-├── workflows/                # Workflow predefiniti
-│   ├── bugfix.md             # Workflow bug fixing
-│   ├── feature.md            # Workflow nuove feature
-│   ├── refactoring.md        # Workflow refactoring
-│   └── OPTIMIZED.md          # Workflow ottimizzato
-│
-├── templates/                # Template output
-│   ├── task.md               # Template task
-│   ├── review.md             # Template review
-│   └── integration.md        # Template integrazione
+│   ├── social_identity_expert.md # 🔑 OAuth/OIDC/Social
+│   ├── browser_automation_expert.md # 🌐 Playwright/E2E
+│   ├── mcp_integration_expert.md # 🔌 MCP Protocol
+│   ├── notification_expert.md    # 🔔 Slack/Discord
+│   ├── payment_integration_expert.md # 💳 Stripe/PayPal
+│   ├── offensive_security_expert.md # 💥 Pentest/Exploit
+│   ├── reverse_engineering_expert.md # 🔍 Binary/IDA
+│   └── mql_decompilation_expert.md # ⚙️ .ex4/.ex5 RE
 │
 ├── system/                   # Componenti sistema (8)
 │   ├── AGENT_REGISTRY.md     # Registry agenti
@@ -294,18 +296,6 @@ agents/
 │   ├── PARALLEL_COORDINATOR.md # Coordinamento parallelo
 │   ├── TASK_DECOMPOSITION.md # Scomposizione task
 │   └── COMPLETION_NOTIFIER.md # Notifiche completamento
-│
-├── docs/                     # Documentazione
-│   ├── README.md             # Documentazione generale
-│   ├── SYSTEM_ARCHITECTURE.md # Architettura
-│   ├── INTEGRATION_REPORT.md # Report integrazione
-│   ├── quickstart.md         # Guida rapida
-│   ├── getting-started.md    # Getting started
-│   ├── quick-reference.md    # Quick reference
-│   ├── prompt-library.md     # Libreria prompt
-│   ├── implementation-details.md # Dettagli implementazione
-│   ├── deploy-checklist.md   # Checklist deploy
-│   └── changelog.md          # Changelog
 │
 └── config/                   # Configurazione (3)
     ├── routing.md            # Tabelle routing
@@ -448,4 +438,4 @@ Output <promise>DONE</promise> quando test passano."
 
 ---
 
-**Ultimo aggiornamento:** 28 Jul 2026 - V13.0 - 41 agents total (6 L0 + 20 L1 + 15 L2)
+**Ultimo aggiornamento:** 28 Jul 2026 - V13.0 - 44 agents total (7 L0 + 22 L1 + 15 L2)

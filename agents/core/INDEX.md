@@ -240,29 +240,9 @@ agents/
       social-oauth-specialist.md
       test-unit-specialist.md
       trading-risk-calculator.md
-  docs/
-    README.md
-    getting-started.md
-    quickstart.md
-    quick-reference.md
-    orchestrator-examples.md
-    orchestrator-advanced.md
-    SYSTEM_ARCHITECTURE.md
-    implementation-details.md
-    prompt-library.md
-    deploy-checklist.md
   config/
     routing.md
     standards.md
-  workflows/
-    bugfix.md
-    feature.md
-    refactoring.md
-    OPTIMIZED.md
-  templates/
-    task.md
-    review.md
-    integration.md
 ```
 
 ---
@@ -276,9 +256,6 @@ agents/
 | L1 Experts | 22 |
 | L2 Specialists | 15 |
 | L1 Recent Additions | 4 |
-| Workflows | 4 |
-| Templates | 3 |
-| Docs | 10+ |
 
 ---
 
@@ -287,8 +264,7 @@ agents/
 - `system/PROTOCOL.md` - Communication protocol (MANDATORY)
 - `system/AGENT_REGISTRY.md` - Routing configuration
 - `system/COMMUNICATION_HUB.md` - Message format
-- `docs/README.md` - System overview
-- `docs/getting-started.md` - Quick start guide
+- `skills/orchestrator/docs/README.md` - System overview (orchestrator skill docs)
 
 ---
 

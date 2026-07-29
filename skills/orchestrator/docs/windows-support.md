@@ -22,7 +22,7 @@
 - Use Shift+Up/Down to select teammates
 - Press Enter to view teammate session, Escape to interrupt
 - Press Ctrl+T to toggle task list
-- Storage: `~/.claude/teams/` and `~/.claude/tasks/`
+- Storage: `~/.config/opencode/teams/` and `~/.config/opencode/tasks/`
 
 **Limitation:** `/resume` does NOT restore in-process teammates after session restart. Spawn new teammates after resuming.
 
@@ -109,3 +109,4 @@ Agent Teams enabled via settings.json:
 ---
 
 *Windows Support Module V12.0 DEEP AUDIT - Orchestrator Extension*
+

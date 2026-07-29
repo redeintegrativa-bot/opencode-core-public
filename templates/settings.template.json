@@ -14,7 +14,7 @@
     "scenario_1_new_install": {
       "description": "If you have NO existing settings.json",
       "steps": [
-        "1. Copy this file to ~/.claude/settings.json",
+        "1. Copy this file to ~/.config/opencode/settings.json",
         "2. Restart Claude Code"
       ]
     },
@@ -22,7 +22,7 @@
     "scenario_2_existing_settings": {
       "description": "If you already have a settings.json",
       "steps": [
-        "1. Open your existing ~/.claude/settings.json",
+        "1. Open your existing ~/.config/opencode/settings.json",
         "2. Add the 'env' block from this template",
         "3. If 'env' already exists, merge the CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS key",
         "4. Restart Claude Code"
@@ -84,7 +84,7 @@
 
   "_troubleshooting": {
     "agent_teams_not_working": [
-      "1. Verify this setting is in ~/.claude/settings.json",
+      "1. Verify this setting is in ~/.config/opencode/settings.json",
       "2. Restart Claude Code completely",
       "3. Check with: /orchestrator health"
     ],
@@ -95,7 +95,8 @@
     "settings_not_applied": [
       "Settings.json changes require Claude Code restart",
       "Verify JSON syntax is valid (no trailing commas)",
-      "Check file is at correct location: ~/.claude/settings.json"
+      "Check file is at correct location: ~/.config/opencode/settings.json"
     ]
   }
 }
+
