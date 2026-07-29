@@ -1,9 +1,9 @@
 {
   "version": "1.1.0",
   "generated_at": "2026-07-28",
-  "total_skills": 36,
+  "total_skills": 37,
   "categories": {
-    "Core": 13,
+    "Core": 14,
     "Utility": 6,
     "Workflow": 12,
     "Language": 4,
@@ -337,8 +337,16 @@
       "allowed_tools": ["read", "grep", "glob", "write", "edit", "bash", "websearch", "task"],
       "category": "Core",
       "slash_command": "/agent-gen"
-    }
-  },
+    },
+    "perplexity": {
+      "description": "Deep web research with synthesized answers and cited sources — Perplexity-style AI search for complex questions, current events, and technical research",
+      "keywords": ["perplexity", "pesquisa profunda", "deep research", "pesquisa web", "investigacao", "fact check", "fontes", "cited search"],
+      "agent": "Framework Evolution Expert",
+      "user_invokable": true,
+      "allowed_tools": ["websearch", "webfetch", "read", "write"],
+      "category": "Core",
+      "slash_command": "/perplexity"
+    },
   "routing": {
     "api": "api-design",
     "rest": "api-design",
@@ -502,6 +510,12 @@
     "configuração": "onboarding",
     "mudar estilo": "onboarding",
     "mudar tom": "onboarding",
+    "pesquisa": "perplexity",
+    "pesquisa profunda": "perplexity",
+    "deep research": "perplexity",
+    "fact check": "perplexity",
+    "tendencias": "perplexity",
+    "investigar": "perplexity",
     "agent-gen": "agent-gen",
     "generate agent": "agent-gen",
     "new specialist": "agent-gen",
@@ -547,7 +561,9 @@
       "/database": "database",
       "/onboarding": "onboarding",
       "/config": "onboarding",
-    "/agent-gen": "agent-gen"
+    "/agent-gen": "agent-gen",
+    "/perplexity": "perplexity",
+    "/pesquisa": "perplexity"
     }
   }
 }

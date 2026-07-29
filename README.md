@@ -78,7 +78,7 @@ Funciona no navegador do PC ou do Termux (Android).
 | Diretório | Finalidade |
 |-----------|-----------|
 | `agents/` | Definições de 56 agentes (L0 core, L1 experts, L2 specialists, system) |
-| `skills/` | 36 skills (code-review, debugging, plan, tdd, security, onboarding, etc.) |
+| `skills/` | 37 skills (code-review, debugging, plan, tdd, security, perplexity, etc.) |
 | `rules/` | 117 regras de segurança e boas práticas por linguagem |
 | `hooks/` | Scripts de validação e segurança (pré-commit, secrets scan) |
 | `workflows/` | Workflows padronizados (bugfix, feature, refactoring) |
