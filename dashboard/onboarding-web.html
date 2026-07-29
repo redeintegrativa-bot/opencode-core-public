@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Onboarding — OpenCode Core</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0d1117;
+    color: #c9d1d9;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .container { max-width: 600px; width: 100%; }
+
+  .card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 32px;
+  }
+
+  .header { text-align: center; margin-bottom: 28px; }
+  .header h1 { font-size: 20px; color: #58a6ff; margin-bottom: 6px; }
+  .header p { font-size: 13px; color: #8b949e; }
+
+  .step { margin-bottom: 24px; }
+  .step-number {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #58a6ff;
+    margin-bottom: 4px;
+  }
+  .step-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #f0f6fc;
+    margin-bottom: 4px;
+  }
+  .step-desc {
+    font-size: 13px;
+    color: #8b949e;
+    margin-bottom: 12px;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .option {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .option:hover { border-color: #58a6ff; background: #1c2333; }
+  .option.selected {
+    border-color: #3fb950;
+    background: #1a2e1a;
+  }
+  .option .radio {
+    width: 18px; height: 18px;
+    border: 2px solid #30363d;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+  .option.selected .radio {
+    border-color: #3fb950;
+  }
+  .option.selected .radio::after {
+    content: '';
+    width: 10px; height: 10px;
+    background: #3fb950;
+    border-radius: 50%;
+  }
+  .option .opt-content { flex: 1; }
+  .option .opt-title { font-weight: 600; font-size: 14px; display: block; }
+  .option .opt-example {
+    font-size: 12px;
+    color: #8b949e;
+    margin-top: 2px;
+    font-style: italic;
+  }
+  .option .opt-label { color: #3fb950; font-size: 11px; margin-left: 4px; }
+
+  .example-box {
+    background: #0d1117;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 12px;
+    color: #8b949e;
+    margin-top: 8px;
+    border-left: 3px solid #30363d;
+  }
+  .example-box strong { color: #c9d1d9; }
+
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: #238636;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+    margin-top: 8px;
+  }
+  .btn:hover { background: #2ea043; }
+  .btn:disabled {
+    background: #21262d;
+    color: #484f58;
+    cursor: not-allowed;
+  }
+
+  .success {
+    text-align: center;
+    padding: 20px 0;
+  }
+  .success .checkmark {
+    width: 56px; height: 56px;
+    background: #23863622;
+    border: 3px solid #3fb950;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    font-size: 28px;
+    color: #3fb950;
+  }
+  .success h2 { color: #f0f6fc; margin-bottom: 8px; }
+  .success p { color: #8b949e; font-size: 13px; margin-bottom: 8px; }
+  .success .summary {
+    background: #0d1117;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px 0;
+    text-align: left;
+  }
+  .success .summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid #21262d;
+    font-size: 14px;
+  }
+  .success .summary-row:last-child { border: none; }
+  .success .summary-label { color: #8b949e; }
+  .success .summary-value { font-weight: 600; color: #f0f6fc; }
+
+  .status-bar {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .status-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #21262d;
+    transition: all 0.3s;
+  }
+  .status-dot.active { background: #58a6ff; }
+  .status-dot.done { background: #3fb950; }
+
+  a { color: #58a6ff; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="card" id="app">
+    <div class="header">
+      <h1>OpenCode Core</h1>
+      <p>Configure o assistente do seu jeito</p>
+    </div>
+
+    <div class="status-bar" id="status-bar">
+      <span class="status-dot" data-step="0"></span>
+      <span class="status-dot" data-step="1"></span>
+      <span class="status-dot" data-step="2"></span>
+    </div>
+
+    <div id="step-content"></div>
+  </div>
+</div>
+
+<script>
+const state = {
+  step: 0,
+  tone: null,
+  focus: null,
+  verbosity: null,
+  saving: false
+};
+
+const steps = [
+  // 0 - ESTILO
+  {
+    render() {
+      return `
+        <div class="step">
+          <div class="step-number">Passo 1 de 3</div>
+          <div class="step-title">Estilo de resposta</div>
+          <div class="step-desc">Isso define como o assistente vai falar com voce.</div>
+
+          <div class="example-box">
+            <strong>Voce perguntou:</strong> "Como criar uma rota GET /users?"
+          </div>
+
+          <div class="options">
+            <div class="option ${state.tone === 'direct' ? 'selected' : ''}" onclick="sel('tone','direct')">
+              <div class="radio"></div>
+              <div class="opt-content">
+                <span class="opt-title">Direto</span>
+                <span class="opt-example">"Cria routes/users.js com handler GET."</span>
+              </div>
+            </div>
+            <div class="option ${state.tone === 'balanced' ? 'selected' : ''}" onclick="sel('tone','balanced')">
+              <div class="radio"></div>
+              <div class="opt-content">
+                <span class="opt-title">Equilibrado <span class="opt-label">recomendado</span></span>
+                <span class="opt-example">"Cria routes/users.js. Recomendo express.Router()."</span>
+              </div>
+            </div>
+            <div class="option ${state.tone === 'didatic' ? 'selected' : ''}" onclick="sel('tone','didatic')">
+              <div class="radio"></div>
+              <div class="opt-content">
+                <span class="opt-title">Didatico</span>
+                <span class="opt-example">"Passo 1: crie routes/users.js. Passo 2: adicione router.get..."</span>
+              </div>
+            </div>
+            <div class="option ${state.tone === 'casual' ? 'selected' : ''}" onclick="sel('tone','casual')">
+              <div class="radio"></div>
+              <div class="opt-content">
+                <span class="opt-title">Relaxado</span>
+                <span class="opt-example">"Bora! Cria routes/users.js e bota a rota la!"</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="btn" ${!state.tone ? 'disabled' : ''} onclick="next()">Continuar</button>
+      `;
+    }
+  },
+
+  // 1 - FOCO
+  {
+    render() {
+      return `
+        <div class="step">
+          <div class="step-number">Passo 2 de 3</div>
+          <div class="step-title">Foco principal</div>
+          <div class="step-desc">Isso ajuda o assistente a dar exemplos na sua area.</div>
+
+          <div class="options">
+            <div class="option ${state.focus === 'web' ? 'selected' : ''}" onclick="sel('focus','web')">
+              <div class="radio"></div>
+              <div class="opt-content">
+                <span class="opt-title">Web</span>
+                <span class="opt-example">React, HTML, CSS, frontend</span>
+              </div>
+            </div>
+            <div class="option ${state.focus === 'backend' ? 'selected' : ''}" onclick="sel('focus','backend')">
+              <div class="radio"></div>
+              <div class="opt-content">
+                <span class="opt-title">Backend / API <span class="opt-label">recomendado</span></span>
+                <span class="opt-example">Servidores, banco de dados, rotas</span>
+              </div>
+            </div>
+            <div class="option ${state.focus === 'cli' ? 'selected' : ''}" onclick="sel('focus','cli')">
+              <div class="radio"></div>
+              <div class="opt-content">
+                <span class="opt-title">Automacao / CLI</span>
+                <span class="opt-example">Scripts, shell, ferramentas de terminal</span>
+              </div>
+            </div>
+            <div class="option ${state.focus === 'data' ? 'selected' : ''}" onclick="sel('focus','data')">
+              <div class="radio"></div>
+              <div class="opt-content">
+                <span class="opt-title">Dados / ML</span>
+                <span class="opt-example">Analise, pipelines, machine learning</span>
+              </div>
+            </div>
+            <div class="option ${state.focus === 'general' ? 'selected' : ''}" onclick="sel('focus','general')">
+              <div class="radio"></div>
+              <div class="opt-content">
+                <span class="opt-title">Geral</span>
+                <span class="opt-example">Um pouco de tudo</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="btn" ${!state.focus ? 'disabled' : ''} onclick="next()">Continuar</button>
+      `;
+    }
+  },
+
+  // 2 - NIVEL
+  {
+    render() {
+      return `
+        <div class="step">
+          <div class="step-number">Passo 3 de 3</div>
+          <div class="step-title">Nivel de experiencia</div>
+          <div class="step-desc">Isso define o nivel de detalhe das respostas.</div>
+
+          <div class="options">
+            <div class="option ${state.verbosity === 'high' ? 'selected' : ''}" onclick="sel('verbosity','high')">
+              <div class="radio"></div>
+              <div class="opt-content">
+                <span class="opt-title">Iniciante</span>
+                <span class="opt-example">"Vamos comecar criando um arquivo... agora dentro dele..."</span>
+              </div>
+            </div>
+            <div class="option ${state.verbosity === 'medium' ? 'selected' : ''}" onclick="sel('verbosity','medium')">
+              <div class="radio"></div>
+              <div class="opt-content">
+                <span class="opt-title">Intermediario</span>
+                <span class="opt-example">"Crie routes/users.js e adicione a rota..."</span>
+              </div>
+            </div>
+            <div class="option ${state.verbosity === 'low' ? 'selected' : ''}" onclick="sel('verbosity','low')">
+              <div class="radio"></div>
+              <div class="opt-content">
+                <span class="opt-title">Avancado <span class="opt-label">recomendado</span></span>
+                <span class="opt-example">"Feito. routes/users.js, linha 12."</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="btn" ${!state.verbosity ? 'disabled' : ''} onclick="save()">
+          ${state.saving ? 'Salvando...' : 'Salvar configuracao'}
+        </button>
+      `;
+    }
+  }
+];
+
+function sel(key, value) {
+  state[key] = value;
+  render();
+}
+
+function next() {
+  if (state.step < 2) {
+    state.step++;
+    render();
+  }
+}
+
+function prev() {
+  if (state.step > 0) {
+    state.step--;
+    render();
+  }
+}
+
+async function save() {
+  state.saving = true;
+  render();
+
+  try {
+    const res = await fetch('/api/config/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tone: state.tone,
+        focus: state.focus,
+        verbosity: state.verbosity
+      })
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      state.step = 3;
+      render();
+    } else {
+      alert('Erro ao salvar: ' + (data.error || 'desconhecido'));
+    }
+  } catch(e) {
+    alert('Erro de conexao: ' + e.message);
+  }
+
+  state.saving = false;
+}
+
+function renderSuccess() {
+  const labels = {
+    direct: 'Direto', balanced: 'Equilibrado',
+    didatic: 'Didatico', casual: 'Relaxado',
+    web: 'Web', backend: 'Backend / API',
+    cli: 'Automacao / CLI', data: 'Dados / ML',
+    general: 'Geral',
+    high: 'Alto (detalhado)', medium: 'Medio', low: 'Baixo (conciso)'
+  };
+
+  return `
+    <div class="success">
+      <div class="checkmark">&#10003;</div>
+      <h2>Configuracao salva!</h2>
+      <p>O assistente ja esta pronto pra usar.</p>
+
+      <div class="summary">
+        <div class="summary-row">
+          <span class="summary-label">Estilo</span>
+          <span class="summary-value">${labels[state.tone]}</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Foco</span>
+          <span class="summary-value">${labels[state.focus]}</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Detalhe</span>
+          <span class="summary-value">${labels[state.verbosity]}</span>
+        </div>
+      </div>
+
+      <p>Proximo passo no terminal:</p>
+      <code style="display:block;background:#0d1117;padding:12px;border-radius:6px;margin:12px 0;font-size:13px">bash setup.sh</code>
+
+      <p style="font-size:12px;margin-top:16px">
+        <a href="/">Ir pro Dashboard</a> &middot;
+        <a href="#" onclick="resetAll()">Refazer</a>
+      </p>
+    </div>
+  `;
+}
+
+function render() {
+  const el = document.getElementById('step-content');
+  const bar = document.getElementById('status-bar');
+
+  // Update status bar
+  bar.querySelectorAll('.status-dot').forEach((dot, i) => {
+    dot.className = 'status-dot';
+    if (i < state.step) dot.classList.add('done');
+    else if (i === state.step) dot.classList.add('active');
+  });
+
+  if (state.step === 3) {
+    el.innerHTML = renderSuccess();
+  } else {
+    el.innerHTML = steps[state.step].render();
+  }
+}
+
+function resetAll() {
+  state.step = 0;
+  state.tone = null;
+  state.focus = null;
+  state.verbosity = null;
+  render();
+}
+
+render();
+</script>
+</body>
+</html>

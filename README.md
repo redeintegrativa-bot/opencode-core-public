@@ -24,17 +24,21 @@ Isso instala automaticamente skills, agentes, regras e hooks no seu ambiente.
 Antes de comecar, personalize como o assistente vai falar com voce:
 
 ```bash
-python onboarding.py      # Recomendado (cores, dialogo passo a passo)
-# ou
-bash onboarding.sh        # Alternativa pro Termux
+python onboarding.py
 ```
 
-**Como funciona:** Sao 3 perguntas com exemplos visuais.
-Voce ve na pratica como o assistente vai responder em cada estilo antes de escolher.
+**Voce escolhe como quer configurar:**
+
+```
+[1] CONSOLE — dialogos passo a passo no terminal (recomendado)
+[2] NAVEGADOR — formulario web em http://localhost:8080
+```
+
+**Os dois fazem as mesmas 3 perguntas** com exemplos visuais:
 
 ```
 [1] DIRETO     → "Cria routes/users.js com handler GET."
-[2] EQUILIBRADO → "Cria routes/users.js. Recomendo express.Router()."  ← recomendado
+[2] EQUILIBRADO → "Cria routes/users.js. Recomendo express.Router()."
 [3] DIDATICO   → "Passo 1: crie o arquivo... Passo 2: adicione a rota..."
 [4] RELAXADO   → "Bora! Cria o arquivo e bota a rota la!"
 ```
@@ -43,6 +47,23 @@ Gera uma config de 2 linhas (~20 tokens).
 Pra mudar depois, digite `/config` no chat.
 
 📖 Quer entender a estrutura completa? Veja `docs/estrutura.md`.
+
+### 📊 Dashboard local (web)
+
+Painel completo com status, test drive e onboarding:
+
+```bash
+python dashboard/server.py
+# Acesse: http://localhost:8080
+```
+
+**O que tem no dashboard:**
+- **Status** — config atual, stats do sistema, dependencias
+- **Test Drive** — monte seu projeto: escolhe opcoes, gera prompt pra copiar e colar no OpenCode
+- **Capacidades** — lista completa do que voce pode fazer
+- **Onboarding web** — acesse `/onboarding` pra configurar pelo navegador
+
+Funciona no navegador do PC ou do Termux (Android).
 
 ### Instalação por plataforma
 

@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenCode Core — Dashboard</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0d1117;
+    color: #c9d1d9;
+    padding: 20px;
+    line-height: 1.6;
+  }
+  .container { max-width: 960px; margin: 0 auto; }
+
+  /* ── HEADER ── */
+  .header {
+    text-align: center;
+    padding: 24px 0 16px;
+    border-bottom: 1px solid #30363d;
+    margin-bottom: 24px;
+  }
+  .header h1 { font-size: 22px; color: #58a6ff; margin-bottom: 4px; }
+  .header p { color: #8b949e; font-size: 13px; }
+
+  /* ── LOADING ── */
+  .loading {
+    text-align: center;
+    padding: 60px 0;
+    color: #8b949e;
+  }
+  .spinner {
+    display: inline-block;
+    width: 28px; height: 28px;
+    border: 3px solid #30363d;
+    border-top-color: #58a6ff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 10px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── CARDS ── */
+  .card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .card h2 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #8b949e;
+    margin-bottom: 14px;
+  }
+  .card h3 {
+    font-size: 15px;
+    color: #f0f6fc;
+    margin-bottom: 8px;
+  }
+
+  /* ── STAT ROW ── */
+  .stat-row {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .stat-item { text-align: center; }
+  .stat-num { font-size: 28px; font-weight: 700; color: #f0f6fc; }
+  .stat-label { font-size: 12px; color: #8b949e; margin-top: 2px; }
+  .stat-sub { font-size: 12px; color: #8b949e; margin-top: 8px; }
+
+  /* ── CONFIG DISPLAY ── */
+  .config-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 8px;
+  }
+  .config-item {
+    background: #0d1117;
+    border-radius: 6px;
+    padding: 10px;
+    text-align: center;
+  }
+  .config-item .label { font-size: 11px; color: #8b949e; text-transform: uppercase; }
+  .config-item .value { font-size: 14px; font-weight: 600; margin-top: 4px; }
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .badge-direct { background: #1f6feb22; color: #58a6ff; }
+  .badge-balanced { background: #23863622; color: #3fb950; }
+  .badge-didatic { background: #d2992222; color: #d29922; }
+  .badge-casual { background: #da363322; color: #ff7b72; }
+  .badge-high { background: #1f6feb22; color: #58a6ff; }
+  .badge-medium { background: #d2992222; color: #d29922; }
+  .badge-low { background: #23863622; color: #3fb950; }
+
+  /* ── DEPENDENCIES ── */
+  .dep-list { display: flex; gap: 16px; flex-wrap: wrap; }
+  .dep-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 13px; color: #8b949e;
+  }
+  .dep-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .dep-ok { background: #3fb950; }
+  .dep-nok { background: #da3633; }
+
+  /* ── TEST DRIVE ── */
+  .td-step {
+    padding: 16px;
+    background: #0d1117;
+    border-radius: 8px;
+    margin-bottom: 12px;
+  }
+  .td-step h3 {
+    font-size: 14px;
+    color: #58a6ff;
+    margin-bottom: 12px;
+  }
+  .td-step p {
+    font-size: 13px;
+    color: #8b949e;
+    margin-bottom: 12px;
+  }
+
+  .td-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 8px;
+  }
+  .td-opt {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: left;
+    color: #c9d1d9;
+    font-family: inherit;
+    font-size: 13px;
+  }
+  .td-opt:hover {
+    border-color: #58a6ff;
+    background: #1c2333;
+  }
+  .td-opt.selected {
+    border-color: #3fb950;
+    background: #1a2e1a;
+  }
+  .td-opt .td-opt-title {
+    font-weight: 600;
+    color: #f0f6fc;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .td-opt .td-opt-desc {
+    font-size: 12px;
+    color: #8b949e;
+  }
+
+  /* ── PROMPT OUTPUT ── */
+  .prompt-box {
+    background: #0d1117;
+    border: 2px solid #3fb950;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 12px;
+    font-family: 'SF Mono', Monaco, monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    color: #7ee787;
+    position: relative;
+  }
+  .prompt-copy {
+    position: absolute;
+    top: 8px; right: 8px;
+    background: #238636;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 11px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .prompt-copy:hover { background: #2ea043; }
+  .prompt-copy.copied { background: #1f6feb; }
+
+  /* ── CAPABILITIES GRID ── */
+  .cap-category { margin-bottom: 20px; }
+  .cap-category h3 {
+    font-size: 14px;
+    color: #58a6ff;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #21262d;
+  }
+  .cap-items { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 8px; }
+  .cap-item {
+    background: #0d1117;
+    border-radius: 6px;
+    padding: 10px 12px;
+  }
+  .cap-item .cap-cmd {
+    color: #58a6ff;
+    font-family: 'SF Mono', Monaco, monospace;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .cap-item .cap-desc {
+    font-size: 12px;
+    color: #8b949e;
+    margin-top: 2px;
+  }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-block;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .btn-primary { background: #238636; color: #fff; }
+  .btn-primary:hover { background: #2ea043; }
+  .btn-secondary { background: #21262d; color: #c9d1d9; }
+  .btn-secondary:hover { background: #30363d; }
+
+  /* ── ONBOARD CTA ── */
+  .onboard-cta { text-align: center; padding: 30px 20px; }
+  .onboard-cta p { color: #8b949e; margin-bottom: 16px; }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    padding: 24px 0;
+    color: #8b949e;
+    font-size: 12px;
+    border-top: 1px solid #21262d;
+    margin-top: 20px;
+  }
+  .footer a { color: #58a6ff; text-decoration: none; }
+  .footer a:hover { text-decoration: underline; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    body { padding: 10px; }
+    .td-options { grid-template-columns: 1fr; }
+    .cap-items { grid-template-columns: 1fr; }
+    .config-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container" id="app">
+  <div class="header">
+    <h1>OpenCode Core</h1>
+    <p>Canivete suico do OpenCode &middot; Dashboard & Test Drive</p>
+  </div>
+
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <div>Carregando...</div>
+  </div>
+
+  <div id="content" style="display:none"></div>
+</div>
+
+<script>
+// ── STATE ──
+let state = {
+  caps: null,
+  stats: null,
+  selected: {},
+  prompt: '',
+  step: 'welcome'
+};
+
+// ── LOAD ──
+async function load() {
+  try {
+    const [sr, cr] = await Promise.all([
+      fetch('/api/status'),
+      fetch('/api/capabilities')
+    ]);
+    state.stats = await sr.json();
+    state.caps = await cr.json();
+    render();
+  } catch(e) {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('content').style.display = 'block';
+    document.getElementById('content').innerHTML =
+      '<div class="card" style="text-align:center;padding:40px;color:#ff7b72">' +
+      'Erro ao conectar com o servidor.<br>Certifique-se de que o server.py esta rodando.</div>';
+  }
+}
+
+// ── RENDER ──
+function render() {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('content').style.display = 'block';
+
+  const s = state.stats;
+  const c = s.config;
+  let html = '';
+
+  // ── STATUS ROW ──
+  if (c.onboarded) {
+    html += `
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:16px">
+          <div class="config-grid">
+            <div class="config-item">
+              <div class="label">Estilo</div>
+              <div class="value">${badge(c.tone)}</div>
+            </div>
+            <div class="config-item">
+              <div class="label">Foco</div>
+              <div class="value" style="color:#f0f6fc;font-size:13px">${c.focus}</div>
+            </div>
+            <div class="config-item">
+              <div class="label">Detalhe</div>
+              <div class="value">${badge(c.verbosity)}</div>
+            </div>
+          </div>
+          <div class="stat-row">
+            <div class="stat-item"><div class="stat-num">${s.stats.agents.total}</div><div class="stat-label">Agentes</div></div>
+            <div class="stat-item"><div class="stat-num">${s.stats.skills}</div><div class="stat-label">Skills</div></div>
+            <div class="stat-item"><div class="stat-num">${s.stats.rules}</div><div class="stat-label">Regras</div></div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid #21262d">
+          <div class="dep-list">
+            ${depItem('Python', s.dependencies.python)}
+            ${depItem('Node', s.dependencies.node)}
+            ${depItem('Git', s.dependencies.git)}
+          </div>
+          <div class="stat-sub">Core ${s.stats.agents.core} &middot; Experts ${s.stats.agents.experts} &middot; Specialists ${s.stats.agents.specialists}</div>
+        </div>
+      </div>
+    `;
+  } else {
+    html += `
+      <div class="card onboard-cta">
+        <h2>Configuracao pendente</h2>
+        <p>Rode o onboarding pra personalizar o estilo do assistente:</p>
+        <code style="display:block;background:#0d1117;padding:10px;border-radius:6px;margin-bottom:16px">python onboarding.py</code>
+        <button class="btn btn-primary" onclick="refresh()">Recarregar</button>
+      </div>
+    `;
+  }
+
+  // ── TEST DRIVE ──
+  html += renderTestDrive();
+
+  // ── ALL CAPABILITIES ──
+  html += `<div class="card"><h2>Todas as capacidades</h2>`;
+  state.caps.categories.forEach(cat => {
+    html += `<div class="cap-category"><h3>${cat.name}</h3><div class="cap-items">`;
+    cat.items.forEach(item => {
+      html += `<div class="cap-item">`;
+      if (item.cmd) html += `<div class="cap-cmd">${item.cmd}</div>`;
+      html += `<div class="cap-desc">${item.desc}</div></div>`;
+    });
+    html += `</div></div>`;
+  });
+  html += `</div>`;
+
+  // ── FOOTER ──
+  html += `
+    <div class="footer">
+      OpenCode Core &middot;
+      <a href="#" onclick="refresh();return false">Recarregar</a> &middot;
+      <a href="#" onclick="reset();return false">Reiniciar test drive</a>
+    </div>
+  `;
+
+  document.getElementById('content').innerHTML = html;
+  updatePrompt();
+}
+
+// ── TEST DRIVE ──
+function renderTestDrive() {
+  let h = `<div class="card"><h2>Test Drive — Monte seu projeto</h2>`;
+  h += `<p style="font-size:13px;color:#8b949e;margin-bottom:12px">Escolha o que voce quer fazer. No final, um prompt pronto pra copiar e colar no OpenCode.</p>`;
+
+  // Step 1: What
+  h += `<div class="td-step"><h3>1. O que voce quer fazer?</h3>`;
+  h += `<div class="td-options">`;
+  const whats = [
+    { id: 'criar', title: 'Criar projeto', desc: 'Gerar codigo do zero' },
+    { id: 'revisar', title: 'Revisar codigo', desc: 'Analisar e melhorar' },
+    { id: 'corrigir', title: 'Corrigir bug', desc: 'Debug e consertar' },
+    { id: 'planejar', title: 'Planejar', desc: 'Arquitetura e design' },
+    { id: 'seguranca', title: 'Auditar seguranca', desc: 'Scanner de vulnerabilidades' },
+    { id: 'testar', title: 'Criar testes', desc: 'TDD e cobertura' },
+  ];
+  whats.forEach(w => {
+    h += `<button class="td-opt ${state.selected.what === w.id ? 'selected' : ''}" onclick="selectWhat('${w.id}')">`;
+    h += `<span class="td-opt-title">${w.title}</span>`;
+    h += `<span class="td-opt-desc">${w.desc}</span></button>`;
+  });
+  h += `</div></div>`;
+
+  if (state.selected.what === 'criar') {
+    h += renderStepCreate();
+  } else if (state.selected.what === 'revisar') {
+    h += renderStepReview();
+  } else if (state.selected.what === 'corrigir') {
+    h += renderStepDebug();
+  } else if (state.selected.what === 'planejar') {
+    h += renderStepPlan();
+  } else if (state.selected.what === 'seguranca') {
+    h += renderStepSecurity();
+  } else if (state.selected.what === 'testar') {
+    h += renderStepTest();
+  }
+
+  // Prompt box
+  h += `<div class="td-step" style="border:1px solid #3fb950;background:#0d1117">`;
+  h += `<h3 style="color:#3fb950">Pronto! Copie o prompt abaixo e cole no OpenCode</h3>`;
+  h += `<p style="font-size:12px;color:#8b949e">O OpenCode vai executar tudo pra voce automaticamente.</p>`;
+  h += `<div class="prompt-box" id="prompt-box">`;
+  h += `<button class="prompt-copy" id="copy-btn" onclick="copyPrompt()">Copiar</button>`;
+  h += `<span id="prompt-text">${state.prompt || 'Escolha as opcoes acima para gerar o prompt...'}</span>`;
+  h += `</div></div>`;
+
+  return h + `</div>`;
+}
+
+// ── SUB-STEPS ──
+function renderStepCreate() {
+  let h = `<div class="td-step"><h3>2. Que tipo de projeto?</h3><div class="td-options">`;
+  const opts = [
+    { id: 'nextjs', title: 'Next.js (React)', desc: 'App web fullstack com TypeScript' },
+    { id: 'fastapi', title: 'FastAPI (Python)', desc: 'API REST em Python' },
+    { id: 'express', title: 'Express (Node)', desc: 'API REST em Node.js' },
+    { id: 'cli', title: 'CLI Python', desc: 'Ferramenta de terminal' },
+    { id: 'html', title: 'HTML/CSS', desc: 'Site estatico simples' },
+    { id: 'react', title: 'Vite + React', desc: 'SPA moderna com Vite' },
+  ];
+  opts.forEach(o => {
+    h += `<button class="td-opt ${state.selected.project === o.id ? 'selected' : ''}" onclick="selectProject('${o.id}')">`;
+    h += `<span class="td-opt-title">${o.title}</span>`;
+    h += `<span class="td-opt-desc">${o.desc}</span></button>`;
+  });
+  h += `</div>`;
+
+  if (state.selected.project) {
+    h += `<div style="margin-top:12px">`;
+    h += `<label style="font-size:13px;color:#8b949e;display:block;margin-bottom:4px">Nome do projeto:</label>`;
+    h += `<input id="project-name" type="text" value="${state.selected.projectName || 'meu-projeto'}" style="width:100%;padding:8px 10px;background:#0d1117;border:1px solid #30363d;border-radius:6px;color:#f0f6fc;font-size:14px" oninput="setProjectName(this.value)">`;
+    h += `</div>`;
+
+    h += `<div style="margin-top:12px"><div class="td-options">`;
+    const extras = [
+      { id: 'git', title: 'Iniciar Git', desc: 'git init + primeiro commit' },
+      { id: 'deploy', title: 'Configurar deploy', desc: 'Preparar pra Vercel/Railway' },
+      { id: 'tests', title: 'Adicionar testes', desc: 'Setup de testing framework' },
+    ];
+    extras.forEach(e => {
+      const sel = state.selected.extras && state.selected.extras.includes(e.id);
+      h += `<button class="td-opt ${sel ? 'selected' : ''}" onclick="toggleExtra('${e.id}')">`;
+      h += `<span class="td-opt-title">${e.title}</span>`;
+      h += `<span class="td-opt-desc">${e.desc}</span></button>`;
+    });
+    h += `</div></div>`;
+  }
+  return h + `</div>`;
+}
+
+function renderStepReview() {
+  let h = `<div class="td-step"><h3>2. O que revisar?</h3><div class="td-options">`;
+  const opts = [
+    { id: 'arquivo', title: 'Arquivo especifico', desc: 'Passa o caminho do arquivo' },
+    { id: 'projeto', title: 'Projeto inteiro', desc: 'Varredura geral do codigo' },
+    { id: 'seguranca', title: 'Foco em seguranca', desc: 'Procura vulnerabilidades' },
+  ];
+  opts.forEach(o => {
+    h += `<button class="td-opt ${state.selected.reviewType === o.id ? 'selected' : ''}" onclick="selectReview('${o.id}')">`;
+    h += `<span class="td-opt-title">${o.title}</span>`;
+    h += `<span class="td-opt-desc">${o.desc}</span></button>`;
+  });
+  return h + `</div>`;
+}
+
+function renderStepDebug() {
+  let h = `<div class="td-step"><h3>2. Qual o problema?</h3>`;
+  h += `<div style="margin-top:8px">`;
+  h += `<label style="font-size:13px;color:#8b949e;display:block;margin-bottom:4px">Descreva o bug:</label>`;
+  h += `<textarea id="bug-desc" rows="3" style="width:100%;padding:8px 10px;background:#0d1117;border:1px solid #30363d;border-radius:6px;color:#f0f6fc;font-size:13px;resize:vertical;font-family:inherit" oninput="setBugDesc(this.value)" placeholder="Ex: O formulario de login nao valida email. Quando envio sem email, mostra erro 500."></textarea>`;
+  h += `</div></div>`;
+  return h;
+}
+
+function renderStepPlan() {
+  let h = `<div class="td-step"><h3>2. O que planejar?</h3>`;
+  h += `<div style="margin-top:8px">`;
+  h += `<label style="font-size:13px;color:#8b949e;display:block;margin-bottom:4px">Descreva o que quer construir:</label>`;
+  h += `<textarea id="plan-desc" rows="3" style="width:100%;padding:8px 10px;background:#0d1117;border:1px solid #30363d;border-radius:6px;color:#f0f6fc;font-size:13px;resize:vertical;font-family:inherit" oninput="setPlanDesc(this.value)" placeholder="Ex: Quero um sistema de autenticacao com login por email e Google OAuth, com banco PostgreSQL."></textarea>`;
+  h += `</div></div>`;
+  return h;
+}
+
+function renderStepSecurity() {
+  let h = `<div class="td-step"><h3>2. Tipo de auditoria</h3><div class="td-options">`;
+  const opts = [
+    { id: 'rapida', title: 'Varredura rapida', desc: 'Scan rapido de seguranca' },
+    { id: 'completa', title: 'Auditoria completa', desc: 'Analise OWASP detalhada' },
+    { id: 'secrets', title: 'Checar secrets', desc: 'Procurar tokens e senhas vazadas' },
+  ];
+  opts.forEach(o => {
+    h += `<button class="td-opt ${state.selected.secType === o.id ? 'selected' : ''}" onclick="selectSec('${o.id}')">`;
+    h += `<span class="td-opt-title">${o.title}</span>`;
+    h += `<span class="td-opt-desc">${o.desc}</span></button>`;
+  });
+  return h + `</div>`;
+}
+
+function renderStepTest() {
+  let h = `<div class="td-step"><h3>2. Abordagem de testes</h3><div class="td-options">`;
+  const opts = [
+    { id: 'tdd', title: 'TDD completo', desc: 'Primeiro os testes, depois o codigo' },
+    { id: 'cobertura', title: 'Cobertura existente', desc: 'Adicionar testes ao codigo atual' },
+    { id: 'estrategia', title: 'Estrategia de testes', desc: 'Plano de que e como testar' },
+  ];
+  opts.forEach(o => {
+    h += `<button class="td-opt ${state.selected.testType === o.id ? 'selected' : ''}" onclick="selectTest('${o.id}')">`;
+    h += `<span class="td-opt-title">${o.title}</span>`;
+    h += `<span class="td-opt-desc">${o.desc}</span></button>`;
+  });
+  return h + `</div>`;
+}
+
+// ── ACTIONS ──
+function selectWhat(id) {
+  state.selected = { what: id };
+  state.prompt = '';
+  render();
+}
+function selectProject(id) {
+  state.selected.project = id;
+  state.selected.projectName = state.selected.projectName || 'meu-projeto';
+  state.selected.extras = [];
+  buildPrompt();
+  render();
+}
+function setProjectName(v) {
+  state.selected.projectName = v;
+  buildPrompt();
+  render();
+}
+function toggleExtra(id) {
+  if (!state.selected.extras) state.selected.extras = [];
+  const idx = state.selected.extras.indexOf(id);
+  if (idx > -1) state.selected.extras.splice(idx, 1);
+  else state.selected.extras.push(id);
+  buildPrompt();
+  render();
+}
+function selectReview(id) {
+  state.selected.reviewType = id;
+  buildPrompt();
+  render();
+}
+function setBugDesc(v) {
+  state.selected.bugDesc = v;
+  buildPrompt();
+}
+function setPlanDesc(v) {
+  state.selected.planDesc = v;
+  buildPrompt();
+}
+function selectSec(id) {
+  state.selected.secType = id;
+  buildPrompt();
+  render();
+}
+function selectTest(id) {
+  state.selected.testType = id;
+  buildPrompt();
+  render();
+}
+
+function reset() {
+  state.selected = {};
+  state.prompt = '';
+  render();
+}
+
+// ── BUILD PROMPT ──
+function buildPrompt() {
+  const s = state.selected;
+  let lines = [];
+  let tone = state.stats.config.tone || 'balanced';
+
+  if (s.what === 'criar' && s.project) {
+    const name = s.projectName || 'meu-projeto';
+    const map = {
+      nextjs: `/scaffold nextjs-ts ${name}`,
+      fastapi: `/scaffold fastapi ${name}`,
+      express: `/scaffold express ${name}`,
+      cli: `/scaffold cli-python ${name}`,
+      html: `/scaffold html-css ${name}`,
+      react: `/scaffold react-ts ${name}`,
+    };
+    lines.push(map[s.project] || `/scaffold ${s.project} ${name}`);
+    if (s.extras && s.extras.includes('git')) lines.push(`Depois: git init, git add ., git commit -m "init"`);
+    if (s.extras && s.extras.includes('deploy')) lines.push(`Depois: configurar deploy na Vercel`);
+    if (s.extras && s.extras.includes('tests')) lines.push(`Depois: adicionar suite de testes com framework padrao`);
+    lines.push(`\nUse o estilo ${tone}. Mostre o passo a passo a medida que for criando.`);
+  }
+
+  else if (s.what === 'revisar' && s.reviewType) {
+    const map = {
+      arquivo: `/review caminho/do/arquivo.js`,
+      projeto: `/review .`,
+      seguranca: `/security-scan .`,
+    };
+    lines.push(map[s.reviewType] || `/review`);
+    lines.push(`\nAponte problemas de qualidade, seguranca e boas praticas. Sugira correcoes.`);
+    lines.push(`\nUse o estilo ${tone}.`);
+  }
+
+  else if (s.what === 'corrigir') {
+    lines.push(`/debug`);
+    if (s.bugDesc) lines.push(`\nProblema: ${s.bugDesc}`);
+    lines.push(`\nInvestigue a causa raiz, mostre o stack trace, e corrija o bug.`);
+    lines.push(`\nUse o estilo ${tone}.`);
+  }
+
+  else if (s.what === 'planejar') {
+    lines.push(`/plan`);
+    if (s.planDesc) lines.push(`\nO que eu quero construir: ${s.planDesc}`);
+    lines.push(`\nQuebre em etapas, sugira arquitetura, tecnologias e dependencias.`);
+    lines.push(`\nUse o estilo ${tone}.`);
+  }
+
+  else if (s.what === 'seguranca' && s.secType) {
+    const map = {
+      rapida: `/security-scan .`,
+      completa: `/security-scan . --completo`,
+      secrets: `python hooks/validate_security.py .`,
+    };
+    lines.push(map[s.secType]);
+    lines.push(`\nMostre os problemas encontrados com gravidade e sugestao de correcao.`);
+    lines.push(`\nUse o estilo ${tone}.`);
+  }
+
+  else if (s.what === 'testar' && s.testType) {
+    const map = {
+      tdd: `/tdd`,
+      cobertura: `/test --coverage`,
+      estrategia: `/test`,
+    };
+    lines.push(map[s.testType]);
+    if (s.testType === 'estrategia') {
+      lines.push(`\nSugira uma estrategia de testes pro projeto atual: o que testar, com quais ferramentas, e como organizar.`);
+    }
+    lines.push(`\nUse o estilo ${tone}.`);
+  }
+
+  state.prompt = lines.join('\n') || 'Escolha as opcoes acima para gerar o prompt...';
+  updatePrompt();
+}
+
+function updatePrompt() {
+  const el = document.getElementById('prompt-text');
+  if (el) el.textContent = state.prompt;
+
+  // Scroll to prompt
+  const box = document.getElementById('prompt-box');
+  if (box && state.prompt && !state.prompt.includes('Escolha')) {
+    box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
+// ── COPY ──
+async function copyPrompt() {
+  try {
+    await navigator.clipboard.writeText(state.prompt);
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = 'Copiado!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'Copiar';
+      btn.classList.remove('copied');
+    }, 2000);
+  } catch(e) {
+    // fallback
+    const ta = document.createElement('textarea');
+    ta.value = state.prompt;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+  }
+}
+
+// ── HELPERS ──
+function badge(value) {
+  const map = {
+    direct: 'direct', balanced: 'balanced',
+    didatic: 'didatic', casual: 'casual',
+    high: 'high', medium: 'medium', low: 'low'
+  };
+  const cls = map[value] || 'direct';
+  return `<span class="badge badge-${cls}">${value}</span>`;
+}
+
+function depItem(name, ok) {
+  return `<div class="dep-item"><span class="dep-dot ${ok ? 'dep-ok' : 'dep-nok'}"></span>${name}</div>`;
+}
+
+function refresh() { location.reload(); }
+
+// ── INIT ──
+load();
+</script>
+</body>
+</html>

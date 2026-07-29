@@ -38,5 +38,8 @@ agents:  ## Lista todos os agentes disponíveis
 	@echo "Expert agents:"
 	@ls agents/experts/*.md 2>/dev/null | sed 's/.*\///' | sed 's/\.md$$//' | while read a; do echo "  $$a"; done
 
+dashboard:  ## Inicia dashboard web local (http://localhost:8080)
+	python dashboard/server.py 2>/dev/null || python3 dashboard/server.py
+
 clean:  ## Limpa caches Python
 	@find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null; echo "✓ Cache limpo"
