@@ -9,7 +9,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 REPO_DIR = Path(__file__).resolve().parent.parent
-CONFIG_DIR = Path.home() / ".config" / "opencode-core"
+CONFIG_DIR = Path.home() / ".config" / "opencode"
 HOST = "0.0.0.0"
 PORT = 8080
 

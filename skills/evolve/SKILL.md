@@ -21,14 +21,14 @@ This is the second stage of the Continuous Learning System.
 
 ## Algorithm
 
-1. **Read instincts**: Load `~/.claude/learnings/instincts.json`
+1. **Read instincts**: Load `~/.config/opencode/learnings/instincts.json`
 2. **Filter candidates**: Select instincts where confidence >= 0.7 AND evolved_to is null/missing
 3. **Check threshold**: If fewer than 3 candidates total, show message and suggest using `/learn` more
 4. **Group by tags**: Group candidates by ALL their tags (see Multi-Tag Grouping)
    - An instinct contributes to every tag group it belongs to
 5. **For each group with 3+ instincts**:
    a. Generate skill name: `{tag}-learned` (e.g., `parallelism-learned`)
-   b. Check if skill already exists at `~/.claude/skills/{tag}-learned/SKILL.md`
+   b. Check if skill already exists at `~/.config/opencode/skills/{tag}-learned/SKILL.md`
       - If exists: merge new patterns into existing skill (see Skill File Merging below)
       - If not: create new skill directory and SKILL.md (Write tool)
    c. Generate skill file with YAML frontmatter and consolidated patterns

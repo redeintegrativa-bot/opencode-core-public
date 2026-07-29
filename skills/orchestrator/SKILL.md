@@ -119,8 +119,8 @@ If files not in current working directory:
 Load project memory from (in priority order):
 1. `PROJECT_PATH/.claude/memory/MEMORY.md`
 2. `PROJECT_PATH/MEMORY.md`
-3. `~/.claude/projects/{project-hash}/memory/MEMORY.md`
-4. `~/.claude/MEMORY.md`
+3. `~/.config/opencode/projects/{project-hash}/memory/MEMORY.md`
+4. `~/.config/opencode/MEMORY.md`
 
 Extract relevant context for task routing. Details: [memory-integration.md](docs/memory-integration.md)
 
@@ -128,7 +128,7 @@ Extract relevant context for task routing. Details: [memory-integration.md](docs
 Load ONLY rules relevant to the current task (token efficiency is critical):
 1. Detect file types in PROJECT_PATH (.py -> python, .ts -> typescript, .go -> go)
 2. Detect task type (security, testing, refactoring, etc.)
-3. Load matching rules from `~/.claude/rules/{common,python,typescript,go}/`
+3. Load matching rules from `~/.config/opencode/rules/{common,python,typescript,go}/`
 4. Inject loaded rules into subagent prompts alongside memory context
 
 **Injection format** (append to each subagent prompt after EXECUTION RULES block):
@@ -159,7 +159,7 @@ Same file edits?           -> SUBAGENTS sequential (NEVER team)
 Competing theories?        -> AGENT TEAM (adversarial)
 ```
 
-### STEP 5: SHOW TABLE
+### STEP 5: SHOW TABLE + REGISTER TASKS
 If `SILENT_START = true`: Skip this step. Table will appear in FINAL REPORT (Step 12).
 If `SILENT_START = false`: Display this table (all columns required):
 
@@ -170,6 +170,10 @@ Rules:
 - Agent column: ONLY valid agent names (Analyzer, Coder, Reviewer, etc.) -- NEVER file paths or tool names
 - Model column: write "haiku", "inherit", or "opus" explicitly
 - Mode column: write "SUBAGENT" or "TEAMMATE" explicitly
+
+After displaying the table, register each task in the task panel via `todowrite`:
+- Each independent task (Depends On = "-") → `todowrite` with status `pending`
+- Each dependent task → `todowrite` with status `pending`
 
 ### STEP 6: LAUNCH ALL INDEPENDENT TASKS IN ONE MESSAGE
 
@@ -210,9 +214,13 @@ SUBAGENT PROTOCOL:
 ```
 
 ### STEP 7: LAUNCH DEPENDENT TASKS
-After Step 6 tasks complete, launch tasks that depend on them.
+After Step 6 tasks complete, update the task panel via `todowrite`:
+- Successful tasks → mark `completed`
+- Failed tasks → mark `cancelled`
+
+Then launch tasks that depend on them.
 Multiple tasks becoming ready simultaneously -> launch ALL in one message.
-Before launching: verify all dependencies completed with SUCCESS status. Skip tasks whose dependencies FAILED (mark SKIPPED). Escalate critical blockers to user via AskUserQuestion.
+Before launching: verify all dependencies completed with SUCCESS status. Skip tasks whose dependencies FAILED (mark SKIPPED) and update via `todowrite`. Escalate critical blockers to user via AskUserQuestion.
 
 ### STEP 8: VERIFICATION LOOP
 For CODE-MODIFYING tasks only (skip for research/analysis):
@@ -247,13 +255,18 @@ Skill(tool, skill="learn")
 
 Learning capture parameters (canonical source: learn/SKILL.md):
 - Confidence: starts at 0.3, increments +0.2 per confirmation, cap 0.9
-- Storage: ~/.claude/learnings/instincts.json
+- Storage: ~/.config/opencode/learnings/instincts.json
 - Promotion: MANUAL only via `/evolve` command (not automatic)
 - Skip if session had 0 code-modifying tasks
 
 ### STEP 10: METRICS SUMMARY
 Runs AFTER Step 8 (verification) and Step 9 (documentation) complete.
-Display session metrics:
+
+Before displaying metrics, ensure ALL tasks in the task panel are properly marked:
+- Completed tasks → `todowrite` status `completed`
+- Skipped/cancelled tasks → `todowrite` status `cancelled`
+
+Then display session metrics:
 ```
 SESSION METRICS:
   Tasks: X completed / Y total
@@ -389,7 +402,7 @@ Windows cleanup before report (OPTIONAL - kills ALL Python processes):
 
 ### STEP X: STRATEGIC COMPACT (TRIGGERED)
 When context reaches ~70% capacity (signs: slow responses, truncated output, lost context):
-1. Save checkpoint to `~/.claude/sessions/checkpoint_{timestamp}.md`:
+1. Save checkpoint to `~/.config/opencode/sessions/checkpoint_{timestamp}.md`:
    ```markdown
    # Session Checkpoint
    ## Decisions Made
@@ -555,11 +568,11 @@ Session Work -> Step 9 (Capture) -> instincts.json -> Confidence grows -> /evolv
 ```
 
 ### Storage
-- Active patterns: `~/.claude/learnings/instincts.json`
-- Promoted skills: `~/.claude/skills/learned/{pattern_id}/SKILL.md`
+- Active patterns: `~/.config/opencode/learnings/instincts.json`
+- Promoted skills: `~/.config/opencode/skills/learned/{pattern_id}/SKILL.md`
 
 ### Confidence Lifecycle
-See canonical definition in `~/.claude/skills/learn/SKILL.md`.
+See canonical definition in `~/.config/opencode/skills/learn/SKILL.md`.
 Summary: starts 0.3, +0.2 per confirmation, cap 0.9. Promotion at 0.7+ with 3+ confirms (manual via /evolve).
 
 ### Using Learned Patterns

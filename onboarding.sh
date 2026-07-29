@@ -2,7 +2,7 @@
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONFIG_DIR="$HOME/.config/opencode-core"
+CONFIG_DIR="$HOME/.config/opencode"
 mkdir -p "$CONFIG_DIR"
 
 V='\033[32m'

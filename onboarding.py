@@ -4,7 +4,7 @@ import urllib.request
 from pathlib import Path
 
 REPO_DIR = Path(__file__).resolve().parent
-CONFIG_DIR = Path.home() / ".config" / "opencode-core"
+CONFIG_DIR = Path.home() / ".config" / "opencode"
 CONFIG_DIR.mkdir(parents=True, exist_ok=True)
 
 V = '\033[32m'; C = '\033[36m'; A = '\033[33m'

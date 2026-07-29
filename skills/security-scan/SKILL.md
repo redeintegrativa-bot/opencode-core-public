@@ -21,7 +21,7 @@ Optional `[path]` limits scan to a subdirectory. Default: entire project.
 
 ## Algorithm
 
-1. **LOAD** security rules from `~/.claude/rules/common/security.md` via Read (if exists)
+1. **LOAD** security rules from `~/.config/opencode/rules/common/security.md` via Read (if exists)
 2. **DETECT** project type and languages via Glob:
    - Python: `**/*.py`, `requirements.txt`, `pyproject.toml`
    - JavaScript/TypeScript: `**/*.{js,ts,jsx,tsx}`, `package.json`
