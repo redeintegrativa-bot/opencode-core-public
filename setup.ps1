@@ -39,7 +39,7 @@ function Write-Info { Write-Host "i $($args[0])" -ForegroundColor Cyan }
 function Get-ConfigDir {
   if (Get-Command opencode -ErrorAction SilentlyContinue) { return "$env:USERPROFILE\.config\opencode" }
   if (Get-Command claude -ErrorAction SilentlyContinue)   { return "$env:USERPROFILE\.claude" }
-  return "$env:USERPROFILE\.opencode-core"
+  return "$env:USERPROFILE\.config\opencode"
 }
 
 function Install-Skills {

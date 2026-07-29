@@ -1,6 +1,6 @@
 # OpenCode Core — Canivete Suíço para OpenCode
 
-57 agentes · 35 skills · 110 regras · hooks · serviços · templates
+55 agentes · 35 skills · 110 regras · hooks · serviços · templates
 
 > Use com OpenCode no **Termux**, **Linux** ou **Windows Shell**.
 > Tudo funciona em terminal — sem GUI, sem browser.

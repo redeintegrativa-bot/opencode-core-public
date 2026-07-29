@@ -4,8 +4,14 @@
 .PHONY: help setup install validate chat clean
 
 help:  ## Mostra esta ajuda
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | \
-	awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
+	@python -c "
+import re
+with open('Makefile') as f:
+    for line in f:
+        m = re.match(r'^([a-zA-Z_-]+):.*## (.+)', line)
+        if m:
+            print(f'  \033[36m{m.group(1):20s}\033[0m {m.group(2)}')
+" 2>/dev/null || grep -E '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | sed 's/:.*## /:/' | sed 's/^/  /'
 
 setup:  ## Instala skills, agents, rules e hooks no ambiente
 	@bash setup.sh
@@ -20,7 +26,16 @@ chat:  ## Inicia o terminal chat
 	@cd terminal-chat && python opencode_chat.py 2>/dev/null || cd terminal-chat && python3 opencode_chat.py
 
 skills:  ## Lista todas as skills disponíveis
-	@python3 -c "
+	@python -c "
+import json
+with open('skills/registry.json') as f:
+    reg = json.load(f)
+for name, skill in reg['skills'].items():
+    cmd = skill.get('slash_command', '')
+    cmd_str = f' ({cmd})' if cmd else ''
+    print(f'  {name:35s} {skill[\"category\"]:15s}{cmd_str}')
+print(f'\nTotal: {reg[\"total_skills\"]} skills')
+" 2>/dev/null || python3 -c "
 import json
 with open('skills/registry.json') as f:
     reg = json.load(f)

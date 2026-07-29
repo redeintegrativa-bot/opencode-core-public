@@ -27,14 +27,7 @@ Antes de comecar, personalize como o assistente vai falar com voce:
 python onboarding.py
 ```
 
-**Voce escolhe como quer configurar:**
-
-```
-[1] CONSOLE — dialogos passo a passo no terminal (recomendado)
-[2] NAVEGADOR — formulario web em http://localhost:8080
-```
-
-**Os dois fazem as mesmas 3 perguntas** com exemplos visuais:
+**Sao 3 perguntas rapidas** com exemplos visuais:
 
 ```
 [1] DIRETO     → "Cria routes/users.js com handler GET."
@@ -45,6 +38,11 @@ python onboarding.py
 
 Gera uma config de 2 linhas (~20 tokens).
 Pra mudar depois, digite `/config` no chat.
+
+**Prefere configurar pelo navegador?** Abra o dashboard e va em `/onboarding`:
+```bash
+python dashboard/server.py
+```
 
 📖 Quer entender a estrutura completa? Veja `docs/estrutura.md`.
 
@@ -79,7 +77,7 @@ Funciona no navegador do PC ou do Termux (Android).
 
 | Diretório | Finalidade |
 |-----------|-----------|
-| `agents/` | Definições de 57 agentes (L0 core, L1 experts, L2 specialists, system) |
+| `agents/` | Definições de 55 agentes (L0 core, L1 experts, L2 specialists, system) |
 | `skills/` | 35 skills (code-review, debugging, plan, tdd, security, onboarding, etc.) |
 | `rules/` | 110 regras de segurança e boas práticas por linguagem |
 | `hooks/` | Scripts de validação e segurança (pré-commit, secrets scan) |

@@ -97,7 +97,7 @@ get_config_dir() {
     opencode) echo "$HOME/.config/opencode" ;;
     codex)    echo "$HOME/.codex" ;;
     gemini)   echo "$HOME/.gemini" ;;
-    *)        echo "$HOME/.opencode-core" ;;
+    *)        echo "$HOME/.config/opencode" ;;
   esac
 }
 

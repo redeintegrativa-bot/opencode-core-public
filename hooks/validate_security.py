@@ -16,7 +16,7 @@ from typing import Any
 class SecurityValidator:
     """Validates code against security rules defined in a markdown file."""
 
-    DEFAULT_RULES_PATH = "/root/opencode-core/rules/common/security.md"
+    DEFAULT_RULES_PATH = str(Path(__file__).resolve().parent.parent / "rules" / "common" / "security.md")
 
     # Compiled regex patterns for security checks
     SECRET_PATTERNS: list[re.Pattern[str]] = [
@@ -157,10 +157,6 @@ class SecurityValidator:
             if not has_rate_limit:
                 violations.append(self._violation("Rate limiting check on endpoints", "MEDIUM", filename, 1, "(entire file)"))
 
-        has_input = any(p.search(code) for p in self.INPUT_VALIDATION_PATTERNS)
-        if not has_input and len(code.strip()) > 0:
-            violations.append(self._violation("Input validation present", "LOW", filename, 1, "(entire file)"))
-
         self.violations.extend(violations)
         return violations
 
@@ -199,7 +195,7 @@ class SecurityValidator:
         skip_dirs = {".git", "node_modules", "__pycache__", ".venv", "venv", "vendor", ".tox", ".eggs"}
         violations: list[dict[str, Any]] = []
 
-        for root, dirs, files in path.walk():
+        for root, dirs, files in os.walk(str(path)):
             dirs[:] = [d for d in dirs if d not in skip_dirs]
             for fname in sorted(files):
                 fpath = Path(root) / fname

@@ -272,7 +272,7 @@
 <body>
 <div class="container" id="app">
   <div class="header">
-    <h1>OpenCode Core <span id="version-badge" style="font-size:12px;background:#21262d;color:#8b949e;padding:2px 8px;border-radius:10px;font-weight:400;vertical-align:middle;margin-left:6px"></span></h1>
+    <h1>OpenCode Core <span id="version-badge" style="font-size:12px;background:#21262d;color:#8b949e;padding:2px 8px;border-radius:10px;font-weight:400;vertical-align:middle;margin-left:6px;cursor:pointer"></span></h1>
     <p>Canivete suico do OpenCode &middot; Dashboard & Test Drive</p>
   </div>
 
@@ -282,6 +282,19 @@
   </div>
 
   <div id="content" style="display:none"></div>
+</div>
+
+<div id="update-modal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#000000aa;z-index:1000;align-items:center;justify-content:center">
+  <div style="background:#161b22;border:1px solid #30363d;border-radius:12px;padding:24px;max-width:560px;width:90%;max-height:80vh;overflow-y:auto;margin:40px auto">
+    <h2 style="font-size:18px;color:#58a6ff;margin-bottom:8px" id="modal-title">Atualizacao disponivel</h2>
+    <div style="color:#8b949e;font-size:13px;margin-bottom:16px" id="modal-versions"></div>
+    <pre id="modal-changelog" style="background:#0d1117;border:1px solid #30363d;border-radius:6px;padding:12px;font-size:12px;line-height:1.5;color:#c9d1d9;white-space:pre-wrap;overflow-x:auto;margin-bottom:16px"></pre>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button onclick="document.getElementById('update-modal').style.display='none'" style="padding:8px 16px;border-radius:6px;border:1px solid #30363d;background:transparent;color:#c9d1d9;cursor:pointer">Fechar</button>
+      <button id="update-btn" onclick="runUpdate()" style="padding:8px 16px;border-radius:6px;border:none;background:#238636;color:#fff;cursor:pointer">Baixar atualizacao</button>
+    </div>
+    <div id="update-status" style="margin-top:12px;font-size:13px;color:#8b949e"></div>
+  </div>
 </div>
 
 <script>
@@ -297,15 +310,27 @@ let state = {
 // ── LOAD ──
 async function load() {
   try {
-    const [sr, cr, vr] = await Promise.all([
+    const [sr, cr, vr, ur] = await Promise.all([
       fetch('/api/status'),
       fetch('/api/capabilities'),
-      fetch('/api/version')
+      fetch('/api/version'),
+      fetch('/api/check-update')
     ]);
     state.stats = await sr.json();
     state.caps = await cr.json();
     const ver = await vr.json();
-    document.getElementById('version-badge').textContent = 'v' + ver.version;
+    const badge = document.getElementById('version-badge');
+    badge.textContent = 'v' + ver.version;
+    if (ur.ok) {
+      const updateData = await ur.json();
+      if (updateData.has_update) {
+        state.update = updateData;
+        badge.textContent = 'Nova versao!';
+        badge.style.background = '#238636';
+        badge.style.color = '#fff';
+        badge.onclick = () => showUpdateModal(updateData);
+      }
+    }
     render();
   } catch(e) {
     document.getElementById('loading').style.display = 'none';
@@ -313,6 +338,40 @@ async function load() {
     document.getElementById('content').innerHTML =
       '<div class="card" style="text-align:center;padding:40px;color:#ff7b72">' +
       'Erro ao conectar com o servidor.<br>Certifique-se de que o server.py esta rodando.</div>';
+  }
+}
+
+function showUpdateModal(data) {
+  document.getElementById('modal-versions').textContent = data.local + ' -> ' + data.remote;
+  document.getElementById('modal-changelog').textContent = data.changelog || '(sem detalhes)';
+  document.getElementById('update-modal').style.display = 'flex';
+}
+
+async function runUpdate() {
+  const btn = document.getElementById('update-btn');
+  const status = document.getElementById('update-status');
+  btn.disabled = true;
+  btn.textContent = 'Atualizando...';
+  status.textContent = '';
+  try {
+    const r = await fetch('/api/update', { method: 'POST' });
+    const d = await r.json();
+    if (d.success) {
+      status.style.color = '#3fb950';
+      status.textContent = 'Atualizado com sucesso!';
+      btn.textContent = 'OK';
+      setTimeout(() => location.reload(), 2000);
+    } else {
+      status.style.color = '#ff7b72';
+      status.textContent = 'Erro: ' + (d.stderr || d.error || 'desconhecido');
+      btn.disabled = false;
+      btn.textContent = 'Baixar atualizacao';
+    }
+  } catch(e) {
+    status.style.color = '#ff7b72';
+    status.textContent = 'Erro: ' + e.message;
+    btn.disabled = false;
+    btn.textContent = 'Baixar atualizacao';
   }
 }
 

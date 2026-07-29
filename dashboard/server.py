@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import json
 import os
+import re
 import subprocess
 import sys
 from http.server import HTTPServer, SimpleHTTPRequestHandler
@@ -32,14 +33,30 @@ def get_config():
         return {"onboarded": False, "error": str(sys.exc_info()[1])}
 
 
-def count_dir(path, ext=None):
+def count_dir(path, ext=None, recursive=True):
     if not path.exists():
         return 0
     if ext == "skill":
         return len([d for d in path.iterdir() if d.is_dir() and (d / "SKILL.md").exists()])
     if ext:
-        return len(list(path.rglob(f"*.{ext}")))
+        globber = path.rglob if recursive else path.glob
+        return len(list(globber(f"*.{ext}")))
     return len(list(path.iterdir()))
+
+
+def count_rules_individual(path):
+    count = 0
+    if not path.exists():
+        return 0
+    for f in path.rglob("*.md"):
+        if f.name == "README.md":
+            continue
+        try:
+            text = f.read_text(encoding="utf-8", errors="ignore")
+            count += len(re.findall(r'^##\s+', text, re.MULTILINE))
+        except Exception:
+            pass
+    return count
 
 
 def check_command(cmd):
@@ -250,21 +267,23 @@ def get_capabilities():
 def get_status():
     config = get_config()
 
-    agents_core = count_dir(REPO_DIR / "agents" / "core", "md")
-    agents_experts = count_dir(REPO_DIR / "agents" / "experts", "md")
-    agents_specialists = count_dir(REPO_DIR / "agents" / "specialists", "md")
+    agents_core = count_dir(REPO_DIR / "agents" / "core", "md", recursive=False)
+    agents_experts = count_dir(REPO_DIR / "agents" / "experts", "md", recursive=False)
+    agents_specialists = count_dir(REPO_DIR / "agents" / "experts" / "L2", "md", recursive=False)
+    agents_system = count_dir(REPO_DIR / "agents" / "system", "md", recursive=False)
     skills_count = count_dir(REPO_DIR / "skills", "skill")
-    rules_count = count_dir(REPO_DIR / "rules", "md")
+    rules_count = count_rules_individual(REPO_DIR / "rules")
     hooks_count = count_dir(REPO_DIR / "hooks")
 
     return {
         "config": config,
         "stats": {
             "agents": {
-                "total": agents_core + agents_experts + agents_specialists,
+                "total": agents_core + agents_experts + agents_specialists + agents_system,
                 "core": agents_core,
                 "experts": agents_experts,
                 "specialists": agents_specialists,
+                "system": agents_system,
             },
             "skills": skills_count,
             "rules": rules_count,
@@ -292,6 +311,20 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             vf = REPO_DIR / "VERSION"
             version = vf.read_text(encoding="utf-8").strip() if vf.exists() else "0.0.0"
             self._json({"version": version, "repo": "redeintegrativa-bot/opencode-core-public"})
+            return
+
+        if parsed.path == "/api/check-update":
+            try:
+                result = subprocess.run(
+                    [sys.executable, str(REPO_DIR / "scripts" / "check-update.py"), "--json"],
+                    capture_output=True, text=True, timeout=15
+                )
+                if result.returncode == 0 and result.stdout.strip():
+                    self._json(json.loads(result.stdout))
+                else:
+                    self._json({"error": "check-update failed", "stderr": result.stderr}, status=500)
+            except Exception as e:
+                self._json({"error": str(e)}, status=500)
             return
 
         if parsed.path == "/":
@@ -323,6 +356,17 @@ class DashboardHandler(SimpleHTTPRequestHandler):
                 self._json({"success": False, "error": str(e)}, status=400)
             return
 
+        if parsed.path == "/api/update":
+            try:
+                result = subprocess.run(
+                    [sys.executable, str(REPO_DIR / "scripts" / "update.py")],
+                    capture_output=True, text=True, timeout=120
+                )
+                self._json({"success": result.returncode == 0, "stdout": result.stdout, "stderr": result.stderr})
+            except Exception as e:
+                self._json({"success": False, "error": str(e)}, status=500)
+            return
+
         self._json({"success": False, "error": "Not found"}, status=404)
 
     def _json(self, data, status=200):
@@ -337,8 +381,26 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         print(f"  {msg}")
 
 
+def check_update_startup():
+    try:
+        result = subprocess.run(
+            [sys.executable, str(REPO_DIR / "scripts" / "check-update.py"), "--json"],
+            capture_output=True, text=True, timeout=15
+        )
+        if result.returncode == 0 and result.stdout.strip():
+            data = json.loads(result.stdout)
+            if data.get("has_update"):
+                print(f"  [!] Atualizacao disponivel: {data['local']} -> {data['remote']}")
+                print(f"      Abra o dashboard ou rode: make update")
+                print()
+    except Exception:
+        pass
+
+
 def main():
     os.chdir(str(REPO_DIR))
+    check_update_startup()
+
     try:
         server = HTTPServer((HOST, PORT), DashboardHandler)
     except OSError:

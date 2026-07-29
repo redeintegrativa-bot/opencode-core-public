@@ -1,5 +1,29 @@
 # Changelog
 
+## 1.3.0 (2026-07-28)
+
+### Added
+- Check-update com changelog diff: mostra o que mudou entre versoes
+- Dashboard: badge verde "Nova versao!" com modal de changelog + botao atualizar
+- Gatilhos de check-update: onboarding, dashboard, make check-update, make setup
+
+### Changed
+- onboarding.py: removeu menu "Console vs Navegador" — inicia direto
+- onboarding.py: check_version agora so informa (nunca pergunta)
+- check-update.py: nunca mais pergunta "Atualizar agora?" no terminal
+- check-update.py: le VERSION direto do raw.githubusercontent.com
+- README corrigido: 55 agentes (era 57)
+- Dashboard: rules_count agora conta 117 regras individuais (nao 13 arquivos)
+
+### Fixed
+- hooks/validate_security.py: DEFAULT_RULES_PATH agora e relativo ao repo
+- hooks/validate_security.py: path.walk() > os.walk() (compat Python 3.9+)
+- hooks/validate_security.py: removeu falso positivo "Input validation"
+- setup.sh: fallback de diretorio corrigido (~/.config/opencode)
+- setup.ps1: fallback de diretorio corrigido (~/.config/opencode)
+- skills/telegram-bot/: diretorio criado (estava so no registry.json)
+- Makefile: help agora usa python como fallback (sem dependencia de awk)
+
 ## 1.0.0 (2026-07-28)
 
 ### Added

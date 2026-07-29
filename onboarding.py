@@ -1,12 +1,6 @@
 #!/usr/bin/env python3
-import json
-import os
-import subprocess
 import sys
-import threading
-import time
 import urllib.request
-import urllib.error
 from pathlib import Path
 
 REPO_DIR = Path(__file__).resolve().parent
@@ -106,8 +100,6 @@ def onboard_console():
     cprint("Nao tem resposta errada.", A)
     cprint("Da pra mudar depois com /config.", A)
     print()
-    input(f"  {C}{B}Pressione ENTER pra comecar{S} ".ljust(10))
-    print()
 
     # 1. ESTILO
     sep()
@@ -204,50 +196,6 @@ def onboard_console():
     show_summary(tone, focus, verbosity)
 
 
-def onboard_browser():
-    print()
-    hdr("OpenCode Core - Dashboard", A)
-    cprint("Vou iniciar o servidor web pra voce configurar", B)
-    cprint("pelo navegador.", B)
-    print()
-
-    server_script = str(REPO_DIR / "dashboard" / "server.py")
-    port = 8080
-
-    try:
-        proc = subprocess.Popen(
-            [sys.executable, server_script, "--port", str(port)],
-            stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-            creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if os.name == 'nt' else 0
-        )
-    except Exception as e:
-        cprint(f"Erro ao iniciar servidor: {e}", R)
-        cprint("Tente: python dashboard/server.py", A)
-        sys.exit(1)
-
-    time.sleep(1.5)
-
-    print(f"  {V}+{'-'*50}+{S}")
-    print(f"  {V}|  Servidor rodando!                         |{S}")
-    print(f"  {V}|                                          |{S}")
-    print(f"  {V}|  Acesse: {C}http://localhost:{port}{V}             |{S}")
-    print(f"  {V}|  Clique em 'Configurar' pra fazer o      |{S}")
-    print(f"  {V}|  onboarding pelo navegador.               |{S}")
-    print(f"  {V}|                                          |{S}")
-    print(f"  {V}|  Para parar: pressione ENTER aqui        |{S}")
-    print(f"  {V}+{'-'*50}+{S}")
-    print()
-
-    try:
-        input()
-    except (EOFError, KeyboardInterrupt):
-        pass
-    finally:
-        proc.terminate()
-        proc.wait(timeout=3)
-        cprint("Servidor encerrado.", G)
-
-
 def check_version():
     vf = REPO_DIR / "VERSION"
     if not vf.exists():
@@ -261,38 +209,27 @@ def check_version():
         def v(s):
             return tuple(int(x) for x in s.split("."))
         if v(remote) > v(local):
-            print()
+            sep()
             cprint(f"[!] Atualizacao disponivel: {local} -> {remote}", A)
-            try:
-                choice = input(f"  {C}Atualizar agora?{S} [S/n] ").strip().lower()
-                if choice in ("", "s", "sim", "y", "yes"):
-                    subprocess.run([sys.executable, str(REPO_DIR / "scripts" / "update.py")])
-            except (EOFError, KeyboardInterrupt):
-                print()
-            print()
+            cprint(f"    Para atualizar: make update", G)
+            sep()
     except Exception:
         pass
 
 
 def main():
     check_version()
-    print()
-    hdr("OpenCode Core - Onboarding", C)
-    cprint("Como voce quer configurar o assistente?", B)
-    print()
-    opt("1", "CONSOLE", "Configurar direto no terminal, com dialogos passo a passo",
-        "Recomendado pra primeira vez", V, "  <<< recomendado")
-    opt("2", "NAVEGADOR", "Configurar pelo browser com formulario web",
-        "Inicia o dashboard em http://localhost:8080", A)
-    print()
-    cprint("Escolha uma opcao [1-2, Enter=1]:", B)
 
-    i = ask(["console", "browser"], default=1)
+    config_file = CONFIG_DIR / "AGENTS.md"
+    if config_file.exists():
+        print()
+        cprint("Ja configurado!", V)
+        cprint("Para mudar suas preferencias, mande /config no OpenCode.", G)
+        cprint("Ou abra o dashboard:  python dashboard/server.py", G)
+        print()
+        return
 
-    if i == 0:
-        onboard_console()
-    else:
-        onboard_browser()
+    onboard_console()
 
 
 if __name__ == "__main__":
