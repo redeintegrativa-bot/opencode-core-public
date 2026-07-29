@@ -1,9 +1,9 @@
 {
   "version": "1.1.0",
   "generated_at": "2026-07-28",
-  "total_skills": 36,
+  "total_skills": 37,
   "categories": {
-    "Core": 11,
+    "Core": 12,
     "Utility": 6,
     "Workflow": 12,
     "Language": 4,
@@ -319,6 +319,15 @@
       "allowed_tools": ["read", "write", "edit", "grep", "glob", "bash"],
       "category": "Core",
       "slash_command": "/database"
+    },
+    "onboarding": {
+      "description": "Conduz onboarding interativo: perguntas para personalizar AGENTS.md, estilo, idioma e perfil do usuário",
+      "keywords": ["onboarding", "configurar", "início", "primeira vez", "setup", "personalizar", "bem-vindo", "boas-vindas", "welcome"],
+      "agent": "System Coordinator",
+      "user_invokable": true,
+      "allowed_tools": ["read", "write", "bash", "askUserQuestion"],
+      "category": "Core",
+      "slash_command": "/onboarding"
     }
   },
   "routing": {
@@ -473,7 +482,13 @@
     "schema": "database",
     "sqlite": "database",
     "postgres": "database",
-    "mongodb": "database"
+    "mongodb": "database",
+    "onboarding": "onboarding",
+    "boas-vindas": "onboarding",
+    "bem-vindo": "onboarding",
+    "welcome": "onboarding",
+    "configurar": "onboarding",
+    "primeira vez": "onboarding"
   },
   "metadata": {
     "orchestrator_version": "13.0",
@@ -510,7 +525,8 @@
       "/ui-design": "ui-ux-system",
       "/telegram": "telegram-bot",
       "/scaffold": "scaffold",
-      "/database": "database"
+      "/database": "database",
+      "/onboarding": "onboarding"
     }
   }
 }

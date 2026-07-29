@@ -12,12 +12,25 @@ Repositório central com definições de agentes, skills, regras e serviços com
 ```bash
 git clone --depth 1 https://github.com/redeintegrativa-bot/opencode-core-public.git
 cd opencode-core-public
-bash setup.sh        # Linux/macOS
+bash setup.sh        # Linux/macOS/Termux
 # ou
 .\setup.ps1          # Windows PowerShell
 ```
 
 Isso instala automaticamente skills, agentes, regras e hooks no seu ambiente.
+
+### 🎯 Onboarding personalizado (recomendado)
+
+Após a instalação, rode o onboarding para configurar o assistente do **seu jeito**:
+
+```bash
+bash onboarding.sh        # Versão Bash
+# ou
+python onboarding.py      # Versão Python (mais interativa)
+```
+
+São 8 perguntas rápidas: nome, idioma, estilo de resposta, nível, foco, terminal e mais.
+O OpenCode passa a responder no **seu estilo preferido** automaticamente.
 
 ### Instalação por plataforma
 
