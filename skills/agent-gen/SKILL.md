@@ -17,7 +17,8 @@ Cria agentes especializados sob demanda quando o orquestrador nao encontra match
 
 - `/agent-gen` — inicia o fluxo interativo
 - `/agent-gen "descricao"` — ja com contexto
-- Automaticamente quando orchestrator detecta 2+ fallbacks no mesmo dominio
+- Automaticamente quando orchestrator detecta fallback (1a vez se dominio novo, 2a vez se repetido, ou 3+ registros no fallback-log)
+- Sugestao proativa do orchestrator ao detectar tech stack sem agente dedicado
 
 ## Flow (6 Fases)
 
@@ -32,22 +33,35 @@ Use `question` tool para coletar:
 5. **Parent** — Se L2: "Qual expert existente ele complementa?"
 6. **Modelo** — Sugira baseado na complexidade: `sonnet` (padrao), `haiku` (rapido/barato), `opus` (complexo)
 
-### FASE 2: PESQUISA
+### FASE 2: PESQUISA (Paralela Inteligente)
 
-Paralelo com Task tool:
+Lance TODAS as tasks em UMA mensagem:
 
 ```
-Task 1 (Explore): "Varra agents/ existentes procurando 
-  duplicatas ou overlaps com as keywords: {keywords}"
+TASK A (Explore): "Varra agents/ existentes procurando duplicatas
+  ou overlaps com as keywords: {keywords}. Retorne nomes e descricoes
+  de agentes similares encontrados."
 
-Task 2 (Explore): "Leia agents/templates/agent.md para 
-  o template do novo agente"
+TASK B (Explore): "Leia agents/templates/agent.md e agent-l2.md.
+  Retorne o template mais adequado para nivel {nivel}."
 
-Task 3 (WebSearch): "Busque melhores praticas e 
-  padroes para {dominio}"
+TASK C (WebSearch): "Busque 'best practices {dominio} {keywords} 2026'
+  e 'common patterns {dominio} development'. Retorne:
+  - 3 principais frameworks/ferramentas
+  - 2 padroes de design comuns
+  - 1 alerta de seguranca conhecido"
+
+TASK D (WebSearch): "Busque '{dominio} anti-patterns common mistakes'.
+  Retorne 2-3 erros comuns para evitar."
 ```
 
 Se ja existir agente similar, pergunte: "Ja existe {agente} que cobre parte disso. Quer criar mesmo assim ou adaptar o existente?"
+
+**Consolidacao:** Apos receber os resultados, integre as descobertas no prompt do agente:
+- Include ferramentas e frameworks da Task C
+- Include avisos de seguranca
+- Include anti-patterns para evitar
+- Se Task A encontrou similar, sugira diferenciacao
 
 ### FASE 3: GERACAO
 
