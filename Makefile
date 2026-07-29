@@ -41,5 +41,26 @@ agents:  ## Lista todos os agentes disponíveis
 dashboard:  ## Inicia dashboard web local (http://localhost:8080)
 	python dashboard/server.py 2>/dev/null || python3 dashboard/server.py
 
+check-update:  ## Verifica se ha atualizacoes disponiveis
+	python scripts/check-update.py 2>/dev/null || python3 scripts/check-update.py
+
+update:  ## Atualiza para a ultima versao (git pull ou ZIP)
+	python scripts/update.py 2>/dev/null || python3 scripts/update.py
+
+backup:  ## Cria backup do setup atual (.config/opencode)
+	@mkdir -p backups
+	@echo "Criando backup..."
+	@if command -v tar >/dev/null 2>&1; then \
+	  tar -czf "backups/opencode-core-$$(date +%Y%m%d-%H%M%S).tar.gz" -C $$HOME .config/opencode 2>/dev/null || true; \
+	  echo "  Backup salvo em backups/"; \
+	else \
+	  echo "  tar nao disponivel. Copie manualmente ~/.config/opencode"; \
+	fi
+
 clean:  ## Limpa caches Python
-	@find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null; echo "✓ Cache limpo"
+	@if command -v find >/dev/null 2>&1; then \
+	  find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null; \
+	  echo "  Cache limpo"; \
+	else \
+	  echo "  find nao disponivel. Remova __pycache__ manualmente."; \
+	fi

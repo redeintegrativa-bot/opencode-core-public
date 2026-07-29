@@ -288,6 +288,11 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         if parsed.path == "/api/capabilities":
             self._json(get_capabilities())
             return
+        if parsed.path == "/api/version":
+            vf = REPO_DIR / "VERSION"
+            version = vf.read_text(encoding="utf-8").strip() if vf.exists() else "0.0.0"
+            self._json({"version": version, "repo": "redeintegrativa-bot/opencode-core-public"})
+            return
 
         if parsed.path == "/":
             self.path = "/dashboard/index.html"

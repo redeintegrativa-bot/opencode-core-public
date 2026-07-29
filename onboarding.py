@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
+import json
 import os
 import subprocess
 import sys
 import threading
 import time
+import urllib.request
+import urllib.error
 from pathlib import Path
 
 REPO_DIR = Path(__file__).resolve().parent
@@ -245,7 +248,35 @@ def onboard_browser():
         cprint("Servidor encerrado.", G)
 
 
+def check_version():
+    vf = REPO_DIR / "VERSION"
+    if not vf.exists():
+        return
+    local = vf.read_text(encoding="utf-8").strip()
+    try:
+        req = urllib.request.Request(
+            "https://api.github.com/repos/redeintegrativa-bot/opencode-core-public/git/ref/heads/master",
+            headers={"User-Agent": "opencode-core/1.0", "Accept": "application/json"}
+        )
+        with urllib.request.urlopen(req, timeout=3) as resp:
+            data = json.loads(resp.read())
+            sha = data.get("object", {}).get("sha", "")
+            fetch_url = f"https://raw.githubusercontent.com/redeintegrativa-bot/opencode-core-public/master/VERSION"
+        req2 = urllib.request.Request(fetch_url, headers={"User-Agent": "opencode-core/1.0"})
+        with urllib.request.urlopen(req2, timeout=3) as resp2:
+            remote = resp2.read().decode().strip()
+            def v(s):
+                return tuple(int(x) for x in s.split("."))
+            if v(remote) > v(local):
+                cprint(f"Nova versao {remote} disponivel! (voce tem {local})", A)
+                cprint(f"Rode: make update", G)
+                print()
+    except Exception:
+        pass
+
+
 def main():
+    check_version()
     print()
     hdr("OpenCode Core - Onboarding", C)
     cprint("Como voce quer configurar o assistente?", B)

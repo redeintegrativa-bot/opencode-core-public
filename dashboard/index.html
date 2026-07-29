@@ -272,7 +272,7 @@
 <body>
 <div class="container" id="app">
   <div class="header">
-    <h1>OpenCode Core</h1>
+    <h1>OpenCode Core <span id="version-badge" style="font-size:12px;background:#21262d;color:#8b949e;padding:2px 8px;border-radius:10px;font-weight:400;vertical-align:middle;margin-left:6px"></span></h1>
     <p>Canivete suico do OpenCode &middot; Dashboard & Test Drive</p>
   </div>
 
@@ -297,12 +297,15 @@ let state = {
 // ── LOAD ──
 async function load() {
   try {
-    const [sr, cr] = await Promise.all([
+    const [sr, cr, vr] = await Promise.all([
       fetch('/api/status'),
-      fetch('/api/capabilities')
+      fetch('/api/capabilities'),
+      fetch('/api/version')
     ]);
     state.stats = await sr.json();
     state.caps = await cr.json();
+    const ver = await vr.json();
+    document.getElementById('version-badge').textContent = 'v' + ver.version;
     render();
   } catch(e) {
     document.getElementById('loading').style.display = 'none';
