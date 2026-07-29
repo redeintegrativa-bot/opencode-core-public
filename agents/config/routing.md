@@ -39,6 +39,7 @@ version: 12.0
 | offensive security, pentest, exploit, red team | offensive_security_expert.md | inherit | L1 |
 | reverse engineer, binary, disassemble, IDA, Ghidra | reverse_engineering_expert.md | inherit | L1 |
 | decompile, .ex4, .ex5, EA protection | mql_decompilation_expert.md | inherit | L1 |
+| audit, ecosystem, health, config drift, estrutura, consistência | framework_evolution_expert.md | inherit | L1 |
 
 ### MCP Plugin Keywords
 
@@ -117,6 +118,7 @@ version: 12.0
 | claude-* / prompt-* / ai-* | claude_systems_expert |
 | arch-* / design-* | architect_expert |
 | devops-* / deploy-* / ci-* | devops_expert |
+| audit-* / ecosystem-* / framework-* | framework_evolution_expert |
 
 ---
 

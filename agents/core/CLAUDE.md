@@ -126,7 +126,7 @@ OGNI RICHIESTA → ORCHESTRATOR V7.0 → DELEGA → AGENT SPECIALIZZATI
 └───────────────┘   └───────┬───────┘   └───────────────┘
                             │
         ┌───────────────────┴───────────────────┐
-        │           EXPERTS (22)                │
+        │           EXPERTS (23)                │
         │       (Chiamati al bisogno)           │
         ├───────────────────────────────────────┤
         │ • GUI Expert (PyQt5)                  │
@@ -137,6 +137,7 @@ OGNI RICHIESTA → ORCHESTRATOR V7.0 → DELEGA → AGENT SPECIALIZZATI
         │ • Architect Expert                    │
         │ • Integration Expert (API)            │
         │ • DevOps Expert (CI/CD)               │
+        │ • Framework Evolution Expert (Audit)  │
         │ • Languages Expert (Python/JS/C#)     │
         │ • Tester Expert (QA/Debug)            │
         │ • AI Integration Expert (LLM)         │
@@ -155,7 +156,7 @@ OGNI RICHIESTA → ORCHESTRATOR V7.0 → DELEGA → AGENT SPECIALIZZATI
 
 ---
 
-## 👥 AGENT DISPONIBILI (44 Totali)
+## 👥 AGENT DISPONIBILI (45 Totali)
 
 ### Core Agents (7)
 | Agent | File | Ruolo | Model | Istanze |
@@ -168,7 +169,7 @@ OGNI RICHIESTA → ORCHESTRATOR V7.0 → DELEGA → AGENT SPECIALIZZATI
 | System Coordinator | `core/system_coordinator.md` | Resource/Token management | haiku | 1 |
 | OpenCode Assistant | `core/opencode-assistant.md` | Meta-agent: direct, concise, PT-BR | - | 1 |
 
-### Expert Agents (22)
+### Expert Agents (23)
 | Expert | File | Specializzazione | Model |
 |--------|------|------------------|-------|
 | GUI Super Expert | `experts/gui-super-expert.md` | PyQt5, Qt, Widget, Layout | sonnet |
@@ -180,6 +181,7 @@ OGNI RICHIESTA → ORCHESTRATOR V7.0 → DELEGA → AGENT SPECIALIZZATI
 | Architect Expert | `experts/architect_expert.md` | Architecture, Design Patterns | opus |
 | Integration Expert | `experts/integration_expert.md` | API, REST, Webhook, cTrader | sonnet |
 | DevOps Expert | `experts/devops_expert.md` | DevOps, CI/CD, Deploy, Docker | haiku |
+| Framework Evolution | `experts/framework_evolution_expert.md` | Ecosystem audit, config drift, structural integrity | sonnet |
 | Languages Expert | `experts/languages_expert.md` | Python, JavaScript, C# | sonnet |
 | AI Integration | `experts/ai_integration_expert.md` | AI/LLM, Model Selection, Fine-tuning | sonnet |
 | Claude Systems | `experts/claude_systems_expert.md` | Claude Ecosystem, Cost Optimization | sonnet |
@@ -263,7 +265,7 @@ agents/
 │   ├── system_coordinator.md # 💰 Resource/Token management
 │   └── opencode-assistant.md # 🤖 Meta-agent
 │
-├── experts/                  # Agent specializzati (22)
+├── experts/                  # Agent specializzati (23)
 │   ├── gui-super-expert.md       # 🎨 PyQt5/Qt/UI
 │   ├── tester_expert.md          # 🧪 Testing/QA/Debug
 │   ├── database_expert.md        # 🗄️ SQL/SQLite/PostgreSQL
@@ -273,6 +275,7 @@ agents/
 │   ├── architect_expert.md       # 🏗️ Architettura/Design
 │   ├── integration_expert.md     # 🔌 API/REST/Webhook
 │   ├── devops_expert.md          # 🚀 DevOps/CI/CD
+│   ├── framework_evolution_expert.md # 🔄 Framework evolution/audit
 │   ├── languages_expert.md       # 💻 Python/JS/C#
 │   ├── ai_integration_expert.md  # 🤖 AI/LLM Integration
 │   ├── claude_systems_expert.md  # 🎛️ Claude Ecosystem
@@ -438,4 +441,4 @@ Output <promise>DONE</promise> quando test passano."
 
 ---
 
-**Ultimo aggiornamento:** 28 Jul 2026 - V13.0 - 44 agents total (7 L0 + 22 L1 + 15 L2)
+**Ultimo aggiornamento:** 28 Jul 2026 - V13.0 - 45 agents total (7 L0 + 23 L1 + 15 L2)

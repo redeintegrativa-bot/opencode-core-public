@@ -116,8 +116,8 @@ orchestrator/
 │   ├── health-check.md         # Diagnostic system
 │   └── observability.md        # Metrics and monitoring
 ├── agents/
-│   ├── core/                   # L0 Core agents (6)
-│   ├── experts/                # L1 Expert agents (22)
+│   ├── core/                   # L0 Core agents (7)
+│   ├── experts/                # L1 Expert agents (23)
 │   │   └── L2/                 # L2 Specialists (15)
 │   ├── system/                 # System protocols
 │   ├── config/                 # Configuration files

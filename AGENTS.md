@@ -1,6 +1,6 @@
 # OpenCode Core — Canivete Suíço para OpenCode
 
-55 agentes · 36 skills · 117 regras · hooks · serviços · templates
+56 agentes · 36 skills · 117 regras · hooks · serviços · templates
 
 > Use com OpenCode no **Termux**, **Linux** ou **Windows Shell**.
 > Tudo funciona em terminal — sem GUI, sem browser.
@@ -47,12 +47,12 @@ ls skills/ | head -20
 cat skills/registry.json | python -m json.tool | head -30
 ```
 
-## 🤖 Agentes (55)
+## 🤖 Agentes (56)
 
 | Nível | Qtd | Descrição |
 |-------|-----|-----------|
 | **L0 Core** | 9 | orchestrator, analyzer, coder, reviewer, documenter, architect... |
-| **L1 Experts** | 22 | security, devops, database, browser, UI/UX, trading, n8n... |
+| **L1 Experts** | 23 | security, devops, database, browser, UI/UX, trading, n8n, framework... |
 | **L2 Specialists** | 15 | auth, db-query, gui-layout, test-unit, trading-risk... |
 | **System** | 9 | system coordinator, memory, services, fallback... |
 

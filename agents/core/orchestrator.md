@@ -55,6 +55,7 @@ STEP 6: Show final table with results. Run AGENT EVOLUTION check.
 | prompt optimize | experts/L2/claude-prompt-optimizer.md | sonnet (inherit) |
 | architettura, design | experts/architect_expert.md | opus |
 | DevOps, deploy, CI/CD | experts/devops_expert.md | haiku |
+| audit, ecosystem, config drift | experts/framework_evolution_expert.md | sonnet (inherit) |
 | Python, JS, C#, coding | experts/languages_expert.md | sonnet (inherit) |
 | refactor, clean code | experts/L2/languages-refactor-specialist.md | sonnet (inherit) |
 | AI, LLM, GPT | experts/ai_integration_expert.md | sonnet (inherit) |
@@ -201,7 +202,7 @@ Este script analisa:
 
 ## AGENT INVENTORY
 
-**Core (6):** analyzer, coder, reviewer, documenter, system_coordinator, orchestrator
+**Core (7):** analyzer, coder, reviewer, documenter, system_coordinator, orchestrator, opencode-assistant
 **L1 Expert (22):** gui-super, database, security, mql, trading, tester, architect, integration, devops, languages, ai_integration, claude_systems, mobile, n8n, social_identity, offensive_security, reverse_engineering, mql_decompilation, browser_automation, mcp_integration, notification, payment_integration
 **L2 Specialist (15):** gui-layout, db-query, security-auth, api-endpoint, test-unit, mql-optimization, trading-risk, mobile-ui, n8n-workflow, claude-prompt, architect-design, devops-pipeline, languages-refactor, ai-model, social-oauth
 
