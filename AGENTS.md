@@ -1,109 +1,30 @@
-# OpenCode Core — Canivete Suíço para OpenCode
+# ONBOARDING
+TONE=balanced FOCUS=backend VERBOSITY=medium
+# V14.0 — 7 core agents · category routing · quality gates · knowledge store
 
-56 agentes · 37 skills · 117 regras · hooks · serviços · templates
+## Features Rápidas
 
-> Use com OpenCode no **Termux**, **Linux** ou **Windows Shell**.
-> Tudo funciona em terminal — sem GUI, sem browser.
+| Comando/Trigger | O que acontece |
+|----------------|----------------|
+| `analyze` / `explore` | Router → analyzer (haiku) — pesquisa, mapeia dependências |
+| `implement` / `fix` / `code` | Router → coder (sonnet) — implementa, debuga |
+| `review` / `validate` | Router → reviewer (sonnet) — code review + quality gates |
+| `document` / `readme` | Router → documenter (haiku) — docs + changelog |
+| `deploy` / `ci` / `docker` | Router → coder (haiku) — devops via skill |
+| Tarefa crítica (auth, security) | Router → phase=critical → adversarial review automático |
+| Erro de sintaxe/import | Quality Gate BLOCKER → re-route automático pra fix |
+| Tipos inconsistentes | CQ-03 → auto-fix silencioso |
+| Sessão interrompida | Session Recovery → auto-resume sem perguntar |
+| Tecnologia nova sem skill | Fallback Log → 3+ ocorrências → auto-cria skill |
 
-## ⚡ Instalação
+## Skills Úteis
 
-```bash
-# Android (Termux)
-pkg install git python3 nodejs
-git clone --depth 1 https://github.com/redeintegrativa-bot/opencode-core-public
-cd opencode-core-public
-bash setup.sh
+`/debug` · `/plan` · `/review` · `/fix` · `/tdd` · `/refactor` · `/api-design` · `/database` · `/security-scan` · `/clone` · `/onboarding` · `/verification-loop`
 
-# Linux
-git clone --depth 1 https://github.com/redeintegrativa-bot/opencode-core-public
-cd opencode-core-public
-bash setup.sh
+## Auto-Decisões (não pergunto)
 
-# Windows (PowerShell)
-git clone --depth 1 https://github.com/redeintegrativa-bot/opencode-core-public
-cd opencode-core-public
-.\setup.ps1
-```
-
-Depois de instalar, o OpenCode já reconhece skills, agentes e regras automaticamente.
-
-## 🎯 Comandos Rápidos
-
-```bash
-# Terminal chat (funciona no Termux!)
-cd terminal-chat
-pip install rich prompt_toolkit
-python opencode_chat.py         # ou python3 no Linux
-
-# Validar segurança
-python hooks/validate_security.py .   # ou python3 no Linux
-
-# Ver agentes disponíveis
-ls agents/core/
-ls agents/experts/
-
-# Ver skills
-ls skills/ | head -20
-cat skills/registry.json | python -m json.tool | head -30
-```
-
-## 🤖 Agentes (56)
-
-| Nível | Qtd | Descrição |
-|-------|-----|-----------|
-| **L0 Core** | 9 | orchestrator, analyzer, coder, reviewer, documenter, architect... |
-| **L1 Experts** | 23 | security, devops, database, browser, UI/UX, trading, n8n, framework... |
-| **L2 Specialists** | 15 | auth, db-query, gui-layout, test-unit, trading-risk... |
-| **System** | 9 | system coordinator, memory, services, fallback... |
-
-## 🧠 Skills (37)
-
-Pra usar qualquer skill, o OpenCode roteia automaticamente. Skills principais:
-
-| Skill | O que faz | Atalho |
-|-------|-----------|--------|
-| `code-review` | Revisão de código como staff engineer | `/review` |
-| `debugging` | Debug sistemático com análise de causa raiz | `/debug` |
-| `plan` | Planejamento de implementação | `/plan` |
-| `tdd-workflow` | Desenvolvimento orientado a testes | `/tdd` |
-| `security-scan` | Auditoria de segurança OWASP | `/security-scan` |
-| `fix` | Correção de bugs | `/fix` |
-| `refactor-clean` | Refatoração e clean code | `/refactor` |
-| `testing-strategy` | Estratégia de testes e cobertura | `/test` |
-| `orchestrator` | Coordenação multi-agente | `/orchestrator` |
-| `clone-on-demand` | Clona repositórios automaticamente | `/clone` |
-| `ui-ux-system` | Design system com Tailwind + Radix | `/ui-design` |
-| `browser-agent` | Automação de browser | — |
-
-## 📁 Estrutura
-
-```
-opencode-core-public/
-├── agents/          → 55 agentes (.md)
-├── skills/          → 35 skills
-├── rules/           → 110 regras de segurança
-├── hooks/           → scripts de validação
-├── workflows/       → bugfix, feature, refactoring
-├── services/        → ranking, fallback, learning
-├── providers/       → DeFi/crypto data providers
-├── memory/          → persistência de memória
-├── terminal-chat/   → chat TUI (funciona no Termux!)
-├── my-money-track/  → app financeiro template
-├── .opencode/       → config + agentes OpenCode
-├── .claude-plugin/  → plugin Claude Code
-├── .codex-plugin/   → plugin Codex
-├── setup.sh         → instalador Linux/Termux
-└── setup.ps1        → instalador Windows
-```
-
-## 🔒 Segurança (obrigatório)
-
-- Sem tokens hardcoded
-- `.env` no `.gitignore`
-- Rode `python hooks/validate_security.py .` antes de todo commit
-
-## 🚀 Rede Integrativa
-
-Este repositório faz parte do ecossistema **Rede Integrativa**.
-
-[https://github.com/redeintegrativa-bot](https://github.com/redeintegrativa-bot)
+- Categoria da tarefa → detecto automaticamente
+- Mode (quick/normal/full/critical) → detecto pela complexidade
+- Gate MEDIUM/LOW → auto-fixo sem te incomodar
+- Revisão adversarial → só rodo em código crítico
+- Conhecimento → salvo no knowledge store automaticamente

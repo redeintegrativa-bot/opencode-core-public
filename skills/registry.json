@@ -3,8 +3,8 @@
   "generated_at": "2026-07-28",
   "total_skills": 37,
   "categories": {
-    "Core": 14,
-    "Utility": 6,
+    "Core": 13,
+    "Utility": 7,
     "Workflow": 12,
     "Language": 4,
     "Learning": 2,
@@ -329,24 +329,25 @@
       "category": "Core",
       "slash_command": "/onboarding"
     },
-    "agent-gen": {
-      "description": "Dynamic agent generation for uncovered domains — diagnoses gaps, researches best practices, generates agent docs, and registers them",
-      "keywords": ["agent", "generate", "create", "new agent", "specialist", "expert", "domain", "gap", "dynamic"],
-      "agent": "Architect Expert",
+    "framework-evolve": {
+      "description": "Audita e evolui o framework pessoal: agents, routing, gates, skills registry. Use /evolve-framework.",
+      "keywords": ["evolve-framework", "audit", "framework", "health", "agents", "routing", "gates"],
+      "agent": "System Coordinator",
       "user_invokable": true,
-      "allowed_tools": ["read", "grep", "glob", "write", "edit", "bash", "websearch", "task"],
-      "category": "Core",
-      "slash_command": "/agent-gen"
+      "allowed_tools": ["read", "write", "edit", "glob", "grep", "bash"],
+      "category": "Utility",
+      "slash_command": "/evolve-framework"
     },
-    "perplexity": {
-      "description": "Deep web research with synthesized answers and cited sources — Perplexity-style AI search for complex questions, current events, and technical research",
-      "keywords": ["perplexity", "pesquisa profunda", "deep research", "pesquisa web", "investigacao", "fact check", "fontes", "cited search"],
-      "agent": "Framework Evolution Expert",
+    "image-gen": {
+      "description": "Geração de imagens via API (Replicate, FAL, Stability AI). Use /image para criar imagens programaticamente.",
+      "keywords": ["image", "generate", "ai", "stable-diffusion", "flux", "replicate", "fal", "imagem", "gerar"],
+      "agent": "Coder",
       "user_invokable": true,
-      "allowed_tools": ["websearch", "webfetch", "read", "write"],
+      "allowed_tools": ["read", "write", "bash"],
       "category": "Core",
-      "slash_command": "/perplexity"
-    },
+      "slash_command": "/image"
+    }
+  },
   "routing": {
     "api": "api-design",
     "rest": "api-design",
@@ -510,18 +511,17 @@
     "configuração": "onboarding",
     "mudar estilo": "onboarding",
     "mudar tom": "onboarding",
-    "pesquisa": "perplexity",
-    "pesquisa profunda": "perplexity",
-    "deep research": "perplexity",
-    "fact check": "perplexity",
-    "tendencias": "perplexity",
-    "investigar": "perplexity",
-    "agent-gen": "agent-gen",
-    "generate agent": "agent-gen",
-    "new specialist": "agent-gen",
-    "new expert": "agent-gen",
-    "create agent": "agent-gen",
-    "dynamic agent": "agent-gen"
+    "evolve-framework": "framework-evolve",
+    "audit": "framework-evolve",
+    "framework": "framework-evolve",
+    "image": "image-gen",
+    "generate image": "image-gen",
+    "flux": "image-gen",
+    "stable-diffusion": "image-gen",
+    "imagem": "image-gen",
+    "gerar": "image-gen",
+    "replicate": "image-gen",
+    "fal": "image-gen"
   },
   "metadata": {
     "orchestrator_version": "13.0",
@@ -560,10 +560,9 @@
       "/scaffold": "scaffold",
       "/database": "database",
       "/onboarding": "onboarding",
-      "/config": "onboarding",
-    "/agent-gen": "agent-gen",
-    "/perplexity": "perplexity",
-    "/pesquisa": "perplexity"
-    }
+    "/config": "onboarding",
+    "/evolve-framework": "framework-evolve",
+    "/image": "image-gen"
+  }
   }
 }
