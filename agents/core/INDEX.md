@@ -5,13 +5,13 @@ description: Complete navigation index for the multi-agent system with all 43 ag
 
 # AGENTS INDEX
 
-> **Version:** 12.0 DEEP AUDIT
-> **Total Agents:** 43 (6 Core + 22 L1 Experts + 15 L2 Specialists)
-> **Last Updated:** 26 Febbraio 2026
+> **Version:** 13.0
+> **Total Agents:** 44 (7 Core + 22 L1 Experts + 15 L2 Specialists)
+> **Last Updated:** 28 Jul 2026
 
 ---
 
-## CORE AGENTS (6)
+## CORE AGENTS (7)
 
 | Agent | Role | Model | Description |
 |-------|------|-------|-------------|
@@ -21,6 +21,7 @@ description: Complete navigation index for the multi-agent system with all 43 ag
 | **reviewer.md** | Quality Validation | sonnet | Code review, best practices, security checks |
 | **documenter.md** | Documentation | haiku | Manages project docs, todolist, worklog |
 | **system_coordinator.md** | Resource Manager | haiku | Token tracking, metrics, file maintenance, cleanup |
+| **opencode-assistant.md** | Meta Agent | - | Direct, concise assistant behavior, Portuguese BR, action-first |
 
 ---
 
@@ -93,7 +94,8 @@ description: Complete navigation index for the multi-agent system with all 43 ag
 ```
 ORCHESTRATOR (opus)
     |
-    +-- CORE AGENTS (6)
+    +-- CORE AGENTS (7)
+    |   +-- opencode-assistant (meta)
     |   +-- analyzer (haiku)
     |   +-- coder (sonnet)
     |   +-- reviewer (sonnet)
@@ -198,6 +200,7 @@ agents/
     reviewer.md
     documenter.md
     system_coordinator.md
+    opencode-assistant.md
   experts/
     ai_integration_expert.md
     architect_expert.md
@@ -268,8 +271,8 @@ agents/
 
 | Category | Count |
 |----------|-------|
-| **Total Agents** | 43 |
-| Core Agents (L0) | 6 |
+| **Total Agents** | 44 |
+| Core Agents (L0) | 7 |
 | L1 Experts | 22 |
 | L2 Specialists | 15 |
 | L1 Recent Additions | 4 |
@@ -290,5 +293,5 @@ agents/
 ---
 
 **Status:** Production Ready
-**Version:** 12.0 DEEP AUDIT
-**Quality:** 100% organized - 43 agents verified
+**Version:** 13.0
+**Quality:** 100% organized - 44 agents verified

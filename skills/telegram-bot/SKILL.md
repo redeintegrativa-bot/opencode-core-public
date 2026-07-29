@@ -1,3 +1,11 @@
+---
+name: telegram-bot
+description: Remote OpenCode interface via Telegram. Inicia sessao remota, notificacoes e daemon mode.
+user-invokable: true
+metadata:
+  keywords: [telegram, bot, remote, notification]
+---
+
 # Telegram Bot
 
 Remote OpenCode interface via Telegram.

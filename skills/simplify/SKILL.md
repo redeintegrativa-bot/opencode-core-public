@@ -1,7 +1,7 @@
 ---
 name: simplify
 description: Review and simplify code for clarity and maintainability
-user-invocable: true
+user-invokable: true
 allowed-tools: [Read, Edit, Grep, Glob, Task]
 ---
 
@@ -36,3 +36,4 @@ Review code for unnecessary complexity and suggest simplifications.
 - Preserve all tests passing
 - Keep function signatures unchanged
 - Prefer readability over cleverness
+

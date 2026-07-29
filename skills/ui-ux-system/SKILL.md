@@ -1,7 +1,7 @@
 ---
 name: ui-ux-system
 description: Comprehensive UI/UX Design System for building accessible, animated, and modern web interfaces. Synthesizes best practices from shadcn/ui, Magic UI, Framer Motion, Radix Primitives, Lucide/Tabler icons, Tremor dashboards, XYFlow, tldraw, Novel editor, and AI streaming patterns from llm-ui and CopilotKit.
-user-invocable: true
+user-invokable: true
 allowed-tools:
   - bash
   - read
@@ -1571,3 +1571,4 @@ import { cn } from "@/lib/utils"
 | Need accessible components? | `radix-ui/primitives` |
 | Need SaaS boilerplate? | `saasfly/saasfly` + `vercel/commerce` |
 | Need 3D/visual effects? | `pmndrs/react-three-fiber` |
+

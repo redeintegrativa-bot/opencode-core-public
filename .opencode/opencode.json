@@ -1,18 +1,14 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "name": "opencode-core-public",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "description": "OpenCode Core by Rede Integrativa — 55 agents, 35 skills, canivete suíço",
-  "agents": {
-    "source": "agents"
-  },
+  "agents": {"source": "../agents"},
   "skills": {
     "source": "../skills",
     "registry": "../skills/registry.json"
   },
-  "rules": {
-    "source": "rules"
-  },
+  "rules": {"source": "../rules"},
   "hooks": {
     "validate_security": {
       "command": "python3 ../hooks/validate_security.py .",
@@ -38,3 +34,4 @@
     }
   }
 }
+

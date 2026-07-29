@@ -884,10 +884,10 @@ To: orchestrator
 ### File di Riferimento
 | File | Scopo |
 |------|-------|
-| `~/.claude/agents/system/AGENT_REGISTRY.md` | Verifica routing e keyword |
-| `~/.claude/agents/system/COMMUNICATION_HUB.md` | Formato messaggi |
-| `~/.claude/agents/system/PROTOCOL.md` | Output standard |
-| `~/.claude/agents/docs/SYSTEM_ARCHITECTURE.md` | Architettura completa |
+| `~/.config/opencode/agents/system/AGENT_REGISTRY.md` | Verifica routing e keyword |
+| `~/.config/opencode/agents/system/COMMUNICATION_HUB.md` | Formato messaggi |
+| `~/.config/opencode/agents/system/PROTOCOL.md` | Output standard |
+| `~/.config/opencode/agents/docs/SYSTEM_ARCHITECTURE.md` | Architettura completa |
 
 ### Comunicazione con Orchestrator
 - **INPUT:** Ricevo TASK_REQUEST da orchestrator
@@ -1012,3 +1012,4 @@ Se hai N operazioni indipendenti (Read, Edit, Grep, Task, Bash), lanciale **TUTT
 | N sotto-task indipendenti | N Task in 1 messaggio |
 
 **VIOLAZIONE = TASK FALLITO. ENFORCEMENT: ASSOLUTO.**
+

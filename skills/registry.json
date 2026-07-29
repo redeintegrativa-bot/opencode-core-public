@@ -1,9 +1,9 @@
 {
   "version": "1.1.0",
   "generated_at": "2026-07-28",
-  "total_skills": 35,
+  "total_skills": 36,
   "categories": {
-    "Core": 12,
+    "Core": 13,
     "Utility": 6,
     "Workflow": 12,
     "Language": 4,
@@ -328,6 +328,15 @@
       "allowed_tools": ["read", "write", "bash", "askUserQuestion"],
       "category": "Core",
       "slash_command": "/onboarding"
+    },
+    "agent-gen": {
+      "description": "Dynamic agent generation for uncovered domains — diagnoses gaps, researches best practices, generates agent docs, and registers them",
+      "keywords": ["agent", "generate", "create", "new agent", "specialist", "expert", "domain", "gap", "dynamic"],
+      "agent": "Architect Expert",
+      "user_invokable": true,
+      "allowed_tools": ["read", "grep", "glob", "write", "edit", "bash", "websearch", "task"],
+      "category": "Core",
+      "slash_command": "/agent-gen"
     }
   },
   "routing": {
@@ -492,7 +501,13 @@
     "config": "onboarding",
     "configuração": "onboarding",
     "mudar estilo": "onboarding",
-    "mudar tom": "onboarding"
+    "mudar tom": "onboarding",
+    "agent-gen": "agent-gen",
+    "generate agent": "agent-gen",
+    "new specialist": "agent-gen",
+    "new expert": "agent-gen",
+    "create agent": "agent-gen",
+    "dynamic agent": "agent-gen"
   },
   "metadata": {
     "orchestrator_version": "13.0",
@@ -531,7 +546,8 @@
       "/scaffold": "scaffold",
       "/database": "database",
       "/onboarding": "onboarding",
-      "/config": "onboarding"
+      "/config": "onboarding",
+    "/agent-gen": "agent-gen"
     }
   }
 }

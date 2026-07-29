@@ -1,3 +1,11 @@
+---
+name: database
+description: Ajuda com banco de dados: SQL queries, migrations, models, otimizacao e design de schema.
+user-invokable: true
+metadata:
+  keywords: [database, sql, query, migration, schema]
+---
+
 # Database
 
 ## Description

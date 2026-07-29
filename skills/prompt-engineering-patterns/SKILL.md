@@ -2,7 +2,7 @@
 name: prompt-engineering-patterns
 description: Master advanced prompt engineering techniques to maximize LLM performance, reliability, and controllability. Use for pre-processing user requests, expanding vague prompts, and optimizing for orchestrator execution.
 disable-model-invocation: false
-user-invocable: true
+user-invokable: true
 argument-hint: "[original request]"
 ---
 
@@ -461,3 +461,4 @@ This skill returns the optimized request, which the orchestrator uses for task d
 
 **PROMPT ENGINEERING PATTERNS V1.0**
 *Better input. Better output. Optimized for orchestrator.*
+

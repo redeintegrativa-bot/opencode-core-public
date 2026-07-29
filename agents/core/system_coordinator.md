@@ -23,7 +23,7 @@ taskkill /F /IM cmd.exe /FI "WINDOWTITLE ne Administrator*" 2>NUL
 taskkill /F /IM powershell.exe /FI "WINDOWTITLE ne Administrator*" 2>NUL
 
 # Elimina file nul se esistono
-rm -f ~/.claude/nul ~/.claude/agents/nul ~/nul 2>NUL
+rm -f ~/.config/opencode/nul ~/.config/opencode/agents/nul ~/nul 2>NUL
 ```
 **Violazione = Eccessivo consumo CPU/RAM o file bloccanti = INACCETTABILE**
 
@@ -735,3 +735,5 @@ Se hai N operazioni indipendenti (Read, Edit, Grep, Task, Bash), lanciale **TUTT
 | N sotto-task indipendenti | N Task in 1 messaggio |
 
 **VIOLAZIONE = TASK FALLITO. ENFORCEMENT: ASSOLUTO.**
+
+

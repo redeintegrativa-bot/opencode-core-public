@@ -5,11 +5,11 @@ description: Centralized registry for agent routing and keyword mapping
 
 # AGENT REGISTRY V2.0 - Registro Centralizzato Competenze
 
-> **Versione:** 6.0 - L2 Sub-Agents Integration
-> **Data:** 2 Febbraio 2026
+> **Versione:** 7.0 - L2 Sub-Agents + Core Expansion
+> **Data:** 28 Jul 2026
 > **Scopo:** Mappatura COMPLETA task → agent per routing automatico (3 livelli)
 > **Usato da:** orchestrator.md per selezione agent
-> **Totale Agent:** 43 (6 Core + 22 L1 Expert + 15 L2 Specialist)
+> **Totale Agent:** 44 (7 Core + 22 L1 Expert + 15 L2 Specialist)
 
 ---
 
@@ -52,6 +52,7 @@ description: Centralized registry for agent routing and keyword mapping
 
 | Agent | File | Trigger Keywords | Quando Usare | Model |
 |-------|------|------------------|--------------|-------|
+| **opencode-assistant** | `core/opencode-assistant.md` | assistente, help, /help, comportamento | Meta agent: diretto, conciso, PT-BR | - |
 | **orchestrator** | `core/orchestrator.md` | - | Entry point OGNI task | opus |
 | **analyzer** | `core/analyzer.md` | analizza, struttura, dipendenze, audit | Prima di implementare | haiku |
 | **coder** | `core/coder.md` | implementa, scrivi, crea, aggiungi | Implementazione codice | haiku/sonnet |
@@ -385,6 +386,10 @@ Questo ordine quando serve implementazione completa.
 - **NUOVO:** Mappatura L1 → L2 con keywords specifiche
 - **NUOVO:** Routing automatico L1 → L2 documentato
 - Aggiornamento totale agent: 43 (6 Core + 22 L1 Expert + 15 L2 Specialist)
+
+### V7.0 - 28 Jul 2026
+- **NUOVO:** opencode-assistant come 7° Core Agent
+- Aggiornamento totale agent: 44 (7 Core + 22 L1 Expert + 15 L2 Specialist)
 
 ### V1.0 - 25 Gennaio 2026
 - Creazione registry completo 15 expert + 4 core

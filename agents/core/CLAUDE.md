@@ -5,8 +5,8 @@ description: Multi-agent system index with orchestrator, core agents, and 15 exp
 
 # SISTEMA AGENT MASTERCOPY V12.0
 
-> **Versione:** 12.0 DEEP AUDIT
-> **Data:** 26 Febbraio 2026
+> **Version:** 13.0
+> **Data:** 28 Jul 2026
 > **Architettura:** Multi-Agent Parallelo con Orchestrator + Expert Files + Anti-Direct Enforcement + Project Path Resolution
 
 ---
@@ -70,7 +70,7 @@ taskkill /F /IM cmd.exe /FI "WINDOWTITLE ne Administrator*" 2>NUL
 taskkill /F /IM powershell.exe /FI "WINDOWTITLE ne Administrator*" 2>NUL
 
 # BATCH 4: NUL KILLER V2.0 (Win32 API - UNICO metodo funzionante)
-python -c "import ctypes,os;[ctypes.windll.kernel32.DeleteFileW(f'\\\\?\\{os.path.abspath(d)}\\nul') for d in [os.path.expanduser('~/.claude'),os.path.expanduser('~/.claude/agents'),os.path.expanduser('~')]]"
+python -c "import ctypes,os;[ctypes.windll.kernel32.DeleteFileW(f'\\\\?\\{os.path.abspath(d)}\\nul') for d in [os.path.expanduser('~/.config/opencode'),os.path.expanduser('~/.config/opencode/agents'),os.path.expanduser('~')]]"
 ```
 
 ---
@@ -87,7 +87,7 @@ Su Windows:
 
 **Cleanup file nul - NUL KILLER V2.0 (Win32 API - UNICO metodo funzionante):**
 ```bash
-python -c "import ctypes,os;[ctypes.windll.kernel32.DeleteFileW(f'\\\\?\\{os.path.abspath(d)}\\nul') for d in [os.path.expanduser('~/.claude'),os.path.expanduser('~/.claude/agents'),os.path.expanduser('~')]]"
+python -c "import ctypes,os;[ctypes.windll.kernel32.DeleteFileW(f'\\\\?\\{os.path.abspath(d)}\\nul') for d in [os.path.expanduser('~/.config/opencode'),os.path.expanduser('~/.config/opencode/agents'),os.path.expanduser('~')]]"
 ```
 **NOTA:** `rm -f`, `del`, `Remove-Item` NON funzionano su device names Windows. Solo Win32 DeleteFileW.
 
@@ -126,7 +126,7 @@ OGNI RICHIESTA → ORCHESTRATOR V7.0 → DELEGA → AGENT SPECIALIZZATI
 └───────────────┘   └───────┬───────┘   └───────────────┘
                             │
         ┌───────────────────┴───────────────────┐
-        │           EXPERTS (23)                │
+        │           EXPERTS (20)                │
         │       (Chiamati al bisogno)           │
         ├───────────────────────────────────────┤
         │ • GUI Expert (PyQt5)                  │
@@ -155,7 +155,7 @@ OGNI RICHIESTA → ORCHESTRATOR V7.0 → DELEGA → AGENT SPECIALIZZATI
 
 ---
 
-## 👥 AGENT DISPONIBILI (44 Totali)
+## 👥 AGENT DISPONIBILI (41 Totali)
 
 ### Core Agents (6)
 | Agent | File | Ruolo | Model | Istanze |
@@ -188,9 +188,6 @@ OGNI RICHIESTA → ORCHESTRATOR V7.0 → DELEGA → AGENT SPECIALIZZATI
 | Reverse Engineering | `experts/reverse_engineering_expert.md` | Binary Analysis, IDA Pro, Ghidra | sonnet |
 | Offensive Security | `experts/offensive_security_expert.md` | Pentesting, Exploit Development | sonnet |
 | MQL Decompilation | `experts/mql_decompilation_expert.md` | MetaTrader reverse engineering, .ex4/.ex5 | sonnet |
-| MCP Design Specialist | `experts/mcp_design_specialist.md` | Canva design operations, brand kits | haiku |
-| MCP Web Specialist | `experts/mcp_web_specialist.md` | Web operations, content extraction | haiku |
-| MCP UI/UX Specialist | `experts/mcp_ui_ux_specialist.md` | UI/UX processing, screenshots | haiku |
 
 ### L2 Sub-Agents (15)
 Vedi: [INDEX.md](INDEX.md) sezione L2 SUB-AGENTS per lista completa.
@@ -248,7 +245,7 @@ T6: Risposta finale
 ## 📁 STRUTTURA FILE
 
 ```
-C:\Users\LeoDg\.claude\agents\
+agents/
 ├── CLAUDE.md                 # Questo file (indice principale)
 ├── INDEX.md                  # Indice navigazione
 │
@@ -260,7 +257,7 @@ C:\Users\LeoDg\.claude\agents\
 │   ├── documenter.md         # 📝 Documentazione
 │   └── system_coordinator.md # 💰 Resource/Token management
 │
-├── experts/                  # Agent specializzati (23)
+├── experts/                  # Agent specializzati (20)
 │   ├── gui-super-expert.md       # 🎨 PyQt5/Qt/UI
 │   ├── tester_expert.md          # 🧪 Testing/QA/Debug
 │   ├── database_expert.md        # 🗄️ SQL/SQLite/PostgreSQL
@@ -451,4 +448,4 @@ Output <promise>DONE</promise> quando test passano."
 
 ---
 
-**Ultimo aggiornamento:** 26 Febbraio 2026 - V12.0 DEEP AUDIT - 43 agents total (6 L0 + 22 L1 + 15 L2)
+**Ultimo aggiornamento:** 28 Jul 2026 - V13.0 - 41 agents total (6 L0 + 20 L1 + 15 L2)

@@ -1,3 +1,16 @@
+---
+name: onboarding
+description: Configura o estilo de resposta do assistente. Le AGENTS.md e ajusta tom, foco e verbosidade. Suporta /config pra mudar o estilo.
+user-invokable: true
+allowed-tools:
+  - AskUserQuestion
+  - Bash
+  - Read
+  - Write
+metadata:
+  keywords: [onboarding, config, setup, estilo, preferencias]
+---
+
 # Onboarding
 
 ## Description

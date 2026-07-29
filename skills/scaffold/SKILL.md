@@ -1,3 +1,15 @@
+---
+name: scaffold
+description: Gera projetos do zero com estrutura pronta para producao. Suporta multiplos stacks (Next.js, Vite, FastAPI, Express, CLI Python, HTML/CSS).
+user-invokable: true
+allowed-tools:
+  - Read
+  - Write
+  - Bash
+metadata:
+  keywords: [scaffold, gerar, projeto, template, boilerplate]
+---
+
 # Scaffold
 
 ## Description

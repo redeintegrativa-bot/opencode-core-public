@@ -26,7 +26,7 @@ Il Metric Tracker System e un sistema automatico di tracciamento delle metriche 
 
 ### circuit-breaker.json
 
-File di configurazione principale: `~/.claude/agents/config/circuit-breaker.json`
+File di configurazione principale: `~/.config/opencode/agents/config/circuit-breaker.json`
 
 ```json
 {
@@ -382,28 +382,28 @@ Lo script include anche una CLI per operazioni rapide:
 
 ```bash
 # Genera report
-python ~/.claude/agents/scripts/metric_tracker.py report
+python ~/.config/opencode/agents/scripts/metric_tracker.py report
 
 # Report in formato JSON
-python ~/.claude/agents/scripts/metric_tracker.py report --format json
+python ~/.config/opencode/agents/scripts/metric_tracker.py report --format json
 
 # Salva report su file
-python ~/.claude/agents/scripts/metric_tracker.py report -o report.md
+python ~/.config/opencode/agents/scripts/metric_tracker.py report -o report.md
 
 # Mostra leaderboard
-python ~/.claude/agents/scripts/metric_tracker.py leaderboard -m tasks_total -n 10
+python ~/.config/opencode/agents/scripts/metric_tracker.py leaderboard -m tasks_total -n 10
 
 # Mostra metriche agente specifico
-python ~/.claude/agents/scripts/metric_tracker.py agent core/coder.md
+python ~/.config/opencode/agents/scripts/metric_tracker.py agent core/coder.md
 
 # Mostra riepilogo token
-python ~/.claude/agents/scripts/metric_tracker.py tokens
+python ~/.config/opencode/agents/scripts/metric_tracker.py tokens
 
 # Health check
-python ~/.claude/agents/scripts/metric_tracker.py health core/coder.md
+python ~/.config/opencode/agents/scripts/metric_tracker.py health core/coder.md
 
 # Reset failures
-python ~/.claude/agents/scripts/metric_tracker.py reset core/coder.md
+python ~/.config/opencode/agents/scripts/metric_tracker.py reset core/coder.md
 ```
 
 ---
@@ -473,11 +473,11 @@ def implement_feature(spec):
 **Causa:** JSON invalid o scrittura interrotta.
 
 **Soluzione:**
-1. I backup vengono creati automaticamente in `~/.claude/agents/backups/`
+1. I backup vengono creati automaticamente in `~/.config/opencode/agents/backups/`
 2. Ripristinare l'ultimo backup:
 ```bash
-cp ~/.claude/agents/backups/circuit-breaker_YYYYMMDD_HHMMSS.json \
-   ~/.claude/agents/config/circuit-breaker.json
+cp ~/.config/opencode/agents/backups/circuit-breaker_YYYYMMDD_HHMMSS.json \
+   ~/.config/opencode/agents/config/circuit-breaker.json
 ```
 
 ### Problema: Performance lenta
@@ -511,9 +511,9 @@ cp ~/.claude/agents/backups/circuit-breaker_YYYYMMDD_HHMMSS.json \
 
 | File | Path |
 |------|------|
-| Config | `~/.claude/agents/config/circuit-breaker.json` |
-| Script | `~/.claude/agents/scripts/metric_tracker.py` |
-| Backups | `~/.claude/agents/backups/circuit-breaker_*.json` |
+| Config | `~/.config/opencode/agents/config/circuit-breaker.json` |
+| Script | `~/.config/opencode/agents/scripts/metric_tracker.py` |
+| Backups | `~/.config/opencode/agents/backups/circuit-breaker_*.json` |
 
 ---
 
@@ -529,3 +529,4 @@ cp ~/.claude/agents/backups/circuit-breaker_YYYYMMDD_HHMMSS.json \
 **Autore:** DevOps Expert / Claude Systems Expert
 **Versione:** 7.0
 **Ultimo Aggiornamento:** 15 Febbraio 2026
+
