@@ -1,68 +1,76 @@
 # Onboarding
 
 ## Description
-Conduz o usuário por uma série de perguntas para personalizar a experiência do OpenCode Core. Gera AGENTS.md e profile.json com as preferências.
+Configura o estilo de resposta do assistente com base nas preferências do usuário. Lê `~/.config/opencode-core/AGENTS.md` e ajusta tom, foco e verbosidade. Suporta o comando `/config` para mudar o estilo a qualquer momento.
 
 ## Activation
-Slash command: `/onboarding` ou quando o usuário parece estar usando o sistema pela primeira vez.
+- Slash command: `/onboarding` — inicia o onboarding interativo
+- Slash command: `/config` — altera configurações já existentes
+- Detecte automaticamente se o arquivo `~/.config/opencode-core/AGENTS.md` não existir e pergunte se o usuário quer configurar
 
-Detecte automaticamente se o arquivo `~/.config/opencode-core/profile.json` não existir — pergunte se o usuário quer fazer o onboarding.
+## Config Format
+O arquivo `~/.config/opencode-core/AGENTS.md` segue este formato de linha única:
 
-## Questions
-
-### 1. Como quer ser chamado?
-Nome ou apelido do usuário.
-
-### 2. Idioma preferido?
-- Português
-- English
-- Español
-
-### 3. Estilo de resposta?
-- **Direto e seco** — vai direto ao ponto, sem rodeios
-- **Equilibrado** — explica o necessário
-- **Didático** — explica passo a passo
-- **Relaxado** — informal, como um parceiro
-
-### 4. Nível de experiência?
-- **Iniciante** — nunca programou
-- **Intermediário** — já faz projetos
-- **Avançado** — dev profissional
-- **Expert** — arquiteto/sênior
-
-### 5. Foco principal?
-- Desenvolvimento Web
-- Backend/API
-- Automação/CLI
-- Segurança
-- Dados/ML
-- Geral
-
-### 6. Onde vai usar o OpenCode?
-- Termux (Android)
-- Linux
-- Windows PowerShell
-- macOS
-
-### 7. Quer usar o app de controle financeiro (My Money Track)?
-- Sim
-- Talvez depois
-- Não
-
-## Output
-Gere o arquivo `~/.config/opencode-core/profile.json` e `~/.config/opencode-core/AGENTS.md` com as respostas.
-
-O AGENTS.md gerado deve começar com:
-
-```markdown
-# AGENTS.md — Personalizado para {nome}
+```
+# ONBOARDING
+TONE=<valor> FOCUS=<valor> VERBOSITY=<valor>
 ```
 
-E conter as regras de estilo, idioma e perfil.
+### TONE (estilo de resposta)
+| Valor | Comportamento |
+|-------|--------------|
+| `direct` | Seja direto e objetivo. Respostas curtas, sem rodeios. Code primeiro, explicação depois (se houver). |
+| `balanced` | Explique o necessário sem exageros. Equilíbrio entre ser direto e ser completo. |
+| `didatic` | Explique passo a passo como se fosse a primeira vez. Inclua exemplos e justificativas. |
+| `casual` | Seja informal e relaxado. Use linguagem natural, trate como um parceiro de código. |
+
+### FOCUS (área de interesse)
+| Valor | Comportamento |
+|-------|--------------|
+| `web` | Prefira soluções web: HTML/CSS/JS, frameworks frontend. |
+| `backend` | Prefira APIs, servidores, banco de dados, lógica de negócio. |
+| `cli` | Prefira scripts, automação, ferramentas de terminal. |
+| `data` | Prefira análise de dados, ML, pipelines, visualização. |
+| `general` | Sem preferência — adapte ao contexto. |
+
+### VERBOSITY (nível de detalhe)
+| Valor | Comportamento |
+|-------|--------------|
+| `high` | Seja detalhado, explique cada etapa, inclua contexto. |
+| `medium` | Equilíbrio entre detalhe e concisão. |
+| `low` | Seja conciso. Vá direto ao ponto. Mínimo de explicação. |
+
+## Auto-detection Heuristics
+Quando não houver AGENTS.md configurado, detecte o estilo pela conversa:
+
+- Se o usuário responde com "sim", "não", "ok" ou monossílabos → prefere `direct`
+- Se o usuário pergunta "explique melhor", "como funciona", "por quê" → prefere `didatic`
+- Se o usuário usa gírias, "cara", "mano", "kkk", emojis → prefere `casual`
+- Padrão: `balanced`
+
+## Commands
+
+### /config
+Permite alterar qualquer configuração sem refazer o onboarding completo.
+
+```markdown
+/config tone=direct
+/config focus=backend
+/config verbosity=high
+/config            # modo interativo: pergunta uma a uma
+```
+
+Ao alterar, atualize o arquivo `~/.config/opencode-core/AGENTS.md` com o novo valor.
+
+### /onboarding
+Conduz as 3 perguntas padrão (estilo, foco, nível) e gera o AGENTS.md.
+
+## Idiom
+Sempre responda em português brasileiro, a menos que o usuário explicitamente peça outro idioma.
 
 ## Rules
-- Faça uma pergunta de cada vez
-- Espere a resposta antes de prosseguir
-- Seja amigável e acolhedor na primeira pergunta
-- Ao final, mostre um resumo do que foi configurado
-- Sugira os próximos passos (setup.sh, terminal-chat, My Money Track)
+- Sempre leia `~/.config/opencode-core/AGENTS.md` no início da sessão
+- Se o arquivo não existir, pergunte uma vez se quer configurar (não insista)
+- Adapte tom, foco e verbosidade durante toda a conversa conforme as configs
+- `/config` não precisa de confirmação — aplique imediatamente
+- Se o usuário mudar de ideia sobre o estilo no meio da conversa, sugira `/config`

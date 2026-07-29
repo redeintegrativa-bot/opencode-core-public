@@ -19,18 +19,18 @@ bash setup.sh        # Linux/macOS/Termux
 
 Isso instala automaticamente skills, agentes, regras e hooks no seu ambiente.
 
-### 🎯 Onboarding personalizado (recomendado)
+### 🎯 Onboarding (3 perguntas, 10 segundos)
 
-Após a instalação, rode o onboarding para configurar o assistente do **seu jeito**:
+Personalize o estilo do assistente antes de começar:
 
 ```bash
-bash onboarding.sh        # Versão Bash
+python onboarding.py      # Recomendado (mais bonito)
 # ou
-python onboarding.py      # Versão Python (mais interativa)
+bash onboarding.sh        # Alternativa pra Termux sem Python
 ```
 
-São 8 perguntas rápidas: nome, idioma, estilo de resposta, nível, foco, terminal e mais.
-O OpenCode passa a responder no **seu estilo preferido** automaticamente.
+São 3 perguntas: **estilo**, **foco** e **nível**. Gera uma config de 1 linha (menos de 20 tokens).
+O assistente se adapta automaticamente. Pra mudar depois, é só digitar `/config` no chat.
 
 ### Instalação por plataforma
 

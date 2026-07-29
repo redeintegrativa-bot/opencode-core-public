@@ -321,8 +321,8 @@
       "slash_command": "/database"
     },
     "onboarding": {
-      "description": "Conduz onboarding interativo: perguntas para personalizar AGENTS.md, estilo, idioma e perfil do usuário",
-      "keywords": ["onboarding", "configurar", "início", "primeira vez", "setup", "personalizar", "bem-vindo", "boas-vindas", "welcome"],
+      "description": "Conduz onboarding interativo: 3 perguntas pra personalizar estilo, foco e verbosidade. Suporta /config pra mudar a qualquer momento.",
+      "keywords": ["onboarding", "configurar", "início", "primeira vez", "setup", "personalizar", "bem-vindo", "boas-vindas", "welcome", "config", "configuração"],
       "agent": "System Coordinator",
       "user_invokable": true,
       "allowed_tools": ["read", "write", "bash", "askUserQuestion"],
@@ -488,7 +488,11 @@
     "bem-vindo": "onboarding",
     "welcome": "onboarding",
     "configurar": "onboarding",
-    "primeira vez": "onboarding"
+    "primeira vez": "onboarding",
+    "config": "onboarding",
+    "configuração": "onboarding",
+    "mudar estilo": "onboarding",
+    "mudar tom": "onboarding"
   },
   "metadata": {
     "orchestrator_version": "13.0",
@@ -526,7 +530,8 @@
       "/telegram": "telegram-bot",
       "/scaffold": "scaffold",
       "/database": "database",
-      "/onboarding": "onboarding"
+      "/onboarding": "onboarding",
+      "/config": "onboarding"
     }
   }
 }
