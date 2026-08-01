@@ -55,7 +55,7 @@ AUTHORIZED_CHAT_ID: Optional[int] = (
 )
 
 MAX_MSG = 4096
-ENGINE_TIMEOUT = 120
+ENGINE_TIMEOUT = 300
 TYPING_INTERVAL = 4
 
 ACK_PHRASES = [
@@ -223,15 +223,29 @@ async def _think(prompt: str) -> str:
 
     try:
         proc = await asyncio.create_subprocess_exec(
-            *cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
+            *cmd,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE,
+            start_new_session=True,
         )
-        stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=ENGINE_TIMEOUT)
-    except asyncio.TimeoutError:
         try:
-            proc.kill()
-        except Exception:
-            pass
-        return "⏰ A resposta demorou demais. Tenta de novo com algo mais simples?"
+            stdout, stderr = await asyncio.wait_for(
+                proc.communicate(), timeout=ENGINE_TIMEOUT
+            )
+        except asyncio.TimeoutError:
+            log.error("engine timeout after %ss — killing", ENGINE_TIMEOUT)
+            try:
+                os.killpg(os.getpgid(proc.pid), signal.SIGKILL)
+            except Exception:
+                try:
+                    proc.kill()
+                except Exception:
+                    pass
+            try:
+                await proc.communicate()
+            except Exception:
+                pass
+            return "⏰ A resposta demorou demais. Tenta de novo com algo mais simples?"
     except FileNotFoundError:
         return "❌ OpenCode CLI não encontrado."
     except Exception as e:
