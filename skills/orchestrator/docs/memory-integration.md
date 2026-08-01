@@ -1,4 +1,8 @@
 > Updated for V12.0 DEEP AUDIT: Memory now works alongside Rules Engine (Step 3) and Learning System (Step 9).
+>
+> **Executável real:** o protocolo abaixo (MEMORY.md + sessões + backup) é implementado pelo
+> `memory/session.py` (CLI stdlib). Use `python3 memory/session.py <init|start|log|end|show|stats|compress|backup>`
+> ou a skill `session-resume` / comando `/remember`. Os snippets a seguir são a especificação de referência.
 
 # Memory Integration Module V12.0
 

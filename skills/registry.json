@@ -1,11 +1,11 @@
 {
   "version": "1.1.0",
   "generated_at": "2026-07-28",
-  "total_skills": 37,
+  "total_skills": 38,
   "categories": {
     "Core": 13,
     "Utility": 7,
-    "Workflow": 12,
+    "Workflow": 13,
     "Language": 4,
     "Learning": 2,
     "Scaffolding": 1
@@ -346,6 +346,15 @@
       "allowed_tools": ["read", "write", "bash"],
       "category": "Core",
       "slash_command": "/image"
+    },
+    "session-resume": {
+      "description": "Auto-resume entre sessões usando MEMORY.md persistente. Use /remember no final de cada sessão e carregue o contexto no início.",
+      "keywords": ["session", "resume", "memory", "continue", "retomar", "histórico", "remember"],
+      "agent": "System Coordinator",
+      "user_invokable": true,
+      "allowed_tools": ["read", "bash", "glob"],
+      "category": "Workflow",
+      "slash_command": null
     }
   },
   "routing": {
@@ -521,7 +530,14 @@
     "imagem": "image-gen",
     "gerar": "image-gen",
     "replicate": "image-gen",
-    "fal": "image-gen"
+    "fal": "image-gen",
+    "session": "session-resume",
+    "resume": "session-resume",
+    "retomar": "session-resume",
+    "continue": "session-resume",
+    "remember": "session-resume",
+    "histórico": "session-resume",
+    "historia": "session-resume"
   },
   "metadata": {
     "orchestrator_version": "13.0",
@@ -562,7 +578,8 @@
       "/onboarding": "onboarding",
     "/config": "onboarding",
     "/evolve-framework": "framework-evolve",
-    "/image": "image-gen"
+    "/image": "image-gen",
+    "/remember": "session-resume"
   }
   }
 }

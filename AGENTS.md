@@ -28,3 +28,14 @@ TONE=balanced FOCUS=backend VERBOSITY=medium
 - Gate MEDIUM/LOW → auto-fixo sem te incomodar
 - Revisão adversarial → só rodo em código crítico
 - Conhecimento → salvo no knowledge store automaticamente
+
+## Memória Persistente (sessões)
+
+Protocolo obrigatório para evitar retrabalho entre sessões (skill `session-resume`):
+
+- **Início**: `python3 memory/session.py show` — carrega o contexto do MEMORY.md e resume onde paramos.
+- **Durante**: descobertas/decisões → `python3 memory/session.py log "<texto>"`.
+- **Final**: `python3 memory/session.py end --summary "..." [--decision "..." --file "..."]` ou `/remember <resumo>`.
+- **Versionar** (git pessoal): `python3 memory/session.py backup --target <repo-pessoal>/memory`.
+
+Storage: global `~/.config/opencode/projects/{hash}/memory/` (sobrevive a updates do repo) ou `--local` para usar `memory/` do repo. **Nunca commitar `MEMORY.md`/sessões no repo público** (`memory/.gitignore` cobre isso).

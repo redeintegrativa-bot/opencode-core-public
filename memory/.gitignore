@@ -1,0 +1,9 @@
+# Dados pessoais de memória — nunca commitados no public.
+# O template e o session.py são o que sobe; o MEMORY.md real e sessões
+# vivem no store local (~/.config/opencode/projects/) e no git pessoal.
+MEMORY.md
+MEMORY.md.bak
+sessions/
+agents/
+shared/
+.state.json

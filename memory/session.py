@@ -1,0 +1,335 @@
+#!/usr/bin/env python3
+"""Session memory CLI - persistent cross-session history.
+
+Two-layer persistence:
+
+* Global store (default): ~/.config/opencode/projects/{hash}/memory/
+  Survives any repo update, reset or re-clone.
+* Local store (--local):  <root>/memory/  (e.g. personal git repo)
+
+Written data:
+  * MEMORY.md      - rolling session summary (newest on top)
+  * MEMORY.md.bak  - single-file backup taken before every write
+  * sessions/      - one log file per session
+  * .state.json    - currently active session
+"""
+
+import argparse
+import hashlib
+import json
+import os
+import re
+import shutil
+import sys
+from datetime import datetime
+from pathlib import Path
+
+MEMORY_NAME = "MEMORY.md"
+TEMPLATE_NAME = "MEMORY.template.md"
+SESSION_DIR = "sessions"
+STATE_FILE = ".state.json"
+BACKUP_SUFFIX = ".bak"
+MAX_SIZE = 50000
+COMPRESSION_THRESHOLD = 30000
+DEFAULT_KEEP = 60
+
+
+def project_hash(root: str) -> str:
+    """Generate unique hash for a project path (md5, first 12 chars)."""
+    normalized = root.lower().replace("\\", "/").rstrip("/")
+    return hashlib.md5(normalized.encode()).hexdigest()[:12]
+
+
+def template_content() -> str:
+    """Read the generic MEMORY template shipped next to this script."""
+    tpl = Path(__file__).resolve().parent / TEMPLATE_NAME
+    if tpl.exists():
+        return tpl.read_text(encoding="utf-8")
+    return "# MEMORY.md\n\n## Sessões\n\n"
+
+
+class SessionStore:
+    """Manage MEMORY.md, session logs and active session state."""
+
+    def __init__(self, root: str, local: bool = False):
+        self.root = Path(root).resolve()
+        if local:
+            self.base = self.root / "memory"
+        else:
+            self.base = (
+                Path.home() / ".config" / "opencode"
+                / "projects" / project_hash(str(self.root)) / "memory"
+            )
+        self.memory_path = self.base / MEMORY_NAME
+        self.sessions_dir = self.base / SESSION_DIR
+        self.state_path = self.base / STATE_FILE
+        self.backup_path = self.base / (MEMORY_NAME + BACKUP_SUFFIX)
+
+    def ensure_dirs(self):
+        self.sessions_dir.mkdir(parents=True, exist_ok=True)
+
+    def init(self, force: bool = False) -> bool:
+        self.ensure_dirs()
+        if self.memory_path.exists() and not force:
+            print(f"Memory already exists: {self.memory_path}")
+            return False
+        self.memory_path.write_text(template_content(), encoding="utf-8")
+        print(f"Created memory file: {self.memory_path}")
+        return True
+
+    def load_state(self) -> dict:
+        if not self.state_path.exists():
+            return {}
+        try:
+            return json.loads(self.state_path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            return {}
+
+    def save_state(self, state: dict):
+        self.state_path.write_text(json.dumps(state, indent=2, ensure_ascii=False), encoding="utf-8")
+
+    def active_session(self) -> dict:
+        state = self.load_state()
+        if state.get("active"):
+            return state["active"]
+        return None
+
+    def start_session(self) -> dict:
+        state = self.load_state()
+        if state.get("active"):
+            print(f"Session already active: {state['active']['session_id']}")
+            return state["active"]
+        session = {
+            "session_id": datetime.now().strftime("%Y%m%d-%H%M%S"),
+            "start": datetime.now().isoformat(timespec="seconds"),
+            "project": str(self.root),
+            "logs": [],
+        }
+        state["active"] = session
+        self.save_state(state)
+        print(f"Session started: {session['session_id']}")
+        return session
+
+    def log_entry(self, text: str):
+        session = self.active_session()
+        if session is None:
+            session = self.start_session()
+        session["logs"].append({"time": datetime.now().isoformat(timespec="seconds"), "text": text})
+        self._persist_active(session)
+        print(f"Logged: {text}")
+
+    def _persist_active(self, session: dict):
+        state = self.load_state()
+        state["active"] = session
+        self.save_state(state)
+
+    def read_memory(self) -> str:
+        return self.memory_path.read_text(encoding="utf-8") if self.memory_path.exists() else ""
+
+    def write_memory(self, content: str):
+        self.ensure_dirs()
+        self._backup()
+        if len(content) > MAX_SIZE:
+            content = content[: COMPRESSION_THRESHOLD].rstrip() + "\n<!-- truncated: memory compressed, run `session.py compress` -->\n"
+        self.memory_path.write_text(content, encoding="utf-8")
+
+    def _backup(self):
+        if self.memory_path.exists():
+            shutil.copy2(self.memory_path, self.backup_path)
+
+    def end_session(self, summary: str, decisions, files) -> dict:
+        session = self.active_session() or {
+            "session_id": datetime.now().strftime("%Y%m%d-%H%M%S"),
+            "start": datetime.now().isoformat(timespec="seconds"),
+            "project": str(self.root),
+            "logs": [],
+        }
+        end = datetime.now()
+        session["end"] = end.isoformat(timespec="seconds")
+        session["summary"] = summary
+
+        lines = [f"## Sessão {end.strftime('%Y-%m-%d')}\n"]
+        if summary:
+            lines.append(f"**Resumo:** {summary}")
+        if decisions:
+            lines.append("\n**Decisões:**")
+            for d in decisions:
+                lines.append(f"- {d}")
+        if files:
+            lines.append("\n**Arquivos:**")
+            for f in files:
+                lines.append(f"- {f}")
+        if session.get("logs"):
+            lines.append("\n**Log:**")
+            for entry in session["logs"]:
+                lines.append(f"- {entry['text']}")
+        block = "\n".join(lines)
+
+        content = self.read_memory()
+        match = re.search(r"(?m)^## Sessões\s*$", content)
+        if match:
+            before = content[: match.end()]
+            after = content[match.end():].lstrip("\n")
+            content = before + "\n\n" + block + "\n\n" + after
+        else:
+            content = content.rstrip() + "\n\n## Sessões\n\n" + block + "\n"
+
+        self.write_memory(content)
+        self._save_session_file(session, block)
+        state = self.load_state()
+        state.pop("active", None)
+        self.save_state(state)
+        print(f"Session ended: {session['session_id']}")
+        return session
+
+    def _save_session_file(self, session: dict, block: str):
+        self.ensure_dirs()
+        stamp = session["session_id"]
+        path = self.sessions_dir / f"session-{stamp}.md"
+        header = f"# Session {stamp}\n\n- start: {session.get('start')}\n- end: {session.get('end')}\n- project: {session.get('project')}\n\n"
+        path.write_text(header + block + "\n", encoding="utf-8")
+
+    def show(self):
+        print(f"Store: {self.base}")
+        print(f"Memory file: {self.memory_path}")
+        session = self.active_session()
+        if session:
+            print(f"Active session: {session['session_id']} (started {session['start']}, {len(session.get('logs', []))} log(s))")
+        else:
+            print("Active session: none")
+        if self.memory_path.exists():
+            print("\n" + self.read_memory())
+
+    def stats(self) -> dict:
+        sessions = list(self.sessions_dir.glob("session-*.md")) if self.sessions_dir.exists() else []
+        size = self.memory_path.stat().st_size if self.memory_path.exists() else 0
+        return {
+            "store": str(self.base),
+            "sessions": len(sessions),
+            "memory_bytes": size,
+            "active": bool(self.active_session()),
+        }
+
+    def compress(self, keep: int = DEFAULT_KEEP):
+        if self.sessions_dir.exists():
+            files = sorted(self.sessions_dir.glob("session-*.md"))
+            for old in files[:-keep] if keep > 0 else files:
+                old.unlink()
+        content = self.read_memory()
+        blocks = re.split(r"(?m)^## Sessão ", content)
+        if len(blocks) > keep + 1:
+            new = blocks[0]
+            for block in blocks[-(keep + 1):]:
+                new += "## Sessão " + block
+            self.write_memory(new)
+        print(f"Compressed, keeping last {keep} sessions")
+
+    def backup(self, target: str = None, from_target: bool = False):
+        if target is None:
+            target = str(self.root / "memory")
+        target = Path(target)
+        target.mkdir(parents=True, exist_ok=True)
+        if from_target:
+            src, dst = target, self.base
+        else:
+            src, dst = self.base, target
+        src.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(src / MEMORY_NAME, dst / MEMORY_NAME)
+        for rel in [STATE_FILE, MEMORY_NAME + BACKUP_SUFFIX]:
+            s = src / rel
+            if s.exists():
+                shutil.copy2(s, dst / rel)
+        sdir = src / SESSION_DIR
+        if sdir.exists():
+            shutil.copytree(sdir, dst / SESSION_DIR, dirs_exist_ok=True)
+        direction = "target -> store" if from_target else "store -> target"
+        print(f"Backed up {direction}: {dst}")
+
+
+def cmd_init(args):
+    return 0 if SessionStore(args.root, args.local).init(args.force) else 1
+
+
+def cmd_start(args):
+    SessionStore(args.root, args.local).start_session()
+    return 0
+
+
+def cmd_log(args):
+    SessionStore(args.root, args.local).log_entry(" ".join(args.text))
+    return 0
+
+
+def cmd_end(args):
+    store = SessionStore(args.root, args.local)
+    store.end_session(args.summary, args.decision, args.file)
+    return 0
+
+
+def cmd_show(args):
+    SessionStore(args.root, args.local).show()
+    return 0
+
+
+def cmd_stats(args):
+    stats = SessionStore(args.root, args.local).stats()
+    for key, value in stats.items():
+        print(f"{key}: {value}")
+    return 0
+
+
+def cmd_compress(args):
+    SessionStore(args.root, args.local).compress(args.keep)
+    return 0
+
+
+def cmd_backup(args):
+    SessionStore(args.root, args.local).backup(args.target, args.from_target)
+    return 0
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Session memory CLI - persistent cross-session history")
+    parser.add_argument("--root", default=os.getcwd(), help="Project root used for hashing/store location")
+    parser.add_argument("--local", action="store_true", help="Use <root>/memory/ instead of the global store")
+
+    sub = parser.add_subparsers(dest="command", required=True)
+
+    init_p = sub.add_parser("init", help="Create MEMORY.md from template")
+    init_p.add_argument("--force", action="store_true")
+    init_p.set_defaults(func=cmd_init)
+
+    sub.add_parser("start", help="Start a session").set_defaults(func=cmd_start)
+
+    log_p = sub.add_parser("log", help="Append a log entry to the active session")
+    log_p.add_argument("text", nargs="+")
+    log_p.set_defaults(func=cmd_log)
+
+    end_p = sub.add_parser("end", help="Finalize the session and update MEMORY.md")
+    end_p.add_argument("--summary", default="", help="Session summary")
+    end_p.add_argument("--decision", action="append", default=[], help="Decision taken (repeatable)")
+    end_p.add_argument("--file", action="append", default=[], help="File modified (repeatable)")
+    end_p.set_defaults(func=cmd_end)
+
+    sub.add_parser("show", help="Show memory and active session").set_defaults(func=cmd_show)
+    sub.add_parser("stats", help="Show store statistics").set_defaults(func=cmd_stats)
+
+    comp_p = sub.add_parser("compress", help="Prune old sessions and trim MEMORY.md")
+    comp_p.add_argument("--keep", type=int, default=DEFAULT_KEEP)
+    comp_p.set_defaults(func=cmd_compress)
+
+    bup_p = sub.add_parser("backup", help="Mirror store <-> target (default: <root>/memory)")
+    bup_p.add_argument("--target", default=None, help="Target directory (e.g. personal repo memory/)")
+    bup_p.add_argument("--from-target", action="store_true", help="Copy from target into the store")
+    bup_p.set_defaults(func=cmd_backup)
+
+    args = parser.parse_args()
+    try:
+        return args.func(args)
+    except Exception as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())
