@@ -39,3 +39,16 @@ Protocolo obrigatório para evitar retrabalho entre sessões (skill `session-res
 - **Versionar** (git pessoal): `python3 memory/session.py backup --target <repo-pessoal>/memory`.
 
 Storage: global `~/.config/opencode/projects/{hash}/memory/` (sobrevive a updates do repo) ou `--local` para usar `memory/` do repo. **Nunca commitar `MEMORY.md`/sessões no repo público** (`memory/.gitignore` cobre isso).
+
+## GitHub / Auth (setup genérico)
+
+Push exige autenticação. Configure com o script genérico (não grava segredo no repo):
+
+```bash
+GH_TOKEN=<token> ./scripts/setup-github-auth.sh <owner> <repo> [<repo>...] [--check]
+```
+
+- Usa o token do env `GH_TOKEN` → grava em `~/.git-credentials` (perms 600) + `credential.helper store`.
+- `--check` valida permissão de escrita em cada repo (receive-pack HTTP 200).
+- Token sugerido: **classic PAT escopo `repo`**. Fine-grained precisa de `Contents: Read and write` + repos selecionados, senão push dá 403.
+- **Nunca commitar tokens** — hooks de segurança bloqueiam padrões tipo `ghp_`.
