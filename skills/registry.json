@@ -1,7 +1,7 @@
 {
   "version": "1.1.0",
   "generated_at": "2026-07-28",
-  "total_skills": 38,
+  "total_skills": 39,
   "categories": {
     "Core": 13,
     "Utility": 7,
@@ -13,348 +13,827 @@
   "skills": {
     "api-design": {
       "description": "REST/GraphQL API design patterns and best practices",
-      "keywords": ["api", "rest", "graphql", "endpoint", "design"],
+      "keywords": [
+        "api",
+        "rest",
+        "graphql",
+        "endpoint",
+        "design"
+      ],
       "agent": "Integration Expert",
       "user_invokable": true,
-      "allowed_tools": ["Read", "grep", "glob", "write", "bash"],
+      "allowed_tools": [
+        "Read",
+        "grep",
+        "glob",
+        "write",
+        "bash"
+      ],
       "category": "Core",
       "slash_command": "/api-design"
     },
     "browser-agent": {
       "description": "Browser automation agent for web browsing, scraping, OCR, screenshots, downloading, and JSON extraction with proxy and session support",
-      "keywords": ["browser", "web", "scrape", "ocr", "screenshot", "download", "search", "extract", "proxy", "session", "automation"],
+      "keywords": [
+        "browser",
+        "web",
+        "scrape",
+        "ocr",
+        "screenshot",
+        "download",
+        "search",
+        "extract",
+        "proxy",
+        "session",
+        "automation"
+      ],
       "agent": "Integration Expert",
       "user_invokable": true,
-      "allowed_tools": ["Read", "Grep", "Glob", "Task"],
+      "allowed_tools": [
+        "Read",
+        "Grep",
+        "Glob",
+        "Task"
+      ],
       "category": "Core",
       "slash_command": null
     },
     "build-fix": {
       "description": "Build system error diagnosis and resolution",
-      "keywords": ["build", "fix", "compile", "error"],
+      "keywords": [
+        "build",
+        "fix",
+        "compile",
+        "error"
+      ],
       "agent": "DevOps Expert",
       "user_invokable": true,
-      "allowed_tools": ["read", "grep", "glob", "bash"],
+      "allowed_tools": [
+        "read",
+        "grep",
+        "glob",
+        "bash"
+      ],
       "category": "Workflow",
       "slash_command": "/build-fix"
     },
     "clone-on-demand": {
       "description": "Clone Git repositories on-demand when orchestrator detects missing project",
-      "keywords": ["clone", "git", "repo", "repository", "github", "fetch", "checkout"],
+      "keywords": [
+        "clone",
+        "git",
+        "repo",
+        "repository",
+        "github",
+        "fetch",
+        "checkout"
+      ],
       "agent": "DevOps Expert",
       "user_invokable": true,
-      "allowed_tools": ["bash", "read", "write"],
+      "allowed_tools": [
+        "bash",
+        "read",
+        "write"
+      ],
       "category": "Workflow",
       "slash_command": "/clone"
     },
     "checkpoint": {
       "description": "Session state persistence and restoration",
-      "keywords": ["checkpoint", "save", "session", "state"],
+      "keywords": [
+        "checkpoint",
+        "save",
+        "session",
+        "state"
+      ],
       "agent": "System Coordinator",
       "user_invokable": true,
-      "allowed_tools": ["read", "write", "bash"],
+      "allowed_tools": [
+        "read",
+        "write",
+        "bash"
+      ],
       "category": "Utility",
       "slash_command": "/checkpoint"
     },
     "cleanup": {
       "description": "Temporary file cleanup and maintenance",
-      "keywords": ["cleanup", "temp", "files", "maintenance", "nul"],
+      "keywords": [
+        "cleanup",
+        "temp",
+        "files",
+        "maintenance",
+        "nul"
+      ],
       "agent": "System Coordinator",
       "user_invokable": true,
-      "allowed_tools": ["glob", "bash"],
+      "allowed_tools": [
+        "glob",
+        "bash"
+      ],
       "category": "Workflow",
       "slash_command": "/cleanup"
     },
     "code-review": {
       "description": "Code quality review and best practices validation",
-      "keywords": ["review", "quality", "lint", "best-practices"],
+      "keywords": [
+        "review",
+        "quality",
+        "lint",
+        "best-practices"
+      ],
       "agent": "Reviewer",
       "user_invokable": true,
-      "allowed_tools": ["read", "grep", "glob"],
+      "allowed_tools": [
+        "read",
+        "grep",
+        "glob"
+      ],
       "category": "Core",
       "slash_command": "/review"
     },
     "debugging": {
       "description": "Debug investigation and error tracing",
-      "keywords": ["debug", "trace", "error", "fix"],
+      "keywords": [
+        "debug",
+        "trace",
+        "error",
+        "fix"
+      ],
       "agent": "Tester Expert",
       "user_invokable": true,
-      "allowed_tools": ["read", "grep", "glob", "bash"],
+      "allowed_tools": [
+        "read",
+        "grep",
+        "glob",
+        "bash"
+      ],
       "category": "Core",
       "slash_command": "/debug"
     },
     "evolve": {
       "description": "Pattern promotion from instincts to skills",
-      "keywords": ["evolve", "promote", "skill", "learning"],
+      "keywords": [
+        "evolve",
+        "promote",
+        "skill",
+        "learning"
+      ],
       "agent": "Coder",
       "user_invokable": true,
-      "allowed_tools": ["read", "write", "glob"],
+      "allowed_tools": [
+        "read",
+        "write",
+        "glob"
+      ],
       "category": "Learning",
       "slash_command": "/evolve"
     },
     "fix": {
       "description": "Bug fixing and patching",
-      "keywords": ["fix", "bug", "repair", "patch"],
+      "keywords": [
+        "fix",
+        "bug",
+        "repair",
+        "patch"
+      ],
       "agent": "Coder",
       "user_invokable": true,
-      "allowed_tools": ["read", "edit", "write", "grep", "glob", "bash"],
+      "allowed_tools": [
+        "read",
+        "edit",
+        "write",
+        "grep",
+        "glob",
+        "bash"
+      ],
       "category": "Workflow",
       "slash_command": "/fix"
     },
     "git-workflow": {
       "description": "Git operations, commits, branches, PRs",
-      "keywords": ["git", "commit", "branch", "merge", "PR", "workflow"],
+      "keywords": [
+        "git",
+        "commit",
+        "branch",
+        "merge",
+        "PR",
+        "workflow"
+      ],
       "agent": "DevOps Expert",
       "user_invokable": true,
-      "allowed_tools": ["bash", "read", "grep", "glob"],
+      "allowed_tools": [
+        "bash",
+        "read",
+        "grep",
+        "glob"
+      ],
       "category": "Core",
       "slash_command": null
     },
     "go-patterns": {
       "description": "Go language patterns and idioms",
-      "keywords": ["go", "golang", "patterns", "idioms"],
+      "keywords": [
+        "go",
+        "golang",
+        "patterns",
+        "idioms"
+      ],
       "agent": "Languages Expert",
       "user_invokable": true,
-      "allowed_tools": ["read", "grep", "glob", "edit", "write"],
+      "allowed_tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "write"
+      ],
       "category": "Language",
       "slash_command": null,
-      "auto_activated": [".go"]
+      "auto_activated": [
+        ".go"
+      ]
     },
     "learn": {
       "description": "Pattern capture and instinct learning",
-      "keywords": ["learn", "pattern", "instinct", "capture"],
+      "keywords": [
+        "learn",
+        "pattern",
+        "instinct",
+        "capture"
+      ],
       "agent": "Documenter",
       "user_invokable": true,
-      "allowed_tools": ["read", "write", "glob"],
+      "allowed_tools": [
+        "read",
+        "write",
+        "glob"
+      ],
       "category": "Learning",
       "slash_command": "/learn"
     },
     "metrics": {
       "description": "Session metrics and statistics dashboard",
-      "keywords": ["metrics", "statistics", "performance", "dashboard"],
+      "keywords": [
+        "metrics",
+        "statistics",
+        "performance",
+        "dashboard"
+      ],
       "agent": "Documenter",
       "user_invokable": true,
-      "allowed_tools": ["read", "glob"],
+      "allowed_tools": [
+        "read",
+        "glob"
+      ],
       "category": "Utility",
       "slash_command": "/metrics"
     },
     "multi-plan": {
       "description": "Multiple approach comparison planning",
-      "keywords": ["multi-plan", "parallel", "comparison", "approaches"],
+      "keywords": [
+        "multi-plan",
+        "parallel",
+        "comparison",
+        "approaches"
+      ],
       "agent": "Architect Expert",
       "user_invokable": true,
-      "allowed_tools": ["read", "grep", "glob", "write"],
+      "allowed_tools": [
+        "read",
+        "grep",
+        "glob",
+        "write"
+      ],
       "category": "Workflow",
       "slash_command": "/multi-plan"
     },
     "orchestrator": {
       "description": "Multi-agent coordination and task delegation",
-      "keywords": ["orchestration", "multi-agent", "coordination", "delegation"],
+      "keywords": [
+        "orchestration",
+        "multi-agent",
+        "coordination",
+        "delegation"
+      ],
       "agent": "Orchestrator",
       "user_invokable": true,
-      "allowed_tools": ["Task", "read", "glob", "grep", "bash", "askUserQuestion"],
+      "allowed_tools": [
+        "Task",
+        "read",
+        "glob",
+        "grep",
+        "bash",
+        "askUserQuestion"
+      ],
       "category": "Core",
       "slash_command": "/orchestrator"
     },
     "plan": {
       "description": "Implementation planning and architecture design",
-      "keywords": ["plan", "design", "architecture", "implementation"],
+      "keywords": [
+        "plan",
+        "design",
+        "architecture",
+        "implementation"
+      ],
       "agent": "Architect Expert",
       "user_invokable": true,
-      "allowed_tools": ["read", "grep", "glob", "write"],
+      "allowed_tools": [
+        "read",
+        "grep",
+        "glob",
+        "write"
+      ],
       "category": "Workflow",
       "slash_command": "/plan"
     },
     "prompt-engineering-patterns": {
       "description": "Master advanced prompt engineering techniques to maximize LLM performance, reliability, and controllability",
-      "keywords": ["prompt", "engineering", "llm", "optimization", "reasoning", "chain-of-thought"],
+      "keywords": [
+        "prompt",
+        "engineering",
+        "llm",
+        "optimization",
+        "reasoning",
+        "chain-of-thought"
+      ],
       "agent": "AI Integration Expert",
       "user_invokable": true,
-      "allowed_tools": ["read", "write", "grep", "glob"],
+      "allowed_tools": [
+        "read",
+        "write",
+        "grep",
+        "glob"
+      ],
       "category": "Core",
       "slash_command": "/prompt-engineering"
     },
     "python-patterns": {
       "description": "Python language patterns and PEP8 best practices",
-      "keywords": ["python", "patterns", "pep8", "best-practices"],
+      "keywords": [
+        "python",
+        "patterns",
+        "pep8",
+        "best-practices"
+      ],
       "agent": "Languages Expert",
       "user_invokable": true,
-      "allowed_tools": ["read", "grep", "glob", "edit", "write"],
+      "allowed_tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "write"
+      ],
       "category": "Language",
       "slash_command": null,
-      "auto_activated": [".py"]
+      "auto_activated": [
+        ".py"
+      ]
     },
     "python-performance-optimization": {
       "description": "Profile and optimize Python code using cProfile, memory profilers, and best practices",
-      "keywords": ["profile", "optimization", "performance", "benchmarking", "cProfile", "memory", "python-perf"],
+      "keywords": [
+        "profile",
+        "optimization",
+        "performance",
+        "benchmarking",
+        "cProfile",
+        "memory",
+        "python-perf"
+      ],
       "agent": "Languages Expert",
       "user_invokable": true,
-      "allowed_tools": ["read", "grep", "glob", "edit", "write", "bash"],
+      "allowed_tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "write",
+        "bash"
+      ],
       "category": "Language",
       "slash_command": "/python-perf"
     },
     "refactor-clean": {
       "description": "Code refactoring and clean code improvements",
-      "keywords": ["refactor", "clean", "code", "improve"],
+      "keywords": [
+        "refactor",
+        "clean",
+        "code",
+        "improve"
+      ],
       "agent": "Languages Refactor Specialist L2",
       "user_invokable": true,
-      "allowed_tools": ["read", "edit", "write", "grep", "glob"],
+      "allowed_tools": [
+        "read",
+        "edit",
+        "write",
+        "grep",
+        "glob"
+      ],
       "category": "Workflow",
       "slash_command": "/refactor"
     },
     "remotion-best-practices": {
       "description": "Remotion video/React animation best practices",
-      "keywords": ["remotion", "video", "react", "animation"],
+      "keywords": [
+        "remotion",
+        "video",
+        "react",
+        "animation"
+      ],
       "agent": "AI Integration Expert",
       "user_invokable": true,
-      "allowed_tools": ["read", "grep", "glob", "edit", "write"],
+      "allowed_tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "write"
+      ],
       "category": "Core",
       "slash_command": null
     },
     "security-scan": {
       "description": "Security audit and vulnerability scanning",
-      "keywords": ["security", "scan", "audit", "vulnerability"],
+      "keywords": [
+        "security",
+        "scan",
+        "audit",
+        "vulnerability"
+      ],
       "agent": "Security Unified Expert",
       "user_invokable": true,
-      "allowed_tools": ["read", "grep", "glob", "bash"],
+      "allowed_tools": [
+        "read",
+        "grep",
+        "glob",
+        "bash"
+      ],
       "category": "Workflow",
       "slash_command": "/security-scan"
     },
     "simplify": {
       "description": "Review code for reuse, quality, and efficiency improvements",
-      "keywords": ["simplify", "reuse", "efficiency", "review", "optimize"],
+      "keywords": [
+        "simplify",
+        "reuse",
+        "efficiency",
+        "review",
+        "optimize"
+      ],
       "agent": "Reviewer",
       "user_invokable": true,
-      "allowed_tools": ["read", "grep", "glob", "edit", "write"],
+      "allowed_tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "write"
+      ],
       "category": "Workflow",
       "slash_command": "/simplify"
     },
     "status": {
       "description": "System health and status dashboard",
-      "keywords": ["status", "health", "metrics", "dashboard"],
+      "keywords": [
+        "status",
+        "health",
+        "metrics",
+        "dashboard"
+      ],
       "agent": "Analyzer",
       "user_invokable": true,
-      "allowed_tools": ["read", "glob", "bash"],
+      "allowed_tools": [
+        "read",
+        "glob",
+        "bash"
+      ],
       "category": "Utility",
       "slash_command": "/status"
     },
     "strategic-compact": {
       "description": "Context compression and memory optimization",
-      "keywords": ["compact", "context", "checkpoint", "memory"],
+      "keywords": [
+        "compact",
+        "context",
+        "checkpoint",
+        "memory"
+      ],
       "agent": "System Coordinator",
       "user_invokable": true,
-      "allowed_tools": ["read", "write", "bash"],
+      "allowed_tools": [
+        "read",
+        "write",
+        "bash"
+      ],
       "category": "Utility",
       "slash_command": "/compact"
     },
     "tdd-workflow": {
       "description": "Test-driven development workflow",
-      "keywords": ["tdd", "test-driven", "development", "workflow"],
+      "keywords": [
+        "tdd",
+        "test-driven",
+        "development",
+        "workflow"
+      ],
       "agent": "Tester Expert",
       "user_invokable": true,
-      "allowed_tools": ["read", "write", "edit", "grep", "glob", "bash"],
+      "allowed_tools": [
+        "read",
+        "write",
+        "edit",
+        "grep",
+        "glob",
+        "bash"
+      ],
       "category": "Workflow",
       "slash_command": "/tdd"
     },
     "testing-strategy": {
       "description": "Testing QA and coverage strategy",
-      "keywords": ["test", "testing", "qa", "coverage"],
+      "keywords": [
+        "test",
+        "testing",
+        "qa",
+        "coverage"
+      ],
       "agent": "Tester Expert",
       "user_invokable": true,
-      "allowed_tools": ["read", "grep", "glob", "bash"],
+      "allowed_tools": [
+        "read",
+        "grep",
+        "glob",
+        "bash"
+      ],
       "category": "Core",
       "slash_command": "/test"
     },
     "typescript-patterns": {
       "description": "TypeScript patterns and strict mode best practices",
-      "keywords": ["typescript", "patterns", "strict", "best-practices"],
+      "keywords": [
+        "typescript",
+        "patterns",
+        "strict",
+        "best-practices"
+      ],
       "agent": "Languages Expert",
       "user_invokable": true,
-      "allowed_tools": ["read", "grep", "glob", "edit", "write"],
+      "allowed_tools": [
+        "read",
+        "grep",
+        "glob",
+        "edit",
+        "write"
+      ],
       "category": "Language",
       "slash_command": null,
-      "auto_activated": [".ts", ".tsx"]
+      "auto_activated": [
+        ".ts",
+        ".tsx"
+      ]
     },
     "verification-loop": {
       "description": "Output verification and quality validation",
-      "keywords": ["verify", "validation", "check", "quality"],
+      "keywords": [
+        "verify",
+        "validation",
+        "check",
+        "quality"
+      ],
       "agent": "Reviewer",
       "user_invokable": true,
-      "allowed_tools": ["read", "grep", "glob"],
+      "allowed_tools": [
+        "read",
+        "grep",
+        "glob"
+      ],
       "category": "Utility",
       "slash_command": null
     },
     "ui-ux-system": {
       "description": "UI/UX Design System with Tailwind, Radix, Framer Motion, Magic UI, AI streaming patterns, dashboards, and accessibility",
-      "keywords": ["ui", "ux", "design", "tailwind", "radix", "framer", "magic", "animation", "component", "dashboard", "accessibility", "a11y", "streaming", "chat", "copilot"],
+      "keywords": [
+        "ui",
+        "ux",
+        "design",
+        "tailwind",
+        "radix",
+        "framer",
+        "magic",
+        "animation",
+        "component",
+        "dashboard",
+        "accessibility",
+        "a11y",
+        "streaming",
+        "chat",
+        "copilot"
+      ],
       "agent": "GUI Super Expert",
       "user_invokable": true,
-      "allowed_tools": ["read", "grep", "glob", "write", "edit"],
+      "allowed_tools": [
+        "read",
+        "grep",
+        "glob",
+        "write",
+        "edit"
+      ],
       "category": "Core",
       "slash_command": "/ui-design"
     },
     "telegram-bot": {
       "description": "Telegram bot assistant - remote OpenCode interface with security locking, daemon mode, and orchestrator bridge",
-      "keywords": ["telegram", "bot", "remote", "daemon", "chat", "mobile", "notification"],
+      "keywords": [
+        "telegram",
+        "bot",
+        "remote",
+        "daemon",
+        "chat",
+        "mobile",
+        "notification"
+      ],
       "agent": "Integration Expert",
       "user_invokable": true,
-      "allowed_tools": ["read", "write", "bash"],
+      "allowed_tools": [
+        "read",
+        "write",
+        "bash"
+      ],
       "category": "Workflow",
       "slash_command": "/telegram"
     },
     "scaffold": {
       "description": "Gera projetos do zero com estrutura pronta: Next.js, Vite, FastAPI, Express, CLI Python, HTML/CSS",
-      "keywords": ["scaffold", "projeto", "criar", "gerar", "new", "create", "init", "start", "template", "boilerplate"],
+      "keywords": [
+        "scaffold",
+        "projeto",
+        "criar",
+        "gerar",
+        "new",
+        "create",
+        "init",
+        "start",
+        "template",
+        "boilerplate"
+      ],
       "agent": "DevOps Expert",
       "user_invokable": true,
-      "allowed_tools": ["bash", "read", "write", "edit", "glob"],
+      "allowed_tools": [
+        "bash",
+        "read",
+        "write",
+        "edit",
+        "glob"
+      ],
       "category": "Scaffolding",
       "slash_command": "/scaffold"
     },
     "database": {
       "description": "Ajuda com banco de dados: SQL queries, models, migrations, otimização e design de schema",
-      "keywords": ["database", "sql", "query", "model", "migration", "orm", "schema", "db", "banco", "dados", "sqlite", "postgres", "mysql", "mongodb"],
+      "keywords": [
+        "database",
+        "sql",
+        "query",
+        "model",
+        "migration",
+        "orm",
+        "schema",
+        "db",
+        "banco",
+        "dados",
+        "sqlite",
+        "postgres",
+        "mysql",
+        "mongodb"
+      ],
       "agent": "Database Expert",
       "user_invokable": true,
-      "allowed_tools": ["read", "write", "edit", "grep", "glob", "bash"],
+      "allowed_tools": [
+        "read",
+        "write",
+        "edit",
+        "grep",
+        "glob",
+        "bash"
+      ],
       "category": "Core",
       "slash_command": "/database"
     },
     "onboarding": {
       "description": "Conduz onboarding interativo: 3 perguntas pra personalizar estilo, foco e verbosidade. Suporta /config pra mudar a qualquer momento.",
-      "keywords": ["onboarding", "configurar", "início", "primeira vez", "setup", "personalizar", "bem-vindo", "boas-vindas", "welcome", "config", "configuração"],
+      "keywords": [
+        "onboarding",
+        "configurar",
+        "início",
+        "primeira vez",
+        "setup",
+        "personalizar",
+        "bem-vindo",
+        "boas-vindas",
+        "welcome",
+        "config",
+        "configuração"
+      ],
       "agent": "System Coordinator",
       "user_invokable": true,
-      "allowed_tools": ["read", "write", "bash", "askUserQuestion"],
+      "allowed_tools": [
+        "read",
+        "write",
+        "bash",
+        "askUserQuestion"
+      ],
       "category": "Core",
       "slash_command": "/onboarding"
     },
     "framework-evolve": {
       "description": "Audita e evolui o framework pessoal: agents, routing, gates, skills registry. Use /evolve-framework.",
-      "keywords": ["evolve-framework", "audit", "framework", "health", "agents", "routing", "gates"],
+      "keywords": [
+        "evolve-framework",
+        "audit",
+        "framework",
+        "health",
+        "agents",
+        "routing",
+        "gates"
+      ],
       "agent": "System Coordinator",
       "user_invokable": true,
-      "allowed_tools": ["read", "write", "edit", "glob", "grep", "bash"],
+      "allowed_tools": [
+        "read",
+        "write",
+        "edit",
+        "glob",
+        "grep",
+        "bash"
+      ],
       "category": "Utility",
       "slash_command": "/evolve-framework"
     },
     "image-gen": {
       "description": "Geração de imagens via API (Replicate, FAL, Stability AI). Use /image para criar imagens programaticamente.",
-      "keywords": ["image", "generate", "ai", "stable-diffusion", "flux", "replicate", "fal", "imagem", "gerar"],
+      "keywords": [
+        "image",
+        "generate",
+        "ai",
+        "stable-diffusion",
+        "flux",
+        "replicate",
+        "fal",
+        "imagem",
+        "gerar"
+      ],
       "agent": "Coder",
       "user_invokable": true,
-      "allowed_tools": ["read", "write", "bash"],
+      "allowed_tools": [
+        "read",
+        "write",
+        "bash"
+      ],
       "category": "Core",
       "slash_command": "/image"
     },
     "session-resume": {
       "description": "Auto-resume entre sessões usando MEMORY.md persistente. Use /remember no final de cada sessão e carregue o contexto no início.",
-      "keywords": ["session", "resume", "memory", "continue", "retomar", "histórico", "remember"],
+      "keywords": [
+        "session",
+        "resume",
+        "memory",
+        "continue",
+        "retomar",
+        "histórico",
+        "remember"
+      ],
       "agent": "System Coordinator",
       "user_invokable": true,
-      "allowed_tools": ["read", "bash", "glob"],
+      "allowed_tools": [
+        "read",
+        "bash",
+        "glob"
+      ],
       "category": "Workflow",
       "slash_command": null
+    },
+    "session-save": {
+      "description": "AUTO-TRIGGER — salva a sessão no store local e no repositório pessoal (backup + commit + push). Sempre ao final de conversa/tarefa ou com /salvar.",
+      "keywords": [
+        "save",
+        "salvar",
+        "gatilho",
+        "persistir",
+        "memory",
+        "git",
+        "backup",
+        "auto-save"
+      ],
+      "agent": "System Coordinator",
+      "category": "Core",
+      "auto_trigger": true,
+      "path": "skills/session-save/SKILL.md",
+      "slash_command": "/salvar"
     }
   },
   "routing": {
@@ -416,7 +895,7 @@
     "metrics": "metrics",
     "statistics": "metrics",
     "performance": "metrics",
-    "dashboard": "metrics",
+    "dashboard": "ui-ux-system",
     "multi-plan": "multi-plan",
     "parallel": "multi-plan",
     "comparison": "multi-plan",
@@ -426,7 +905,7 @@
     "coordination": "orchestrator",
     "delegation": "orchestrator",
     "plan": "plan",
-    "design": "plan",
+    "design": "ui-ux-system",
     "architecture": "plan",
     "implementation": "plan",
     "prompt": "prompt-engineering-patterns",
@@ -447,10 +926,10 @@
     "remotion": "remotion-best-practices",
     "video": "remotion-best-practices",
     "react": "remotion-best-practices",
-    "animation": "remotion-best-practices",
+    "animation": "ui-ux-system",
     "security": "security-scan",
     "scan": "security-scan",
-    "audit": "security-scan",
+    "audit": "framework-evolve",
     "vulnerability": "security-scan",
     "simplify": "simplify",
     "reuse": "simplify",
@@ -474,14 +953,11 @@
     "check": "verification-loop",
     "ui": "ui-ux-system",
     "ux": "ui-ux-system",
-    "design": "ui-ux-system",
     "tailwind": "ui-ux-system",
     "radix": "ui-ux-system",
     "framer": "ui-ux-system",
     "magic": "ui-ux-system",
-    "animation": "ui-ux-system",
     "component": "ui-ux-system",
-    "dashboard": "ui-ux-system",
     "accessibility": "ui-ux-system",
     "a11y": "ui-ux-system",
     "streaming": "ui-ux-system",
@@ -492,7 +968,7 @@
     "daemon": "telegram-bot",
     "scaffold": "scaffold",
     "criar": "scaffold",
-    "gerar": "scaffold",
+    "gerar": "image-gen",
     "new project": "scaffold",
     "create": "scaffold",
     "init": "scaffold",
@@ -521,14 +997,12 @@
     "mudar estilo": "onboarding",
     "mudar tom": "onboarding",
     "evolve-framework": "framework-evolve",
-    "audit": "framework-evolve",
     "framework": "framework-evolve",
     "image": "image-gen",
     "generate image": "image-gen",
     "flux": "image-gen",
     "stable-diffusion": "image-gen",
     "imagem": "image-gen",
-    "gerar": "image-gen",
     "replicate": "image-gen",
     "fal": "image-gen",
     "session": "session-resume",
@@ -576,10 +1050,10 @@
       "/scaffold": "scaffold",
       "/database": "database",
       "/onboarding": "onboarding",
-    "/config": "onboarding",
-    "/evolve-framework": "framework-evolve",
-    "/image": "image-gen",
-    "/remember": "session-resume"
-  }
+      "/config": "onboarding",
+      "/evolve-framework": "framework-evolve",
+      "/image": "image-gen",
+      "/remember": "session-resume"
+    }
   }
 }

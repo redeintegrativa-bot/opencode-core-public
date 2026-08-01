@@ -47,7 +47,7 @@ python3 memory/session.py end \
 ```
 
 - Se o usuário invocar `/remember <resumo>`, use este comando `end`.
-- Versionar (opcional): `python3 memory/session.py backup --target <git-pessoal>/memory`.
+- **OBRIGATÓRIO (gatilho `session-save`)**: ao final de qualquer conversa, além do `end`, fazer `backup` para o repositório pessoal + `git commit`/`push`. Espelhar recursos genéricos no repo público.
 
 ### 4. Manutenção
 
