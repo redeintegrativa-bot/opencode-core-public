@@ -8,9 +8,10 @@ e processada pelo mesmo LLM que roda no terminal (big-pickle).
 ## Quick Start
 
 ```bash
-pip install python-telegram-bot python-dotenv  # dependências
-cp .env.example .env                            # configurar token
-./daemon.sh start                               # iniciar agente
+python3 -m venv venv                 # ambiente isolado
+venv/bin/pip install -r requirements.txt
+cp .env.example .env                 # configurar token
+./daemon.sh start                    # iniciar agente
 ```
 
 ## Comandos do daemon

@@ -10,6 +10,13 @@ PID_FILE="/tmp/opencode-agent.pid"
 LOG_FILE="${SCRIPT_DIR}/logs/agent.log"
 AGENT_SCRIPT="${SCRIPT_DIR}/opencode_agent.py"
 
+# Usar o Python do venv se existir (senão, o do sistema)
+if [ -x "${SCRIPT_DIR}/venv/bin/python" ]; then
+    PYTHON_BIN="${SCRIPT_DIR}/venv/bin/python"
+else
+    PYTHON_BIN="python3"
+fi
+
 mkdir -p "${SCRIPT_DIR}/logs"
 
 usage() {
@@ -35,7 +42,7 @@ cmd_start() {
     fi
 
     echo "Starting OpenCode Agent..."
-    nohup python3 "$AGENT_SCRIPT" >> "$LOG_FILE" 2>&1 &
+    nohup "$PYTHON_BIN" "$AGENT_SCRIPT" >> "$LOG_FILE" 2>&1 &
     local pid=$!
     echo "$pid" > "$PID_FILE"
     sleep 1
