@@ -1,7 +1,7 @@
 {
   "version": "1.1.0",
   "generated_at": "2026-07-28",
-  "total_skills": 39,
+  "total_skills": 40,
   "categories": {
     "Core": 13,
     "Utility": 7,
@@ -834,6 +834,20 @@
       "auto_trigger": true,
       "path": "skills/session-save/SKILL.md",
       "slash_command": "/salvar"
+    },
+    "session-triage": {
+      "description": "Decide se e onde salvar uma informação (perfil, sessão, git pessoal, público). Critérios de retenção.",
+      "keywords": [
+        "save",
+        "decidir",
+        "triage",
+        "critérios",
+        "o que salvar"
+      ],
+      "agent": "System Coordinator",
+      "category": "Core",
+      "auto_trigger": true,
+      "path": "skills/session-triage/SKILL.md"
     }
   },
   "routing": {
