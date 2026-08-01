@@ -1,6 +1,6 @@
 ---
 name: session-save
-description: AUTO-TRIGGER — SEMPRE executar ao final de qualquer conversa ou tarefa. Persiste descobertas no store local E espelha no repositório pessoal (backup + commit + push). Usar também quando houver fatos novos relevantes no meio da conversa.
+description: AUTO-TRIGGER — SEMPRE executar ao final de qualquer conversa ou tarefa E registrar descobertas no meio da conversa (salvamento contínuo). Persiste no store local E espelha no repositório pessoal (backup + commit + push).
 user-invokable: true
 allowed-tools: Bash, Read
 metadata:
@@ -16,9 +16,21 @@ Salva a memória da sessão atual em **duas camadas**, sempre:
 ## Quando disparar (OBRIGATÓRIO)
 
 - **Final de qualquer conversa/tarefa** — antes de encerrar o turno.
-- Quando houver **descobertas ou decisões não óbvias** no meio da conversa.
+- **Após cada resposta importante** (salvamento contínuo): se houve descoberta, decisão ou fato novo relevante, registrar na hora com `log` — não esperar o fim. Assim nada se perde se a conversa morrer no meio.
 - Quando o usuário invocar `/salvar` ou `/remember`.
 - Quando o contexto estiver ficando longo (evitar perda por compactação).
+
+**Antes de salvar, use a skill `session-triage` para decidir SE e ONDE salvar.** Nem tudo merece memória.
+
+## Salvamento contínuo vs. salvamento final
+
+| Momento | O que fazer |
+|---------|-------------|
+| **Durante a conversa** (após resposta com fato novo) | `session.py log "<descoberta>"` — só no store local, rápido, sem git |
+| **Fim de tarefa/conversa** | Fluxo completo: `end` → `backup` → commit + push pessoal |
+| **Milestone/etapa grande** | Fluxo completo (não esperar o fim absoluto) |
+
+No salvamento contínuo, **não** commitar a cada log — isso enche o histórico de git. Commit ocorre no fluxo final (ou a cada milestone).
 
 ## Passos
 

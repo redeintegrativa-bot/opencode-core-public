@@ -131,8 +131,33 @@ class SessionStore:
         self.ensure_dirs()
         self._backup()
         if len(content) > MAX_SIZE:
-            content = content[: COMPRESSION_THRESHOLD].rstrip() + "\n<!-- truncated: memory compressed, run `session.py compress` -->\n"
+            content = self._smart_trim(content, DEFAULT_KEEP)
+            content += "\n<!-- auto-trimmed: sessões antigas resumidas -->\n"
         self.memory_path.write_text(content, encoding="utf-8")
+
+    def _smart_trim(self, content: str, keep: int = DEFAULT_KEEP) -> str:
+        """Resume sessões antigas mantendo o cabeçalho (perfil/ambiente) e as K recentes completas."""
+        blocks = re.split(r"(?m)^## Sessão ", content)
+        if len(blocks) <= keep + 1:
+            return content
+        head = blocks[0]
+        old_blocks = blocks[1:-keep] if keep > 0 else blocks[1:]
+        recent = blocks[-keep:] if keep > 0 else []
+        summary = []
+        for block in old_blocks:
+            lines = block.splitlines()
+            title = lines[0].strip() if lines else "?"
+            m = re.search(r"\*\*Resumo:\*\*\s*(.+)", block)
+            one_line = m.group(1).strip() if m else ""
+            if not one_line:
+                one_line = next((l.strip() for l in lines if l.strip() and not l.strip().startswith("#")), "")
+            summary.append(f"- {title}: {one_line[:140]}")
+        new = head
+        if summary:
+            new += "\n".join(summary) + "\n"
+        for block in recent:
+            new += "## Sessão " + block
+        return new
 
     def _backup(self):
         if self.memory_path.exists():
@@ -217,13 +242,12 @@ class SessionStore:
             for old in files[:-keep] if keep > 0 else files:
                 old.unlink()
         content = self.read_memory()
-        blocks = re.split(r"(?m)^## Sessão ", content)
-        if len(blocks) > keep + 1:
-            new = blocks[0]
-            for block in blocks[-(keep + 1):]:
-                new += "## Sessão " + block
-            self.write_memory(new)
-        print(f"Compressed, keeping last {keep} sessions")
+        trimmed = self._smart_trim(content, keep)
+        if trimmed != content:
+            self.write_memory(trimmed)
+            print(f"Comprimido: sessões antigas viraram resumo; mantidas as {keep} mais recentes completas. Perfil preservado.")
+        else:
+            print(f"Nada a comprimir (há {keep} ou menos sessões).")
 
     def backup(self, target: str = None, from_target: bool = False):
         if target is None:
