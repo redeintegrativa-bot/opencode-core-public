@@ -86,6 +86,7 @@ class SessionStore:
             return {}
 
     def save_state(self, state: dict):
+        self.state_path.parent.mkdir(parents=True, exist_ok=True)
         self.state_path.write_text(json.dumps(state, indent=2, ensure_ascii=False), encoding="utf-8")
 
     def active_session(self) -> dict:
