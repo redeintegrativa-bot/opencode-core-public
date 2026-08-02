@@ -1,9 +1,9 @@
 {
   "version": "1.1.0",
   "generated_at": "2026-07-28",
-  "total_skills": 40,
+  "total_skills": 41,
   "categories": {
-    "Core": 13,
+    "Core": 14,
     "Utility": 7,
     "Workflow": 13,
     "Language": 4,
@@ -848,6 +848,30 @@
       "category": "Core",
       "auto_trigger": true,
       "path": "skills/session-triage/SKILL.md"
+    },
+    "mcp-discovery": {
+      "description": "Descobrir e adicionar servidores MCP sob demanda consultando o catálogo mcpservers.org e configurando no opencode.jsonc",
+      "keywords": [
+        "mcp",
+        "mcpservers",
+        "discover",
+        "server",
+        "integracao",
+        "add-mcp",
+        "catalogo",
+        "on-demand"
+      ],
+      "agent": "MCP Integration Expert",
+      "user_invokable": true,
+      "allowed_tools": [
+        "Read",
+        "Write",
+        "Grep",
+        "Glob",
+        "Bash"
+      ],
+      "category": "Core",
+      "slash_command": "/mcp-find"
     }
   },
   "routing": {
@@ -1025,7 +1049,13 @@
     "continue": "session-resume",
     "remember": "session-resume",
     "histórico": "session-resume",
-    "historia": "session-resume"
+    "historia": "session-resume",
+    "mcpservers": "mcp-discovery",
+    "mcp-server": "mcp-discovery",
+    "add-mcp": "mcp-discovery",
+    "instalar-mcp": "mcp-discovery",
+    "mcp-catalogo": "mcp-discovery",
+    "descobrir-mcp": "mcp-discovery"
   },
   "metadata": {
     "orchestrator_version": "13.0",
@@ -1067,7 +1097,8 @@
       "/config": "onboarding",
       "/evolve-framework": "framework-evolve",
       "/image": "image-gen",
-      "/remember": "session-resume"
+      "/remember": "session-resume",
+      "/mcp-find": "mcp-discovery"
     }
   }
 }
