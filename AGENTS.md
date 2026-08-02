@@ -51,4 +51,16 @@ GH_TOKEN=<token> ./scripts/setup-github-auth.sh <owner> <repo> [<repo>...] [--ch
 - Usa o token do env `GH_TOKEN` → grava em `~/.git-credentials` (perms 600) + `credential.helper store`.
 - `--check` valida permissão de escrita em cada repo (receive-pack HTTP 200).
 - Token sugerido: **classic PAT escopo `repo`**. Fine-grained precisa de `Contents: Read and write` + repos selecionados, senão push dá 403.
+
+## Reflexão automática (mini-Hermes)
+
+`scripts/reflect.py` varre as sessões salvas, detecta padrões recorrentes e propõe skills/regras para revisão (nada é ativado sem aprovação):
+
+```bash
+python3 scripts/reflect.py --root /root --scan   # heurístico (sem LLM)
+python3 scripts/reflect.py --root /root --deep   # análise semântica via opencode run
+python3 scripts/reflect.py --list                # listar propostas pendentes
+```
+
+Propostas vão para `~/.config/opencode/hermes-staging/<data>/`. Revisar antes de ativar.
 - **Nunca commitar tokens** — hooks de segurança bloqueiam padrões tipo `ghp_`.

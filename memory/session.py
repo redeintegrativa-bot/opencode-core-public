@@ -87,7 +87,9 @@ class SessionStore:
 
     def save_state(self, state: dict):
         self.state_path.parent.mkdir(parents=True, exist_ok=True)
-        self.state_path.write_text(json.dumps(state, indent=2, ensure_ascii=False), encoding="utf-8")
+        tmp = self.state_path.with_suffix(".tmp")
+        tmp.write_text(json.dumps(state, indent=2, ensure_ascii=False), encoding="utf-8")
+        os.replace(tmp, self.state_path)
 
     def active_session(self) -> dict:
         state = self.load_state()
@@ -117,7 +119,7 @@ class SessionStore:
             session = self.start_session()
         session["logs"].append({"time": datetime.now().isoformat(timespec="seconds"), "text": text})
         self._persist_active(session)
-        print(f"Logged: {text}")
+        print(f"Logged: {text}", flush=True)
 
     def _persist_active(self, session: dict):
         state = self.load_state()
@@ -133,7 +135,9 @@ class SessionStore:
         if len(content) > MAX_SIZE:
             content = self._smart_trim(content, DEFAULT_KEEP)
             content += "\n<!-- auto-trimmed: sessões antigas resumidas -->\n"
-        self.memory_path.write_text(content, encoding="utf-8")
+        tmp = self.memory_path.with_suffix(".tmp")
+        tmp.write_text(content, encoding="utf-8")
+        os.replace(tmp, self.memory_path)
 
     def _smart_trim(self, content: str, keep: int = DEFAULT_KEEP) -> str:
         """Resume sessões antigas mantendo o cabeçalho (perfil/ambiente) e as K recentes completas."""
@@ -164,12 +168,10 @@ class SessionStore:
             shutil.copy2(self.memory_path, self.backup_path)
 
     def end_session(self, summary: str, decisions, files) -> dict:
-        session = self.active_session() or {
-            "session_id": datetime.now().strftime("%Y%m%d-%H%M%S"),
-            "start": datetime.now().isoformat(timespec="seconds"),
-            "project": str(self.root),
-            "logs": [],
-        }
+        session = self.active_session()
+        if session is None:
+            print("No active session — nothing to end (use 'log' to start one).", flush=True)
+            return None
         end = datetime.now()
         session["end"] = end.isoformat(timespec="seconds")
         session["summary"] = summary
@@ -205,7 +207,7 @@ class SessionStore:
         state = self.load_state()
         state.pop("active", None)
         self.save_state(state)
-        print(f"Session ended: {session['session_id']}")
+        print(f"Session ended: {session['session_id']}", flush=True)
         return session
 
     def _save_session_file(self, session: dict, block: str):
@@ -229,11 +231,40 @@ class SessionStore:
     def stats(self) -> dict:
         sessions = list(self.sessions_dir.glob("session-*.md")) if self.sessions_dir.exists() else []
         size = self.memory_path.stat().st_size if self.memory_path.exists() else 0
+        metas = self.sessions_meta()
         return {
             "store": str(self.base),
             "sessions": len(sessions),
             "memory_bytes": size,
             "active": bool(self.active_session()),
+            "last_session": metas[-1] if metas else None,
+        }
+
+    def sessions_meta(self) -> list:
+        """Return metadata (id, date, summary) for every saved session, oldest first."""
+        metas = []
+        if not self.sessions_dir.exists():
+            return metas
+        for f in sorted(self.sessions_dir.glob("session-*.md")):
+            text = f.read_text(encoding="utf-8")
+            m = re.search(r"(?m)^\*\*Resumo:\*\*\s*(.+)", text)
+            summary = m.group(1).strip() if m else ""
+            sid = f.stem.replace("session-", "")
+            metas.append({"id": sid, "date": sid[:8], "summary": summary[:200]})
+        return metas
+
+    def status(self) -> dict:
+        active = self.active_session()
+        metas = self.sessions_meta()
+        return {
+            "store": str(self.base),
+            "memory_file": str(self.memory_path),
+            "sessions_total": len(metas),
+            "memory_bytes": self.memory_path.stat().st_size if self.memory_path.exists() else 0,
+            "active": bool(active),
+            "active_session": active,
+            "last_session": metas[-1] if metas else None,
+            "sessions": metas,
         }
 
     def compress(self, keep: int = DEFAULT_KEEP):
@@ -303,6 +334,21 @@ def cmd_stats(args):
     return 0
 
 
+def cmd_status(args):
+    data = SessionStore(args.root, args.local).status()
+    if args.short:
+        s = data
+        print(f"store: {s['store']}", flush=True)
+        print(f"sessions_total: {s['sessions_total']}", flush=True)
+        print(f"memory_bytes: {s['memory_bytes']}", flush=True)
+        print(f"active: {s['active']}", flush=True)
+        if s.get("last_session"):
+            print(f"last_session: {s['last_session']['id']} — {s['last_session']['summary'][:80]}", flush=True)
+        return 0
+    print(json.dumps(data, ensure_ascii=False, indent=2), flush=True)
+    return 0
+
+
 def cmd_compress(args):
     SessionStore(args.root, args.local).compress(args.keep)
     return 0
@@ -338,6 +384,10 @@ def main():
 
     sub.add_parser("show", help="Show memory and active session").set_defaults(func=cmd_show)
     sub.add_parser("stats", help="Show store statistics").set_defaults(func=cmd_stats)
+
+    status_p = sub.add_parser("status", help="Show full store status (JSON by default)")
+    status_p.add_argument("--short", action="store_true", help="Compact text summary")
+    status_p.set_defaults(func=cmd_status)
 
     comp_p = sub.add_parser("compress", help="Prune old sessions and trim MEMORY.md")
     comp_p.add_argument("--keep", type=int, default=DEFAULT_KEEP)
