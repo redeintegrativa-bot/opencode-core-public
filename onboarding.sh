@@ -18,7 +18,7 @@ echo -e "  ${C}${B}+--------------------------------------------------+${S}"
 echo -e "  ${C}${B}| OpenCode Core - Onboarding                        |${S}"
 echo -e "  ${C}${B}+--------------------------------------------------+${S}"
 echo ""
-echo -e "  ${B}Ola! Vou te fazer 3 perguntas rapidas pra${S}"
+echo -e "  ${B}Ola! Vou te fazer 5 perguntas rapidas pra${S}"
 echo -e "  ${B}entender como voce gosta de receber ajuda.${S}"
 echo ""
 echo -e "  ${A}Nao tem resposta errada.${S}"
@@ -29,7 +29,7 @@ echo ""
 
 echo -e "  ${G}--------------------------------------------------${S}"
 echo ""
-echo -e "  ${C}PERGUNTA 1 DE 3${S}"
+echo -e "  ${C}PERGUNTA 1 DE 5${S}"
 echo ""
 echo -e "  ${B}ESTILO DE RESPOSTA${S}"
 echo -e "  ${G}Isso define como EU vou falar com voce.${S}"
@@ -75,7 +75,7 @@ echo ""
 
 echo -e "  ${G}--------------------------------------------------${S}"
 echo ""
-echo -e "  ${C}PERGUNTA 2 DE 3${S}"
+echo -e "  ${C}PERGUNTA 2 DE 5${S}"
 echo ""
 echo -e "  ${B}FOCO PRINCIPAL${S}"
 echo -e "  ${G}Isso ajuda a dar exemplos na SUA area.${S}"
@@ -119,7 +119,7 @@ echo ""
 
 echo -e "  ${G}--------------------------------------------------${S}"
 echo ""
-echo -e "  ${C}PERGUNTA 3 DE 3${S}"
+echo -e "  ${C}PERGUNTA 3 DE 5${S}"
 echo ""
 echo -e "  ${B}NIVEL DE EXPERIENCIA${S}"
 echo -e "  ${G}Isso define o nivel de detalhe das respostas.${S}"
@@ -162,6 +162,89 @@ cat > "$CONFIG_DIR/AGENTS.md" << AGENTS
 TONE=$TONE FOCUS=$FOCUS VERBOSITY=$VERBOSITY
 AGENTS
 
+# ---------------------------------------------------------------------------
+# PERGUNTA 4 DE 5 - PERMISSOES
+# ---------------------------------------------------------------------------
+echo -e "  ${G}--------------------------------------------------${S}"
+echo ""
+echo -e "  ${C}PERGUNTA 4 DE 5${S}"
+echo ""
+echo -e "  ${B}COMO QUER QUE EU PERGUNTE?${S}"
+echo -e "  ${G}Define quanto eu posso executar sem te incomodar.${S}"
+echo ""
+echo -e "  ${V}${B}[1]${S} ${B}ACESSO TOTAL${S}"
+echo -e "    ${G}Executo tudo sozinho: scans, leitura, instalacao${S}"
+echo ""
+echo -e "  ${C}${B}[2]${S} ${B}EQUILIBRADO${S}  ${G}<<< recomendado${S}"
+echo -e "    ${G}Git/pip liberados; o resto pergunta${S}"
+echo ""
+echo -e "  ${A}${B}[3]${S} ${B}APROVAR SEMPRE${S}"
+echo -e "    ${G}Toda acao pede sua aprovacao${S}"
+echo ""
+echo -e "  ${B}Como prefere? [1-3, Enter=2]${S}"
+read -p "  > " PERM_CHOICE
+PERM_CHOICE="${PERM_CHOICE:-2}"
+
+CONFIG_JSON="$CONFIG_DIR/opencode.json"
+if [ ! -f "$CONFIG_JSON" ]; then
+  echo "{}" > "$CONFIG_JSON"
+fi
+
+case "$PERM_CHOICE" in
+  1) PERM_R="ACESSO TOTAL"; PERM_VAL='{"*":"allow"}' ;;
+  3) PERM_R="APROVAR SEMPRE"; PERM_VAL='{"*":"ask"}' ;;
+  *) PERM_R="EQUILIBRADO"; PERM_VAL='{"*":"ask","bash":{"*":"ask","git *":"allow","pip *":"allow","pip3 *":"allow","npm *":"allow","node *":"allow","python *":"allow","python3 *":"allow","ls *":"allow","pwd":"allow","cat *":"allow","echo *":"allow"},"read":"allow","glob":"allow","grep":"allow","webfetch":"allow","websearch":"allow"}' ;;
+esac
+
+# Aplica a permissao preservando o resto do opencode.json (python melhor p/ merge)
+python3 - "$CONFIG_JSON" "$PERM_VAL" << 'PYEOF' 2>/dev/null || python - "$CONFIG_JSON" "$PERM_VAL" << 'PYEOF'
+import json, sys
+path, perm = sys.argv[1], sys.argv[2]
+try:
+    cfg = json.load(open(path, encoding="utf-8"))
+except Exception:
+    cfg = {}
+cfg["permission"] = json.loads(perm)
+json.dump(cfg, open(path, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+PYEOF
+
+echo ""
+echo -e "  ${V}+--------------------------------------------------+${S}"
+echo -e "  ${V}|  ${PERM_R} ativado!${S}"
+echo -e "  ${V}|${S}"
+echo -e "  ${V}|  Config em: $CONFIG_JSON${S}"
+echo -e "  ${V}+--------------------------------------------------+${S}"
+echo ""
+
+# ---------------------------------------------------------------------------
+# PERGUNTA 5 DE 5 - RECURSOS OPCIONAIS
+# ---------------------------------------------------------------------------
+echo -e "  ${G}--------------------------------------------------${S}"
+echo ""
+echo -e "  ${C}PERGUNTA 5 DE 5${S}"
+echo ""
+echo -e "  ${B}RECURSOS OPCIONAIS${S}"
+echo -e "  ${G}Ferramentas extras que so ativam com seu consentimento.${S}"
+echo ""
+echo -e "  ${B}1) MONITORAMENTO DE REDE${S}"
+echo -e "    ${G}Verifica dispositivos e eventos na rede local${S}"
+read -p "  Ativar? [s/N] > " NET_CHOICE
+if [[ "${NET_CHOICE,,}" =~ ^(s|sim|y|yes)$ ]]; then
+  python3 "$REPO_DIR/scripts/features.py" enable network_watch 2>/dev/null || \
+    python "$REPO_DIR/scripts/features.py" enable network_watch 2>/dev/null || true
+  echo -e "  ${V}  [+] Monitoramento de rede ativado${S}"
+fi
+echo ""
+echo -e "  ${B}2) VERIFICAR ATUALIZACOES${S}"
+echo -e "    ${G}Avisa quando o repositorio publico tem novidades${S}"
+read -p "  Ativar? [s/N] > " UPD_CHOICE
+if [[ "${UPD_CHOICE,,}" =~ ^(s|sim|y|yes)$ ]]; then
+  python3 "$REPO_DIR/scripts/features.py" enable update_check 2>/dev/null || \
+    python "$REPO_DIR/scripts/features.py" enable update_check 2>/dev/null || true
+  echo -e "  ${V}  [+] Verificar atualizacoes ativado${S}"
+fi
+echo ""
+
 echo ""
 echo -e "  ${V}${B}+--------------------------------------------------+${S}"
 echo -e "  ${V}${B}| Onboarding concluido!                             |${S}"
@@ -169,10 +252,11 @@ echo -e "  ${V}${B}+--------------------------------------------------+${S}"
 echo -e "  ${V}|  ESTILO       [ $(echo $TONE_R | xargs) ]${S}"
 echo -e "  ${V}|  FOCO         $(echo $FOCUS_R | xargs)${S}"
 echo -e "  ${V}|  DETALHE      $(echo $VERBOSITY | xargs)${S}"
+echo -e "  ${V}|  PERMISSAO    $PERM_R${S}"
 echo -e "  ${V}+--------------------------------------------------+${S}"
 echo ""
 echo -e "  ${G}Config salva em: $CONFIG_DIR/AGENTS.md${S}"
-echo -e "  ${G}(2 linhas, ~20 tokens)${S}"
+echo -e "  ${G}Permissoes em:   $CONFIG_DIR/opencode.json${S}"
 echo ""
 echo -e "  ${G}--------------------------------------------------${S}"
 echo ""

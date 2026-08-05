@@ -1,4 +1,4 @@
-# =============================================================================
+﻿# =============================================================================
 # OpenCode Core — Setup Script (Windows PowerShell)
 # =============================================================================
 # Instala skills, agentes, regras e hooks no ambiente do usuário.
@@ -153,6 +153,17 @@ function Show-Banner {
   Write-Host ""
 }
 
+function Check-Update {
+  $checker = Join-Path $RepoDir "scripts\check-update.py"
+  if (Test-Path $checker) {
+    Write-Info "Verificando atualizacoes..."
+    try {
+      $out = & python $checker 2>$null
+      if (-not $out) { $out = & python3 $checker 2>$null }
+    } catch {}
+  }
+}
+
 function Show-Summary {
   param($Target)
   $skillCount = (Get-ChildItem -Path (Join-Path $Target "skills") -Recurse -Filter "SKILL.md" -ErrorAction SilentlyContinue).Count
@@ -178,6 +189,7 @@ function Show-Summary {
 # Main
 # ---------------------------------------------------------------------------
 Show-Banner
+Check-Update
 
 if ($Help) {
   Write-Host "Uso: .\setup.ps1 [-Skills] [-Agents] [-Rules] [-Hooks] [-Workflows] [-CI] [-All]"

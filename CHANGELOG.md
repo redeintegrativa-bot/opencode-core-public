@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.4.0 (2026-08-05)
+
+### Added
+- scripts/features.py: gerenciador de recursos opcionais (opt-in) — list/enable/disable/is-enabled
+- Onboarding (console + bash) agora tem 5 perguntas: estilo, foco, nivel, PERMISSOES e RECURSOS opcionais
+- Modos de permissao: ACESSO TOTAL / EQUILIBRADO / APROVAR SEMPRE (grava no opencode.json preservando o resto)
+- `/config` — revisa/ajusta permissoes e recursos a qualquer momento
+- `/update` — atualizacao CONSULTIVA: mostra o changelog e so aplica com aprovacao explicita
+- check-update.py: `--self-test` (11 testes internos sem rede)
+
+### Changed
+- Recursos como monitoramento de rede e check de atualizacoes agora sao OPTO-IN (nada ativa sozinho)
+- Plugins network-watch e update-check respeitam ~/.config/opencode/features.json
+- update-check.js agora e CONSULTIVO: detecta novidades, registra alerta pendente e NAO aplica nada sem aprovacao
+
+### Fixed
+- check-update.py: changelog diff corrigido (comparava por ordem do arquivo, quebrado quando secoes fora de ordem)
+- check-update.py: branch detectada via `git ls-remote --symref` (main ou master), sem hardcoded
+- update.py: branch dinamica centralizada (git pull e ZIP usam a mesma deteccao)
+- setup.ps1: corrigido encoding (UTF-8 com BOM) que quebrava no PowerShell 5.1
+
 ## 1.3.0 (2026-07-28)
 
 ### Added

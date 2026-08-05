@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import json
+import subprocess
 import sys
 import urllib.request
 from pathlib import Path
@@ -65,7 +67,156 @@ def save_config(tone, focus, verbosity):
     (CONFIG_DIR / "AGENTS.md").write_text(agents_md, encoding="utf-8")
 
 
-def show_summary(tone, focus, verbosity):
+# ---------------------------------------------------------------------------
+# Modos de permissao e recursos opcionais
+# ---------------------------------------------------------------------------
+
+def read_opencode_json():
+    path = CONFIG_DIR / "opencode.json"
+    if not path.exists():
+        return {}
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+def write_opencode_json(cfg):
+    path = CONFIG_DIR / "opencode.json"
+    path.write_text(json.dumps(cfg, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+PERMISSION_MODES = {
+    "full": {
+        "label": "ACESSO TOTAL",
+        "desc": "Tudo liberado. Eu executo scans, leio arquivos e instalo coisas sem perguntar a cada acao.",
+        "config": {"*": "allow"},
+    },
+    "balanced": {
+        "label": "EQUILIBRADO",
+        "desc": "Comandos basicos (git, pip, node) rodam sozinhos; o resto pergunta antes.",
+        "config": {
+            "*": "ask",
+            "bash": {"*": "ask",
+                     "git *": "allow",
+                     "pip *": "allow",
+                     "pip3 *": "allow",
+                     "npm *": "allow",
+                     "node *": "allow",
+                     "python *": "allow",
+                     "python3 *": "allow",
+                     "ls *": "allow",
+                     "pwd": "allow",
+                     "cat *": "allow",
+                     "echo *": "allow"},
+            "read": "allow",
+            "glob": "allow",
+            "grep": "allow",
+            "webfetch": "allow",
+            "websearch": "allow",
+        },
+    },
+    "strict": {
+        "label": "APROVAR SEMPRE",
+        "desc": "Toda acao pede sua aprovacao. Maximo controle, mais interrompido.",
+        "config": {"*": "ask"},
+    },
+}
+
+
+def apply_permission_mode(mode):
+    """Grava o modo de permissao no opencode.json preservando o resto."""
+    cfg = read_opencode_json()
+    cfg["permission"] = PERMISSION_MODES[mode]["config"]
+    write_opencode_json(cfg)
+    return cfg
+
+
+def get_available_features():
+    """Lista os recursos opcionais via scripts/features.py --json."""
+    checker = REPO_DIR / "scripts" / "features.py"
+    if not checker.exists():
+        return []
+    try:
+        r = subprocess.run(
+            [sys.executable, str(checker), "list", "--json"],
+            capture_output=True, text=True, timeout=15
+        )
+        if r.returncode == 0 and r.stdout.strip():
+            return json.loads(r.stdout)
+    except Exception:
+        pass
+    return []
+
+
+def toggle_feature(name, enabled):
+    checker = REPO_DIR / "scripts" / "features.py"
+    action = "enable" if enabled else "disable"
+    try:
+        subprocess.run([sys.executable, str(checker), action, name],
+                       capture_output=True, text=True, timeout=15)
+    except Exception:
+        pass
+
+
+def ask_permission_mode():
+    sep()
+    cprint("PERGUNTA 4 DE 5", C)
+    print()
+    cprint("COMO QUER QUE EU PERGUNTE?", B)
+    cprint("Define quanto eu posso executar sem te incomodar.", G)
+    print()
+    opt("1", "ACESSO TOTAL", "Executo tudo sozinho: scans de rede, leitura, instalacao",
+        '"Pode fazer o que precisar."', V)
+    opt("2", "EQUILIBRADO", "Basico rodando sozinho, resto pergunta",
+        '"Git e pip liberados; o resto pergunte."', C, "  <<< recomendado")
+    opt("3", "APROVAR SEMPRE", "Toda acao pede sua aprovacao",
+        '"Me mostra antes de executar."', A)
+    cprint("Como prefere?", B)
+
+    modos = list(PERMISSION_MODES.keys())
+    i = ask(modos, default=2)
+    mode = modos[i]
+    apply_permission_mode(mode)
+    print()
+    feed(f"  {PERMISSION_MODES[mode]['label']} ativado!\n\n{PERMISSION_MODES[mode]['desc']}", V)
+    return mode
+
+
+def ask_optional_features():
+    features = get_available_features()
+    if not features:
+        return []
+
+    sep()
+    cprint("PERGUNTA 5 DE 5", C)
+    print()
+    cprint("RECURSOS OPCIONAIS", B)
+    cprint("Ferramentas extras que so ativam com seu consentimento.", G)
+    print()
+
+    enabled = []
+    for idx, f in enumerate(features, start=1):
+        opt(str(idx), f["name"].upper(), f["description"], "", color=V)
+        cprint(f"    Ativar? [s/N]", B)
+        try:
+            resp = input(f"  {C}>{S} ").strip().lower()
+        except (EOFError, KeyboardInterrupt):
+            resp = "n"
+        if resp in ("s", "sim", "y", "yes"):
+            toggle_feature(f["key"], True)
+            enabled.append(f["key"])
+            print(f"  {V}  [+] {f['name']} ativado{S}")
+        print()
+
+    if not enabled:
+        cprint("Nenhum recurso opcional ativado. Da pra ativar depois com:", G)
+        cprint("  python scripts/features.py enable <nome>", C)
+        print()
+    return enabled
+
+
+def show_summary(tone, focus, verbosity, mode=None, features=None):
     print()
     hdr("Onboarding concluido!", V)
 
@@ -77,10 +228,18 @@ def show_summary(tone, focus, verbosity):
     print(f"  {V}|  ESTILO       [ {tone_r:<12} ]{' ' * 20}|{S}")
     print(f"  {V}|  FOCO         {focus_r:<40}|{S}")
     print(f"  {V}|  DETALHE      {verb_r:<40}|{S}")
+    if mode:
+        perm_label = PERMISSION_MODES[mode]["label"]
+        print(f"  {V}|  PERMISSAO    {perm_label:<40}|{S}")
+    if features:
+        feats_r = ", ".join(f.upper() for f in features)
+        print(f"  {V}|  RECURSOS     {feats_r:<40}|{S}")
+    elif features is not None:
+        print(f"  {V}|  RECURSOS     nenhum opcional ativado{' ' * 15}|{S}")
     print(f"  {V}+{'-'*50}+{S}")
     print()
     cprint(f"Config salva em: {CONFIG_DIR / 'AGENTS.md'}", G)
-    cprint("(2 linhas, ~20 tokens)", G)
+    cprint(f"Permissoes em:   {CONFIG_DIR / 'opencode.json'}", G)
     print()
     sep()
     cprint("PROXIMO PASSO:", B)
@@ -94,7 +253,7 @@ def show_summary(tone, focus, verbosity):
 def onboard_console():
     print()
     hdr("OpenCode Core - Onboarding", C)
-    cprint("Vou te fazer 3 perguntas rapidas pra", B)
+    cprint("Vou te fazer 5 perguntas rapidas pra", B)
     cprint("entender como voce gosta de receber ajuda.", B)
     print()
     cprint("Nao tem resposta errada.", A)
@@ -103,7 +262,7 @@ def onboard_console():
 
     # 1. ESTILO
     sep()
-    cprint("PERGUNTA 1 DE 3", C)
+    cprint("PERGUNTA 1 DE 5", C)
     print()
     cprint("ESTILO DE RESPOSTA", B)
     cprint("Isso define como EU vou falar com voce.", G)
@@ -135,7 +294,7 @@ def onboard_console():
 
     # 2. FOCO
     sep()
-    cprint("PERGUNTA 2 DE 3", C)
+    cprint("PERGUNTA 2 DE 5", C)
     print()
     cprint("FOCO PRINCIPAL", B)
     cprint("Isso ajuda a dar exemplos na SUA area.", G)
@@ -163,7 +322,7 @@ def onboard_console():
 
     # 3. NIVEL
     sep()
-    cprint("PERGUNTA 3 DE 3", C)
+    cprint("PERGUNTA 3 DE 5", C)
     print()
     cprint("NIVEL DE EXPERIENCIA", B)
     cprint("Isso define o nivel de detalhe das respostas.", G)
@@ -193,7 +352,14 @@ def onboard_console():
     feed(f"  {rotulos_n[i]} ativado!\n\n{explicacoes_n[i]}", V)
 
     save_config(tone, focus, verbosity)
-    show_summary(tone, focus, verbosity)
+
+    # 4. PERMISSOES
+    mode = ask_permission_mode()
+
+    # 5. RECURSOS OPCIONAIS
+    enabled = ask_optional_features()
+
+    show_summary(tone, focus, verbosity, mode, enabled)
 
 
 def check_version():

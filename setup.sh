@@ -188,7 +188,6 @@ install_services() {
 install_github_actions() {
   local target="$REPO_DIR"
   mkdir -p "$target/.github/workflows"
-
   # CI workflow
   cat > "$target/.github/workflows/ci.yml" << 'EOF'
 name: CI
@@ -260,10 +259,22 @@ show_summary() {
 }
 
 # ---------------------------------------------------------------------------
+# Update check
+# ---------------------------------------------------------------------------
+check_update() {
+  if [ -f "$REPO_DIR/scripts/check-update.py" ]; then
+    info "Verificando atualizacoes..."
+    python3 "$REPO_DIR/scripts/check-update.py" 2>/dev/null || \
+      python "$REPO_DIR/scripts/check-update.py" 2>/dev/null || true
+  fi
+}
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 main() {
   show_banner
+  check_update
 
   local os
   os=$(detect_os)

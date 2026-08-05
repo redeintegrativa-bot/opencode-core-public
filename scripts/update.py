@@ -12,7 +12,30 @@ from pathlib import Path
 
 REPO_DIR = Path(__file__).resolve().parent.parent
 REPO = "redeintegrativa-bot/opencode-core-public"
-ZIP_URL = f"https://github.com/{REPO}/archive/refs/heads/master.zip"
+GITHUB = f"https://github.com/{REPO}"
+_branch_cache = None
+
+
+def get_default_branch():
+    """Detecta a branch padrao do repo (main ou master) via git ls-remote."""
+    global _branch_cache
+    if _branch_cache:
+        return _branch_cache
+    try:
+        r = subprocess.run(
+            ["git", "ls-remote", "--symref", f"{GITHUB}.git", "HEAD"],
+            capture_output=True, text=True, timeout=10
+        )
+        for line in r.stdout.splitlines():
+            if line.startswith("ref:"):
+                branch = line.split("refs/heads/")[-1].split()[0].strip()
+                if branch:
+                    _branch_cache = branch
+                    return _branch_cache
+    except Exception:
+        pass
+    _branch_cache = "master"
+    return _branch_cache
 
 V = '\033[32m'; C = '\033[36m'; A = '\033[33m'; R = '\033[31m'; B = '\033[1m'; S = '\033[0m'
 
@@ -33,17 +56,18 @@ def check_git():
 
 
 def update_via_git():
-    log("Atualizando via git pull...", C)
+    branch = get_default_branch()
+    log(f"Atualizando via git pull ({branch})...", C)
     try:
-        subprocess.run(["git", "-C", str(REPO_DIR), "fetch", "origin", "master"],
+        subprocess.run(["git", "-C", str(REPO_DIR), "fetch", "origin", branch],
                        check=True, timeout=30)
         result = subprocess.run(
-            ["git", "-C", str(REPO_DIR), "log", "--oneline", "HEAD..origin/master"],
+            ["git", "-C", str(REPO_DIR), "log", "--oneline", f"HEAD..origin/{branch}"],
             capture_output=True, text=True, timeout=10
         )
         if result.stdout.strip():
             log(f"Mudancas pendentes:\n{result.stdout}", A)
-            subprocess.run(["git", "-C", str(REPO_DIR), "pull", "origin", "master"],
+            subprocess.run(["git", "-C", str(REPO_DIR), "pull", "origin", branch],
                            check=True, timeout=30)
             log("Atualizado com sucesso via git!", V)
             return True
@@ -59,11 +83,13 @@ def update_via_git():
 
 
 def update_via_zip():
-    log("Baixando ultima versao do GitHub...", C)
+    branch = get_default_branch()
+    zip_url = f"{GITHUB}/archive/refs/heads/{branch}.zip"
+    log(f"Baixando ultima versao do GitHub ({branch})...", C)
     zip_path = Path(tempfile.mkdtemp()) / "update.zip"
 
     try:
-        req = urllib.request.Request(ZIP_URL, headers={"User-Agent": "opencode-core/1.0"})
+        req = urllib.request.Request(zip_url, headers={"User-Agent": "opencode-core/1.0"})
         with urllib.request.urlopen(req, timeout=60) as resp:
             zip_path.write_bytes(resp.read())
 
@@ -73,9 +99,9 @@ def update_via_zip():
         with zipfile.ZipFile(zip_path, "r") as zf:
             zf.extractall(extract_dir)
 
-        inner = extract_dir / f"opencode-core-public-master"
+        inner = extract_dir / f"opencode-core-public-{branch}"
         if not inner.exists():
-            inner = extract_dir / f"{REPO.split('/')[1]}-master"
+            inner = extract_dir / f"{REPO.split('/')[1]}-{branch}"
 
         if not inner.exists():
             log("Estrutura do ZIP inesperada.", R)
