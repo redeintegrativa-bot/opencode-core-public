@@ -16,3 +16,7 @@ build/
 Thumbs.db
 downloads/
 =*
+state/
+fallback-log.json
+evolution-log.json
+.session-counter

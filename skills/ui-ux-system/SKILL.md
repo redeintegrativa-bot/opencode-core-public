@@ -1423,11 +1423,12 @@ export function cn(...inputs: ClassValue[]) {
 ```tsx
 // app/layout.tsx
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Space_Grotesk, Inter } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 
-const inter = Inter({ subsets: ["latin"] })
+const display = Space_Grotesk({ subsets: ["latin"], variable: "--font-display" })
+const body = Inter({ subsets: ["latin"], variable: "--font-body" })
 
 export const metadata: Metadata = {
   title: "My App",
@@ -1437,7 +1438,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={`${display.variable} ${body.variable}`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           {children}
         </ThemeProvider>
@@ -1446,6 +1447,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   )
 }
 ```
+
+> **Tipografia (hub §11.2):** use um par display + body (ex: `Space Grotesk` + `Inter`), nunca `Inter`/`Roboto` "for everything" — paletas 100% default parecem template.
 
 ```tsx
 // components/theme-provider.tsx
@@ -1500,77 +1503,6 @@ import { useReducedMotion, useInView } from "framer-motion"
 // Utilities
 import { cn } from "@/lib/utils"
 ```
-
----
-
-## Design Principles
-
-1. **Composition over configuration** — Build complex UIs by composing simple, focused primitives
-2. **Accessible by default** — Every component uses correct ARIA attributes, keyboard navigation, and focus management
-3. **Motion with purpose** — Animations communicate state changes, not decoration; always respect `prefers-reduced-motion`
-4. **Mobile-first responsive** — Design for small screens first, enhance for larger viewports
-5. **Dark mode ready** — CSS custom properties enable seamless theme switching
-6. **Type-safe** — Full TypeScript support with proper prop types and generic constraints
-7. **Performance** — Tree-shakeable icons, lazy-loaded modals, optimized re-renders with `React.memo` and `useMemo`
-
----
-
-## Referências dos Repositórios
-
-### IA & Streaming UI
-
-| Repository | Use Case | When to Consult |
-|---|---|---|
-| `shadcn-ui/ui` | Component library, design system patterns, Radix-based UI primitives | Building foundational UI components, styling patterns, or need a proven component architecture |
-| `Nutlope/llm-ui` | LLM streaming UI components (typewriter effect, markdown rendering, code blocks) | Implementing real-time LLM output display, streaming text with markdown, or token-by-token rendering |
-| `danny-avila/LibreChat` | Multi-model chat interface patterns, conversation management, message history | Building chat UIs that support multiple AI providers, conversation threading, or message persistence |
-| `browserbase/stagehand` | Browser automation UI, AI-driven web interaction patterns | Creating interfaces for AI agents that browse the web, form filling, or screen interaction feedback |
-| `CopilotKit/CopilotKit` | AI copilot sidebar, in-app AI assistance, context-aware suggestions | Adding an AI assistant panel to existing apps, code suggestion UI, or inline AI actions |
-
-### Animações & Microinterações
-
-| Repository | Use Case | When to Consult |
-|---|---|---|
-| `magicuidesign/magicui` | Animated gradients, particle effects, shimmer, beam, spotlight components | Need eye-catching decorative effects, animated backgrounds, or attention-grabbing UI accents |
-| `framer/motion` | Layout animations, gestures, scroll-triggered animations, page transitions | General-purpose animation library for React — layout shifts, enter/exit, drag, scroll-linked |
-| `pmndrs/react-three-fiber` | 3D UI components, WebGL integration, 3D scene rendering in React | Building 3D product viewers, immersive experiences, or data visualization in three dimensions |
-| `motion-division/motion` | Advanced motion patterns, spring physics, complex orchestration | Next-gen motion library (Framer Motion successor) — when you need the latest animation primitives |
-| `julianshapiro/velocity` | Lightweight jQuery animation engine, CSS color animation | jQuery-based projects needing fast, simple animations without a full React animation library |
-
-### Componentes, Ícones & SaaS
-
-| Repository | Use Case | When to Consult |
-|---|---|---|
-| `tabler/tabler-icons` | SVG icon set (5000+ icons), consistent stroke style | Need broad icon coverage, Tabler-style icons, or alternative to Lucide for specific icon sets |
-| `lucide-icons/lucide` | Feather icons fork, tree-shakable, 24x24 stroke icons | Primary icon set for most projects — clean, minimal, well-maintained, React-friendly |
-| `radix-ui/primitives` | Accessible, unstyled UI primitives (dialogs, menus, selects, tooltips) | Building accessible components from scratch, need headless UI with correct ARIA behavior |
-| `vercel/commerce` | Next.js e-commerce boilerplate, storefront patterns | Building online stores, product pages, cart/checkout flows with Next.js |
-| `saasfly/saasfly` | Full-stack SaaS template (auth, billing, i18n, multi-tenancy) | Scaffolding a SaaS product — includes auth, payments, subscriptions, and localization |
-
-### Canvas, Dashboards & Editores
-
-| Repository | Use Case | When to Consult |
-|---|---|---|
-| `xyflow/xyflow` | Node-based flow editors (React Flow), drag-and-drop node graphs | Building workflow builders, diagram editors, pipeline visualizers, or node-based UIs |
-| `tldraw/tldraw` | Infinite canvas, drawing tools, whiteboard functionality | Creating collaborative whiteboards, annotation tools, or infinite zoom canvas experiences |
-| `novel-bms/novel` | Notion-like rich text editor, block-based editing, slash commands | Building content editors with block-based editing, slash menus, and collaborative features |
-| `tremorlabs/tremor` | Dashboard components (charts, tables, KPIs, sparklines) | Rapid dashboard building with pre-built data visualization and metric display components |
-| `tremorlabs/tremor-raw` | Unstyled dashboard primitives, headless chart/table components | Need dashboard primitives without Tailwind opinions — bring your own styling |
-
----
-
-## Quick Reference Matrix
-
-| Task | Recommended Repos |
-|---|---|
-| Need a chat interface? | `danny-avila/LibreChat` + `Nutlope/llm-ui` + `CopilotKit/CopilotKit` |
-| Need animations? | `framer/motion` + `magicuidesign/magicui` + `julianshapiro/velocity` |
-| Need a dashboard? | `tremorlabs/tremor` + `xyflow/xyflow` |
-| Need a canvas/editor? | `tldraw/tldraw` + `novel-bms/novel` + `xyflow/xyflow` |
-| Need icons? | `lucide-icons/lucide` + `tabler/tabler-icons` |
-| Need accessible components? | `radix-ui/primitives` |
-| Need SaaS boilerplate? | `saasfly/saasfly` + `vercel/commerce` |
-| Need 3D/visual effects? | `pmndrs/react-three-fiber` |
 
 ---
 
@@ -1783,6 +1715,14 @@ Repos recomendados (2026) — selecionar por caso de uso:
 | `cloudflare/kumo` | Componentes acessíveis (Base UI) da Cloudflare | Stack acessível moderno + docs CLI |
 | `mui/material-ui` | Material Design completo | Apps enterprise estilo Google |
 | `ant-design/ant-design` | Enterprise UI + design language | Dashboards corporativos, i18n |
+
+### IA & Streaming UI
+| Repo | Uso | Quando usar |
+|---|---|---|
+| `Nutlope/llm-ui` | LLM streaming UI (typewriter, markdown, code blocks) | Output de LLM em tempo real |
+| `danny-avila/LibreChat` | Multi-model chat, conversas, histórico | Chat multi-provider, threading |
+| `CopilotKit/CopilotKit` | Copilot sidebar, AI in-app | Assistente AI dentro do app |
+| `browserbase/stagehand` | Browser automation UI, agentic web patterns | Interfaces para agentes que navegam |
 
 ### Efeitos & Animações
 | Repo | Uso | Quando usar |

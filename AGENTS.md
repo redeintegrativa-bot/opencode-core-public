@@ -64,3 +64,17 @@ python3 scripts/reflect.py --list                # listar propostas pendentes
 
 Propostas vão para `~/.config/opencode/hermes-staging/<data>/`. Revisar antes de ativar.
 - **Nunca commitar tokens** — hooks de segurança bloqueiam padrões tipo `ghp_`.
+
+## Loop de Auto-Melhoria (ativo via plugin)
+
+O plugin `~/.config/opencode/plugins/self-improvement.js` roda automaticamente a cada sessão:
+
+| Gatilho | O que grava |
+|---------|-------------|
+| `session.idle` | `state/session-history.jsonl` + `state/session-recovery.json` |
+| `tool.execute.after` com erro | `state/fallback-log.jsonl` (com keywords p/ roteamento) |
+| A cada 10 sessões | Rebuild de `fallback-log.json` → roda `scripts/evolve-agent.py --check` → sugestões em `state/knowledge.jsonl` |
+
+**Uso:** checagens baratas (evolve-agent.py, local, sem LLM) rodam sozinhas.
+Auditoria pesada do framework (`/evolve-framework`) permanece sob demanda.
+Consulte `state/*.jsonl` para health-check e aprendizado acumulado.

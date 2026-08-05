@@ -36,7 +36,6 @@
       "description": "Browser automation agent for web browsing, scraping, OCR, screenshots, downloading, and JSON extraction with proxy and session support",
       "keywords": [
         "browser",
-        "web",
         "scrape",
         "ocr",
         "screenshot",
@@ -899,7 +898,6 @@
     "graphql": "api-design",
     "endpoint": "api-design",
     "browser": "browser-agent",
-    "web": "browser-agent",
     "scrape": "browser-agent",
     "ocr": "browser-agent",
     "screenshot": "browser-agent",

@@ -1,0 +1,162 @@
+import {
+  appendFileSync,
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  writeFileSync,
+} from "node:fs"
+import { join } from "node:path"
+import { homedir } from "node:os"
+
+const BASE = join(homedir(), ".config", "opencode")
+const STATE_DIR = join(BASE, "state")
+const SESSION_LOG = join(STATE_DIR, "session-history.jsonl")
+const FALLBACK_JSONL = join(STATE_DIR, "fallback-log.jsonl")
+const KNOWLEDGE_LOG = join(STATE_DIR, "knowledge.jsonl")
+const RECOVERY_FILE = join(STATE_DIR, "session-recovery.json")
+const COUNTER_FILE = join(STATE_DIR, ".session-counter")
+const LEGACY_FALLBACK = join(BASE, "fallback-log.json")
+const EVOLVE_SCRIPT = join(BASE, "scripts", "evolve-agent.py")
+
+const CHECK_INTERVAL = 10
+
+const AGENT_NAMES = [
+  "analyzer", "coder", "reviewer", "documenter", "orchestrator",
+  "system_coordinator", "gui-super-expert",
+]
+
+function ensureDirs() {
+  mkdirSync(STATE_DIR, { recursive: true })
+}
+
+function appendLine(file, obj) {
+  ensureDirs()
+  appendFileSync(file, JSON.stringify(obj) + "\n")
+}
+
+function readCounter() {
+  try {
+    return parseInt(readFileSync(COUNTER_FILE, "utf8").trim(), 10) || 0
+  } catch {
+    return 0
+  }
+}
+
+function writeCounter(n) {
+  ensureDirs()
+  writeFileSync(COUNTER_FILE, String(n))
+}
+
+function extractKeywords(text) {
+  if (!text) return []
+  return AGENT_NAMES.filter((a) => text.toLowerCase().includes(a))
+}
+
+function rebuildLegacyFallback() {
+  if (!existsSync(FALLBACK_JSONL)) return
+  const entries = []
+  try {
+    const lines = readFileSync(FALLBACK_JSONL, "utf8").split("\n").filter(Boolean)
+    for (const line of lines.slice(-200)) {
+      try {
+        entries.push(JSON.parse(line))
+      } catch {}
+    }
+  } catch {}
+  const payload = { version: 1, entries, generated_at: new Date().toISOString() }
+  try {
+    writeFileSync(LEGACY_FALLBACK, JSON.stringify(payload, null, 2), "utf8")
+  } catch {}
+}
+
+async function runEvolveCheck(ctx) {
+  try {
+    const proc = await ctx.$`python "${EVOLVE_SCRIPT}" --check`
+    const out = String(proc.stdout || "").trim()
+    if (ctx.client && ctx.client.app) {
+      await ctx.client.app.log({
+        body: {
+          service: "self-improvement",
+          level: "info",
+          message: "Auto-evolve check (10 sessions)",
+          extra: { output: out.slice(0, 2000) },
+        },
+      })
+    }
+    appendLine(KNOWLEDGE_LOG, {
+      type: "evolve_check",
+      ts: new Date().toISOString(),
+      suggestions: out.slice(0, 4000),
+    })
+  } catch (err) {
+    if (ctx.client && ctx.client.app) {
+      await ctx.client.app.log({
+        body: {
+          service: "self-improvement",
+          level: "warn",
+          message: "Auto-evolve check failed",
+          extra: { error: String(err).slice(0, 500) },
+        },
+      })
+    }
+  }
+}
+
+export const SelfImprovement = async (ctx) => {
+  ensureDirs()
+  return {
+    event: async ({ event }) => {
+      const props = event.properties || event.data || {}
+      const now = new Date().toISOString()
+      const sessionID = props.sessionID || props.id || null
+      const directory = ctx.directory || ""
+
+      if (event.type === "session.idle") {
+        appendLine(SESSION_LOG, { type: "session", ts: now, sessionID, directory })
+        try {
+          writeFileSync(
+            RECOVERY_FILE,
+            JSON.stringify(
+              { lastSession: sessionID, ts: now, directory, resumed: false },
+              null,
+              2
+            ),
+            "utf8"
+          )
+        } catch {}
+
+        const count = readCounter() + 1
+        writeCounter(count)
+        if (count >= CHECK_INTERVAL) {
+          writeCounter(0)
+          rebuildLegacyFallback()
+          await runEvolveCheck(ctx)
+        }
+      }
+
+      if (event.type === "session.error") {
+        appendLine(FALLBACK_JSONL, {
+          type: "session_error",
+          ts: now,
+          sessionID,
+          error: String(props.error || "").slice(0, 500),
+        })
+      }
+    },
+
+    "tool.execute.after": async (input, output) => {
+      const now = new Date().toISOString()
+      const err = output?.error ? String(output.error) : null
+      if (!err) return
+      const tool = input?.tool || "unknown"
+      const text = `${tool} ${err}`
+      appendLine(FALLBACK_JSONL, {
+        type: "tool_error",
+        ts: now,
+        tool,
+        error: err.slice(0, 400),
+        keywords: extractKeywords(text),
+      })
+    },
+  }
+}
