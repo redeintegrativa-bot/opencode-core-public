@@ -1,7 +1,7 @@
 ---
 name: ui-ux-system
 description: Comprehensive UI/UX Design System for building accessible, animated, and modern web interfaces. Synthesizes best practices from shadcn/ui, Magic UI, Framer Motion, Radix Primitives, Lucide/Tabler icons, Tremor dashboards, XYFlow, tldraw, Novel editor, and AI streaming patterns from llm-ui and CopilotKit.
-user-invokable: true
+user-invocable: true
 allowed-tools:
   - bash
   - read
@@ -1572,3 +1572,281 @@ import { cn } from "@/lib/utils"
 | Need SaaS boilerplate? | `saasfly/saasfly` + `vercel/commerce` |
 | Need 3D/visual effects? | `pmndrs/react-three-fiber` |
 
+---
+
+# DESIGN HUB — Módulo de Design & Interface (v1.0)
+
+> Este hub transforma a skill em referência de **design com intenção**, não apenas código.
+> Orienta decisões visuais, tendências 2026, landing pages, gate de qualidade, e **quando acionar outros especialistas e repos** do ecossistema.
+> Idioma: PT-BR.
+
+---
+
+## 11. Princípios de Design Visual
+
+Regras que separam um site "funciona" de um site "parece feito por um designer".
+
+### 11.1 Hierarquia Visual
+- **1 ideia por seção** — cada bloco comunica UMA mensagem principal.
+- **Escala tipográfica clara** — Hero 64–96px, título de seção 36–48px, corpo 16–18px, caption 13–14px.
+- **Peso > cor para hierarquia** — primeiro diferença de tamanho/weight; cor é reforço.
+- **Leitura em F/Z** — elemento mais importante no topo-esquerda (F) ou no centro (Z).
+
+### 11.2 Tipografia (o ativo nº 1 em 2026)
+- **Escolha display + body pairing** — uma fonte display forte (ex: Space Grotesk, Sora, Clash Display) + uma body legível (Inter, Manrope).
+- **Evite Inter/Roboto "for everything"** — paletas 100% default parecem templates.
+- **Tracking**: headings levemente tighter (`-0.02em`), body normal.
+- **Line-height**: 1.1–1.2 em headings, 1.6–1.7 em parágrafos.
+- **Type scale consistente** via design tokens (não font-size soltos).
+
+### 11.3 Cor
+- **Base neutra** (branco / preto / tons de cinza) + **1 cor de destaque saturada** (electric blue, lime, burnt orange) — não paletas tímidas.
+- **Contraste WCAG**: 4.5:1 texto normal, 3:1 texto grande.
+- **Nunca cor como único sinal** — sempre acompanhe com ícone/texto/padrão.
+- **Dark mode**: preto `#0a0b0c`–`#121317` (não `#000` puro), superfícies elevadas um tom acima.
+
+### 11.4 Espaçamento & Ritmo
+- **Escala de 8px** (`4, 8, 12, 16, 24, 32, 48, 64, 96`).
+- **Seções grandes com respiro** — padding vertical generoso (`py-24` / `py-32`).
+- **Consistência**: o mesmo espaçamento significa a mesma relação em todo o site.
+
+### 11.5 Motion com Propósito
+- **Só anima transform/opacity** — nunca `width/height/top/left` (custa layout).
+- **1–2 reveals por scroll, cirúrgicos** — não animar tudo.
+- **`prefers-reduced-motion` obrigatório** — usuário com redução = zero animação.
+- **Duração** 200–500ms, easing `ease-out`; micro-interações < 200ms.
+
+---
+
+## 12. Tendências 2026 → Receitas Prontas
+
+Receitas diretas das tendências validadas em 2026. Aplique com intenção, não todas de uma vez.
+
+### 12.1 Dark-Dominant (padrão para SaaS/AI)
+- 60%+ das landings novas usam dark-dominant.
+- Fundo `#0a0b0c`–`#121317`, texto off-white `#f4f4f5`, bordas de baixa opacidade (`rgba(255,255,255,0.08)`).
+- Um único acento saturado (ex: electric blue) para CTAs e destaques.
+- **Sempre com toggle light/dark funcional** (class + localStorage + system).
+
+### 12.2 Bento Grid (o layout padrão de features)
+- Grid assimétrico estilo widgets de macOS: células de tamanhos diferentes.
+- `grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6`, com células `lg:col-span-2`, `lg:col-span-4`.
+- Uso principal: seção de features/métricas em SaaS.
+
+### 12.3 Glassmorphism com Restrição
+- `backdrop-blur` + fundo translúcido em **superfícies específicas** (nav overlay, cards) — não o site inteiro.
+- Funciona melhor sobre dark com gradientes vibrantes de fundo.
+- Aplicar de forma contida (não é mais a "linguagem visual" do site).
+
+### 12.4 Tipografia Cinética
+- 1 headline animada no hero (palavras que ciclam/morph/split) — NÃO repetir em toda página.
+- CSS scroll-driven animations ou Framer Motion `AnimatePresence`.
+- É "mais polimento que substância" — use como abertura forte.
+
+### 12.5 Scrollytelling
+- Conteúdo revelado conforme o scroll = narrativa guiada.
+- Reage ao scroll **sem roubar o controle** (nada de scroll-jacking).
+- CSS `animation-timeline: scroll()` nativo (sem JS) quando suportado.
+
+### 12.6 Grão & Textura Tátil (antídoto ao "parece AI")
+- CSS noise/grain overlay (`filter: url(#noise)`) ou imagem de grão em baixa opacidade.
+- Textura em hero/headlines (stone, fabric, chrome) substitui gradiente text plano.
+- Transmite "feito por humano".
+
+### 12.7 Hero 3D (R3F / Spline)
+- 1 objeto 3D central com material claro (glass, metal, stone), iluminação deliberada, fundo mínimo.
+- Lazy-load (import dinâmico) — hero 3D pesado que atrasa LCP é negativo líquido.
+- Fallback estático + `prefers-reduced-motion`.
+
+### 12.8 Acentos Saturados Únicos
+- Acentos `electric blue`, `burnt orange`, `lime`, `saturated pink` substituem pastéis 2022-23.
+- Gradientes como **ferramenta cirúrgica**: 1 hero blob OU 1 CTA, não em todo fundo.
+
+### 12.9 Barely-There UI (anti-design)
+- Restrição máxima: 1 typeface, hairline borders de baixa opacidade, estrutura via whitespace/weight, não por boxes/sombras.
+
+### 12.10 Anti-Grid Brutalism (nichos)
+- Layouts "quebrados", monospace, `border-radius: 0`, pixels 1px, grão.
+- Para dev-tools, estúdios criativos, marcas que querem sinalizar autenticidade.
+
+---
+
+## 13. Landing Pages & Conversão
+
+Estrutura de landing de alta conversão (validada em 2026 — mobile-first, single-column narrative).
+
+### 13.1 Anatomia (ordem de persuasão)
+1. **Nav** — logo + 3-4 links + CTA (sticky, blur ao rolar).
+2. **Hero** — headline 64–96px (outcome-focada) + subhead + 1 CTA + prova social (logos).
+3. **Social proof** — logos de clientes / métricas.
+4. **Problem/Agitate** — por que o status quo dói.
+5. **Solution / Features** — bento grid.
+6. **Product demo** — vídeo/gif interativo (não screenshot estático para SaaS).
+7. **How it works** — 3 passos.
+8. **Comparison table** — "vs concorrência" (maior conversor não-hero).
+9. **Testimonials** — com foto + resultado mensurável.
+10. **Pricing** — transparente, 3 tiers, tier destaque.
+11. **FAQ** — accordion.
+12. **Final CTA** + footer.
+
+### 13.2 Regras de conversão
+- **1 objetivo por página** — todo elemento constrói desejo, credibilidade OU reduz atrito.
+- **Mobile-first, single-column** — o fluxo linear em 1 coluna vence multi-coluna no mobile.
+- **CTAs acima da dobra + repetidos** — header, meio, final.
+- **Trust signals perto de friction points** — selo/garantia ao lado do botão e do form.
+- **Forms curtos** — quanto menos campos, mais conversão.
+- **Headlines de outcome** — "Aumente X em Y", não "Nossa plataforma".
+- **Contraste de CTA** — o botão principal é o elemento mais saturado da tela.
+
+### 13.3 Micro-interações que convertem
+- CTA que pulsa suavemente ao entrar no viewport.
+- Contadores que animam ao scroll (stats).
+- Progress bar de scroll.
+- Before/after slider, calculadora de ROI.
+
+---
+
+## 14. Checklist de Qualidade Visual (Design Gate)
+
+Gate automático de review visual. Rodar SEMPRE após implementar/editar uma UI.
+
+### 14.1 Hierarquia & Layout
+- [ ] 1 mensagem clara por seção
+- [ ] Escala tipográfica consistente (tokens)
+- [ ] Whitespace generoso e ritmo consistente
+- [ ] Grid/alignment consistente (sem elementos soltos)
+
+### 14.2 Cor & Contraste
+- [ ] Texto ≥ 4.5:1 (normal) / 3:1 (grande)
+- [ ] Cor nunca é o único sinal de estado
+- [ ] 1 acento dominante (sem arco-íris)
+
+### 14.3 Temas
+- [ ] Light e dark funcionais (toggle + localStorage + system)
+- [ ] Mesmas proporções de contraste nos 2 temas
+
+### 14.4 Responsivo & Mobile
+- [ ] Mobile-first testado (≥ 320px)
+- [ ] Touch targets ≥ 44x44px
+- [ ] Single-column no mobile, sem overflow horizontal
+
+### 14.5 Motion & Performance
+- [ ] Anima só transform/opacity
+- [ ] ≤ 2 reveals por scroll
+- [ ] `prefers-reduced-motion` respeitado
+- [ ] LCP < 2.5s, CLS < 0.1 (assets lazy, fonts optimizada)
+
+### 14.6 Acessibilidade
+- [ ] Navegação por teclado completa
+- [ ] ARIA correto (menus, diálogos, tabs)
+- [ ] Skip link presente
+- [ ] Focus visible em todo interativo
+
+### 14.7 Verificação final
+- [ ] Sem estética "genérica de AI" (ver checklist frontend-design no gui-super-expert)
+- [ ] Direção estética BOLD e consistente
+- [ ] Tipografia com personalidade (não só Inter default)
+
+---
+
+## 15. Matriz de Especialistas Complementares
+
+Quando o design precisa de competência além da skill, **delegar/consultar**:
+
+| Necessidade | Especialista/Skill | Como consultar |
+|---|---|---|
+| Layout web complexo (grids, sidebars, forms, dashboards) | `gui-layout-specialist` (L2) | Delegar task de layout |
+| Mobile / Flutter / React Native | `mobile-ui-specialist` (L2) | Delegar task mobile |
+| Arquitetura de software do app (SOLID, DDD, patterns) | `architect-design-specialist` (L2) | Design de estrutura front |
+| Geração de imagens/assets on-demand | skill `image-gen` | Assets hero/backgrounds |
+| Vídeo, 3D, Remotion, WebGL heroes | skill `remotion-best-practices` | Heroes 3D, motion video |
+| TypeScript/React estrito | skill `typescript-patterns` | Código TS/TSX |
+| Validação/qualidade do código | `reviewer` (core) | Review + Design Gate |
+| Análise/exploração de estrutura | `analyzer` (core) | Antes de implementar |
+| Documentação/changelog da mudança | `documenter` (core) | Docs + CHANGELOG |
+
+**Fluxo recomendado para tarefa de UI:** `analyzer` (entender) → skill `ui-ux-system` (design) → L2/especialista se preciso → `coder` (implementar) → `reviewer` (Design Gate + code review).
+
+---
+
+## 16. Matriz de Repos Complementares
+
+Repos recomendados (2026) — selecionar por caso de uso:
+
+### Componentes & Design Systems
+| Repo | Uso | Quando usar |
+|---|---|---|
+| `shadcn-ui/ui` | Copy-paste components, Radix-based, você é dono do código | Fundação de qualquer app React/Tailwind |
+| `heroui-inc/heroui` (NextUI) | UI moderna e completa (v3) | Precisa de lib completa com Figma kit |
+| `mantinedev/mantine` | 120+ componentes, 100+ hooks | Precisar de date pickers, spotlight, drag-drop prontos |
+| `mui/base-ui` | Headless primitives (sucessor rápido do Radix) | Primitives sem estilo, atualização ativa |
+| `cloudflare/kumo` | Componentes acessíveis (Base UI) da Cloudflare | Stack acessível moderno + docs CLI |
+| `mui/material-ui` | Material Design completo | Apps enterprise estilo Google |
+| `ant-design/ant-design` | Enterprise UI + design language | Dashboards corporativos, i18n |
+
+### Efeitos & Animações
+| Repo | Uso | Quando usar |
+|---|---|---|
+| `magicuidesign/magicui` | Animated components (shimmer, bento, particles) | Landing pages e marketing |
+| `framer/motion` (ou `motion`) | Layout/scroll/gestures/transitions | Animações React em geral |
+| `pmndrs/react-three-fiber` | 3D/WebGL em React | Hero 3D, visualização 3D |
+
+### Dashboards & Dados
+| Repo | Uso | Quando usar |
+|---|---|---|
+| `tremorlabs/tremor` | Dashboard components (charts, KPIs, sparklines) | Dashboards rápidos |
+| `tremorlabs/tremor-raw` | Dashboard primitives headless | Dashboard sem opinião de estilo |
+| `xyflow/xyflow` | Node-based flow editors | Workflow builders |
+
+### Editores & Canvas
+| Repo | Uso | Quando usar |
+|---|---|---|
+| `tldraw/tldraw` | Infinite canvas/whiteboard | Whiteboards colaborativos |
+| `novel-bms/novel` | Editor rich text block-based | Editores tipo Notion |
+
+### Recursos de Design
+| Repo | Uso | Quando usar |
+|---|---|---|
+| `bradtraversy/design-resources-for-developers` | Curadoria mantida (fotos, mockups, cores, ícones) | Precisa de asset/recurso |
+| `hqasmei/awesome-design-resources` | Recursos modernos (Tailwind, AI editors) | Referência atual de tooling |
+
+### Ícones
+| Repo | Uso | Quando usar |
+|---|---|---|
+| `lucide-icons/lucide` | Ícones 24x24 stroke, tree-shakable | Padrão primário |
+| `tabler/tabler-icons` | 5000+ ícones SVG stroke | Cobertura extra |
+
+### Templates SaaS
+| Repo | Uso | Quando usar |
+|---|---|---|
+| `vercel/commerce` | E-commerce boilerplate Next.js | Lojas online |
+| `saasfly/saasfly` | Full-stack SaaS (auth, billing, i18n) | Scaffold de SaaS |
+
+---
+
+## Design Hub — Fluxo de Decisão
+
+```
+Tarefa de UI/site/landing
+   │
+   ▼
+1. Entender objetivo (converter? dashboard? portfólio?)
+   │
+   ▼
+2. Escolher direção estética (minimal, dark-tech, vibrante, premium, brutalist...)
+   │
+   ▼
+3. Definir tokens (cor, tipografia, espaço, radius, motion)
+   │
+   ▼
+4. Montar estrutura (landing: anatomia seção 13 | app: grid/layout)
+   │
+   ▼
+5. Aplicar tendência(s) com moderação (seção 12)
+   │
+   ▼
+6. Implementar com repos certos (seção 16) + especialistas se preciso (seção 15)
+   │
+   ▼
+7. Rodar Design Gate (seção 14) — fixar até passar
+```

@@ -97,6 +97,41 @@ Il plugin frontend-design si attiva automaticamente con queste keyword:
 
 ---
 
+## 🧭 DESIGN HUB (SKILL `ui-ux-system`)
+
+**Fonte primária de referência de design:** carregar a skill `ui-ux-system` (Design Hub) para:
+
+- **Princípios de Design Visual** (hierarquia, tipografia, cor, espaçamento, motion com propósito)
+- **Tendências 2026 → receitas prontas** (dark-dominant, bento, glassmorphism, tipografia cinética, scrollytelling, grão/tátil, hero 3D, acentos saturados)
+- **Landing Pages & Conversão** (anatomia de landing de alta conversão, mobile-first, single-column)
+- **Checklist de Qualidade Visual (Design Gate)** — rodar SEMPRE após implementar UI
+- **Matriz de Especialistas Complementares** e **Matriz de Repos Complementares**
+
+### Fluxo de ativação do hub
+```
+Task de UI/design → carregar ui-ux-system (Design Hub)
+   → decidir direção estética (seção 11)
+   → aplicar tendência com moderação (seção 12)
+   → montar landing/layout (seção 13)
+   → implementar com repos certos (seção 16)
+   → delegar especialistas quando necessário (seção 15)
+   → rodar Design Gate (seção 14)
+```
+
+### Quando delegar a especialistas (não fazer tudo sozinho)
+
+| Necessidade | Delegar para |
+|---|---|
+| Layout web complexo (grids, sidebars, forms, dashboards) | `gui-layout-specialist` (L2) |
+| Mobile / Flutter / React Native | `mobile-ui-specialist` (L2) |
+| Arquitetura de software do app (SOLID, DDD) | `architect-design-specialist` (L2) |
+| Imagens/assets | skill `image-gen` |
+| Vídeo/3D/Remotion heroes | skill `remotion-best-practices` |
+| TypeScript/React estrito | skill `typescript-patterns` |
+| Review + Design Gate | `reviewer` (core) |
+
+---
+
 ## REGOLE CORE
 
 ### 1. COMPONENTI ATOMICI
