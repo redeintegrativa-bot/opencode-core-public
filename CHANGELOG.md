@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.8.3 (2026-08-06)
+
+### Added
+- `scripts/validate-encoding.py`: bloqueia UTF-8 invalido e mojibake latin-1->UTF-8 (bytes 0xC3/0xC2/0xE2 lidos como latin-1 e re-encodados), avisa sobre BOM desnecessario (excecao: `setup.ps1`, que precisa de BOM para o PowerShell 5.1).
+- CI valida encoding em arquivos de texto no pessoal e no publico.
+
+### Fixed
+- Mojibake no `ROADMAP.md` (double-encoding de `ção` e `→`) corrigido.
+
 ## 1.8.2 (2026-08-06)
 
 ### Fixed

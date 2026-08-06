@@ -47,3 +47,5 @@ jobs:
         run: python3 scripts/validate-plugins.py
       - name: Validate skill registry
         run: python3 -m json.tool skills/registry.json > /dev/null
+      - name: Validate file encoding
+        run: python3 scripts/validate-encoding.py --quiet
