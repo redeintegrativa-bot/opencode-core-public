@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.5.0 (2026-08-05)
+
+### Added
+- skill `update-core`: atualizacao do core por linguagem natural (CONSULTIVA — procura o repo, mostra o changelog e so aplica com aprovacao explicita)
+- Comandos `/update` e `/config` agora sao arquivos reais em `.opencode/command/` e sao instalados pelo setup
+- setup.sh/setup.ps1: flags `--commands` e `--plugins` + reinstall automatico no modo `--all`
+- update.py: auto-install apos atualizar (roda o setup para reaplicar skills/plugins/comandos) + flag `--no-install`
+- README: secao "Como atualizar" (via chat, skill `update-core`, ou `python scripts/update.py`)
+
+### Changed
+- skills/registry.json: entry `update-core` + routing de "atualizacao/versao/changelog" (total: 42 skills)
+- CI: branch padrao corrigida para `master` (repo + heredocs do setup)
+
 ## 1.4.0 (2026-08-05)
 
 ### Added

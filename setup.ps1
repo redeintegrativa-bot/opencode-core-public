@@ -8,7 +8,9 @@
 #   .\setup.ps1 -Skills      # Apenas skills
 #   .\setup.ps1 -Agents      # Apenas agentes
 #   .\setup.ps1 -Rules       # Apenas regras
-#   .\setup.ps1 -Hooks       # Apenas hooks
+#   .\setup.ps1 -Workflows   # Apenas workflows
+#   .\setup.ps1 -Commands    # Apenas comandos
+#   .\setup.ps1 -Plugins     # Apenas plugins
 #   .\setup.ps1 -Help        # Esta mensagem
 # =============================================================================
 
@@ -18,6 +20,8 @@ param(
   [switch]$Rules,
   [switch]$Hooks,
   [switch]$Workflows,
+  [switch]$Commands,
+  [switch]$Plugins,
   [switch]$CI,
   [switch]$All,
   [switch]$Help
@@ -30,6 +34,8 @@ $RulesDir = Join-Path $RepoDir "rules"
 $HooksDir = Join-Path $RepoDir "hooks"
 $WorkflowsDir = Join-Path $RepoDir "workflows"
 $ServicesDir = Join-Path $RepoDir "services"
+$CommandsDir = Join-Path $RepoDir ".opencode\command"
+$PluginsDir = Join-Path $RepoDir "plugins"
 
 function Write-Log { Write-Host "✓ $($args[0])" -ForegroundColor Green }
 function Write-Warn { Write-Host "! $($args[0])" -ForegroundColor Yellow }
@@ -106,6 +112,30 @@ function Install-Services {
   Write-Log "Services installed → $svcTarget"
 }
 
+function Install-Commands {
+  param($Target)
+  if (-not (Test-Path $CommandsDir)) {
+    Write-Warn "Sem diretorio .opencode\command no repo; pulando comandos"
+    return
+  }
+  $cmdTarget = Join-Path $Target "command"
+  New-Item -ItemType Directory -Path $cmdTarget -Force | Out-Null
+  Copy-Item -Path "$CommandsDir\*" -Destination $cmdTarget -Recurse -Force -ErrorAction SilentlyContinue
+  Write-Log "Commands installed → $cmdTarget"
+}
+
+function Install-Plugins {
+  param($Target)
+  if (-not (Test-Path $PluginsDir)) {
+    Write-Warn "Sem diretorio plugins\ no repo; pulando plugins"
+    return
+  }
+  $pluginsTarget = Join-Path $Target "plugins"
+  New-Item -ItemType Directory -Path $pluginsTarget -Force | Out-Null
+  Copy-Item -Path "$PluginsDir\*.js" -Destination $pluginsTarget -Force -ErrorAction SilentlyContinue
+  Write-Log "Plugins installed → $pluginsTarget"
+}
+
 function Install-GitHubActions {
   $actionsDir = Join-Path $RepoDir ".github\workflows"
   New-Item -ItemType Directory -Path $actionsDir -Force | Out-Null
@@ -115,9 +145,9 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [master]
   pull_request:
-    branches: [main]
+    branches: [master]
 
 jobs:
   validate:
@@ -192,12 +222,12 @@ Show-Banner
 Check-Update
 
 if ($Help) {
-  Write-Host "Uso: .\setup.ps1 [-Skills] [-Agents] [-Rules] [-Hooks] [-Workflows] [-CI] [-All]"
+  Write-Host "Uso: .\setup.ps1 [-Skills] [-Agents] [-Rules] [-Hooks] [-Workflows] [-Commands] [-Plugins] [-CI] [-All]"
   exit 0
 }
 
 $target = Get-ConfigDir
-$mode = if ($All -or (-not $Skills -and -not $Agents -and -not $Rules -and -not $Hooks -and -not $Workflows -and -not $CI)) { "all" } else { "partial" }
+$mode = if ($All -or (-not $Skills -and -not $Agents -and -not $Rules -and -not $Hooks -and -not $Workflows -and -not $Commands -and -not $Plugins -and -not $CI)) { "all" } else { "partial" }
 
 New-Item -ItemType Directory -Path $target -Force | Out-Null
 
@@ -206,6 +236,8 @@ if ($mode -eq "all" -or $Agents)    { Install-Agents $target }
 if ($mode -eq "all" -or $Rules)     { Install-Rules $target }
 if ($mode -eq "all" -or $Hooks)     { Install-Hooks $target }
 if ($mode -eq "all" -or $Workflows) { Install-Workflows $target }
+if ($mode -eq "all" -or $Commands)  { Install-Commands $target }
+if ($mode -eq "all" -or $Plugins)   { Install-Plugins $target }
 if ($mode -eq "all" -or $CI)        { Install-GitHubActions }
 
 # Always install services and CI if all

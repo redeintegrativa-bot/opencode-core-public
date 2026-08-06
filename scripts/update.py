@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import argparse
 import os
 import subprocess
 import sys
@@ -128,7 +129,39 @@ def update_via_zip():
         return False
 
 
+def reinstall_components():
+    """Reaplica skills/agentes/regras/hooks/plugins/comandos no config do usuario."""
+    setup = REPO_DIR / "setup.sh" if os.name != "nt" else REPO_DIR / "setup.ps1"
+    if not setup.exists():
+        log("setup nao encontrado; pulando reinstall.", A)
+        return True
+    log("Reinstalando componentes no seu config...", C)
+    try:
+        if os.name != "nt":
+            subprocess.run(["bash", str(setup), "--all"],
+                           check=True, cwd=str(REPO_DIR), timeout=120)
+        else:
+            subprocess.run(
+                ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass",
+                 "-File", str(setup), "-All"],
+                check=True, cwd=str(REPO_DIR), timeout=120)
+        log("Reinstall concluido.", V)
+        return True
+    except subprocess.CalledProcessError as e:
+        log(f"Falha no reinstall (pode rodar ./setup.sh manualmente): {e}", A)
+        return False
+    except subprocess.TimeoutExpired:
+        log("Reinstall excedeu tempo limite (pode rodar ./setup.sh manualmente).", A)
+        return False
+
+
 def main():
+    parser = argparse.ArgumentParser(description="Atualiza o OpenCode Core.")
+    parser.add_argument(
+        "--no-install", action="store_true",
+        help="Apenas baixa/atualiza os arquivos, sem reinstalar componentes no config.")
+    args = parser.parse_args()
+
     print()
     log("OpenCode Core — Atualizacao", C)
     print()
@@ -143,6 +176,12 @@ def main():
         ok = update_via_zip()
 
     if ok:
+        print()
+        if not args.no_install:
+            reinstall_components()
+        else:
+            log("--no-install: componentes NAO foram reinstalados.", A)
+            log("  Rode ./setup.sh (ou .\\setup.ps1) para aplicar skills/plugins.", C)
         print()
         log("Atualizacao concluida!", V)
         log("Rode novamente o onboarding se quiser.", G)

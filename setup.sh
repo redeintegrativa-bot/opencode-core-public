@@ -25,6 +25,8 @@ RULES_DIR="$REPO_DIR/rules"
 HOOKS_DIR="$REPO_DIR/hooks"
 WORKFLOWS_DIR="$REPO_DIR/workflows"
 SERVICES_DIR="$REPO_DIR/services"
+COMMANDS_DIR="$REPO_DIR/.opencode/command"
+PLUGINS_DIR="$REPO_DIR/plugins"
 
 # Cores
 RED='\033[0;31m'
@@ -185,6 +187,32 @@ install_services() {
   log "Services installed → $services_target"
 }
 
+install_commands() {
+  local target="$1"
+  local commands_target="$target/command"
+
+  if [ -d "$COMMANDS_DIR" ]; then
+    mkdir -p "$commands_target"
+    cp -r "$COMMANDS_DIR"/* "$commands_target/" 2>/dev/null || true
+    log "Commands installed → $commands_target"
+  else
+    warn "Sem diretorio .opencode/command no repo; pulando comandos"
+  fi
+}
+
+install_plugins() {
+  local target="$1"
+  local plugins_target="$target/plugins"
+
+  if [ -d "$PLUGINS_DIR" ]; then
+    mkdir -p "$plugins_target"
+    cp "$PLUGINS_DIR"/*.js "$plugins_target/" 2>/dev/null || true
+    log "Plugins installed → $plugins_target"
+  else
+    warn "Sem diretorio plugins/ no repo; pulando plugins"
+  fi
+}
+
 install_github_actions() {
   local target="$REPO_DIR"
   mkdir -p "$target/.github/workflows"
@@ -194,9 +222,9 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [master]
   pull_request:
-    branches: [main]
+    branches: [master]
 
 jobs:
   validate:
@@ -296,7 +324,7 @@ main() {
 
   case "$mode" in
     --help|-h)
-      echo "Uso: ./setup.sh [--skills|--agents|--rules|--hooks|--workflows|--ci|--all]"
+      echo "Uso: ./setup.sh [--skills|--agents|--rules|--hooks|--workflows|--commands|--plugins|--ci|--all]"
       exit 0
       ;;
     --ci)
@@ -308,6 +336,8 @@ main() {
     --rules)      install_rules "$target" ;;
     --hooks)      install_hooks "$target" ;;
     --workflows)  install_workflows "$target" ;;
+    --commands)   install_commands "$target" ;;
+    --plugins)    install_plugins "$target" ;;
     --deps)
       info "Dependências já instaladas durante o setup"
       exit 0
@@ -320,6 +350,8 @@ main() {
       install_hooks "$target"
       install_workflows "$target"
       install_services "$target"
+      install_commands "$target"
+      install_plugins "$target"
       install_github_actions
       ;;
   esac

@@ -73,6 +73,30 @@ Funciona no navegador do PC ou do Termux (Android).
 
 ---
 
+## 🔄 Como atualizar
+
+Depois de instalado, mantenha o core sempre na versão mais recente.
+
+**Jeito mais fácil:** peça no chat ao seu assistente:
+
+```
+Atualiza o opencode core pra mim
+```
+
+Ele vai procurar o repo, checar a versão mais recente e aplicar — sempre te perguntando antes de atualizar (skill `update-core`).
+
+**Ou manualmente:**
+
+```bash
+cd opencode-core-public
+python scripts/update.py                 # baixa a versão nova e reinstala tudo
+python scripts/update.py --no-install    # só baixa/atualiza, sem reinstalar
+```
+
+O `update.py` detecta sozinho se o repo é um clone git (`git pull`) ou não (download ZIP) e, ao terminar, roda o `setup` automaticamente para reaplicar skills, agentes, plugins e comandos no seu config.
+
+---
+
 ## 📦 O que vem incluído
 
 | Diretório | Finalidade |

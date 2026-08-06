@@ -1,7 +1,7 @@
 {
   "version": "1.1.0",
   "generated_at": "2026-07-28",
-  "total_skills": 41,
+  "total_skills": 42,
   "categories": {
     "Core": 14,
     "Utility": 7,
@@ -890,6 +890,33 @@
       ],
       "category": "Core",
       "slash_command": "/mcp-find"
+    },
+    "update-core": {
+      "description": "Verifica e aplica atualizações do OpenCode Core (consultivo, só aplica com aprovação). Dispara em linguagem natural: atualizar core, update do framework, versão nova, novidades do repositório.",
+      "keywords": [
+        "update",
+        "atualizar",
+        "atualização",
+        "atualizacao",
+        "core",
+        "framework",
+        "versao",
+        "versão",
+        "novidades",
+        "changelog",
+        "opencode-core",
+        "update-core"
+      ],
+      "agent": "System Coordinator",
+      "user_invokable": true,
+      "allowed_tools": [
+        "read",
+        "glob",
+        "grep",
+        "bash"
+      ],
+      "category": "Utility",
+      "slash_command": "/update-core"
     }
   },
   "routing": {
@@ -1008,7 +1035,6 @@
     "check": "verification-loop",
     "ui": "ui-ux-system",
     "ux": "ui-ux-system",
-    "design": "ui-ux-system",
     "tailwind": "ui-ux-system",
     "radix": "ui-ux-system",
     "framer": "ui-ux-system",
@@ -1094,7 +1120,16 @@
     "add-mcp": "mcp-discovery",
     "instalar-mcp": "mcp-discovery",
     "mcp-catalogo": "mcp-discovery",
-    "descobrir-mcp": "mcp-discovery"
+    "descobrir-mcp": "mcp-discovery",
+    "update": "update-core",
+    "atualizar": "update-core",
+    "atualização": "update-core",
+    "atualizacao": "update-core",
+    "novidades": "update-core",
+    "changelog": "update-core",
+    "versao nova": "update-core",
+    "versão nova": "update-core",
+    "update-core": "update-core"
   },
   "metadata": {
     "orchestrator_version": "13.0",
@@ -1137,7 +1172,8 @@
       "/evolve-framework": "framework-evolve",
       "/image": "image-gen",
       "/remember": "session-resume",
-      "/mcp-find": "mcp-discovery"
+      "/mcp-find": "mcp-discovery",
+      "/update-core": "update-core"
     }
   }
 }
