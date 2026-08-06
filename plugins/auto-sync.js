@@ -1,4 +1,5 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync, appendFileSync } from "node:fs"
+import { execFile } from "node:child_process"
 import { join } from "node:path"
 import { homedir } from "node:os"
 import { runPy } from "./lib/python-helper.js"
@@ -40,29 +41,32 @@ function writePending(payload) {
   } catch {}
 }
 
-async function exec(ctx, cmd) {
-  try {
-    const proc = await ctx.$`${cmd}`
-    return { ok: true, out: String(proc.stdout || "").trim() }
-  } catch (e) {
-    return { ok: false, out: String((e && e.stderr) || e).slice(0, 500) }
-  }
+function runProcess(command, args, options = {}) {
+  return new Promise((resolve) => {
+    execFile(command, args, { windowsHide: true, timeout: 120000, maxBuffer: 4 * 1024 * 1024, ...options }, (error, stdout, stderr) => {
+      resolve({ ok: !error, out: String(stdout || "").trim(), err: String(stderr || error || "").trim() })
+    })
+  })
 }
 
-async function runHead(ctx, repo) {
-  const r = await exec(ctx, `git -C ${repo} rev-parse --short HEAD`)
+function runGit(repo, ...args) {
+  return runProcess("git", ["-C", repo, ...args])
+}
+
+async function runHead(repo) {
+  const r = await runGit(repo, "rev-parse", "--short", "HEAD")
   return r.ok ? r.out : null
 }
 
-async function isDirty(ctx, repo) {
-  const r = await exec(ctx, `git -C ${repo} status --porcelain`)
+async function isDirty(repo) {
+  const r = await runGit(repo, "status", "--porcelain")
   if (!r.ok) return true
-  return r.out.split("\n").some((l) => l && !l.startsWith("??"))
+  return r.out.split("\n").some((line) => line && !line.startsWith("??"))
 }
 
-async function hasRemote(ctx, repo) {
-  const r = await exec(ctx, `git -C ${repo} remote`)
-  return r.ok && r.out.trim().length > 0
+async function hasRemote(repo) {
+  const r = await runGit(repo, "remote")
+  return r.ok && r.out.length > 0
 }
 
 async function autoPull(ctx) {
@@ -72,26 +76,26 @@ async function autoPull(ctx) {
     appendLog(entry)
     return { pulled: false, changed: false }
   }
-  if (!(await hasRemote(ctx, CORE_DIR))) {
+  if (!(await hasRemote(CORE_DIR))) {
     entry.result = "skip-no-remote"
     entry.detail = "sem remote configurado (backup local apenas)"
     appendLog(entry)
     return { pulled: false, changed: false }
   }
-  const before = await runHead(ctx, CORE_DIR)
-  if (await isDirty(ctx, CORE_DIR)) {
+  const before = await runHead(CORE_DIR)
+  if (await isDirty(CORE_DIR)) {
     entry.result = "skip-dirty"
     appendLog(entry)
     return { pulled: false, changed: false }
   }
-  const pull = await exec(ctx, `git -C ${CORE_DIR} pull --ff-only`)
+  const pull = await runGit(CORE_DIR, "pull", "--ff-only")
   if (!pull.ok) {
     entry.result = "fail"
     entry.detail = pull.out.slice(0, 200)
     appendLog(entry)
     return { pulled: false, changed: false }
   }
-  const after = await runHead(ctx, CORE_DIR)
+  const after = await runHead(CORE_DIR)
   entry.result = "ok"
   entry.before = before
   entry.after = after
@@ -107,10 +111,10 @@ async function autoRedeploy(ctx) {
     appendLog(entry)
     return false
   }
-  const proc = await exec(
-    ctx,
-    `powershell -NoProfile -ExecutionPolicy Bypass -File ${SETUP_PS1} -Skills -Commands -Plugins -Memory -SkipUpdateCheck`
-  )
+  const proc = await runProcess("powershell", [
+    "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", SETUP_PS1,
+    "-Skills", "-Commands", "-Plugins", "-Memory", "-SkipUpdateCheck",
+  ])
   entry.result = proc.ok ? "ok" : "fail"
   entry.detail = proc.out.slice(-300)
   appendLog(entry)

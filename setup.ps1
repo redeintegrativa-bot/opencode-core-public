@@ -188,42 +188,13 @@ function Install-Memory {
 
 function Install-GitHubActions {
   $actionsDir = Join-Path $RepoDir ".github\workflows"
-  New-Item -ItemType Directory -Path $actionsDir -Force | Out-Null
-
-  @'
-name: CI
-
-on:
-  push:
-    branches: [master]
-  pull_request:
-    branches: [master]
-
-jobs:
-  validate:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Security validation
-        run: |
-          if [ -f hooks/validate_security.py ]; then
-            python3 hooks/validate_security.py .
-          fi
-      - name: Validate OpenCode plugin layout
-        run: python3 scripts/validate-plugins.py
-      - name: Check SKILL.md files
-        run: |
-          for skill in skills/*/SKILL.md; do
-            if [ -f "$skill" ]; then echo "✓ $skill"; fi
-          done
-      - name: Validate registry
-        run: |
-          if [ -f skills/registry.json ]; then
-            python3 -m json.tool skills/registry.json > /dev/null && echo "✓ registry.json OK"
-          fi
-'@ | Out-File -FilePath (Join-Path $actionsDir "ci.yml") -Encoding utf8
-
-  Write-Log "GitHub Actions workflow installed"
+  $workflowSource = Join-Path $actionsDir "ci.yml"
+  if (-not (Test-Path -LiteralPath $workflowSource)) {
+    Write-Warn "Workflow CI nao encontrado; pulando GitHub Actions"
+    return
+  }
+  # O workflow ja e versionado no repo; nao o regenere para evitar divergencia.
+  Write-Log "GitHub Actions workflow validado"
 }
 
 function Show-Banner {

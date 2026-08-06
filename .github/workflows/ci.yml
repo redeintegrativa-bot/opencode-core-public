@@ -6,25 +6,44 @@ on:
   pull_request:
     branches: [master]
 
+permissions:
+  contents: read
+
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
       - name: Security validation
+        run: python3 hooks/validate_security.py .
+      - name: Validate Python syntax
         run: |
-          if [ -f hooks/validate_security.py ]; then
-            python3 hooks/validate_security.py .
-          fi
+          python3 - <<'PY'
+          import ast
+          from pathlib import Path
+          for path in Path('.').rglob('*.py'):
+              if any(part in {'.git', 'node_modules', '.venv', 'venv'} for part in path.parts):
+                  continue
+              ast.parse(path.read_text(encoding='utf-8-sig'), filename=str(path))
+          PY
+      - name: Validate JavaScript plugin syntax
+        run: find plugins -type f -name '*.js' -print0 | xargs -0 -n1 node --check
+      - name: Validate PowerShell installer syntax
+        shell: pwsh
+        run: |
+          $tokens = $null
+          $errors = $null
+          [void][System.Management.Automation.Language.Parser]::ParseFile("$PWD/setup.ps1", [ref]$tokens, [ref]$errors)
+          if ($errors.Count) { $errors | ForEach-Object { Write-Error $_.Message }; exit 1 }
+      - name: Validate shell installer syntax
+        run: bash -n setup.sh
       - name: Validate OpenCode plugin layout
         run: python3 scripts/validate-plugins.py
-      - name: Check SKILL.md files
-        run: |
-          for skill in skills/*/SKILL.md; do
-            if [ -f "$skill" ]; then echo "✓ $skill"; fi
-          done
-      - name: Validate registry
-        run: |
-          if [ -f skills/registry.json ]; then
-            python3 -m json.tool skills/registry.json > /dev/null && echo "✓ registry.json OK"
-          fi
+      - name: Validate skill registry
+        run: python3 -m json.tool skills/registry.json > /dev/null

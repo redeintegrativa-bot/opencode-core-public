@@ -184,17 +184,25 @@ def _managed(rel: str) -> bool:
 
 
 def compute_pending(personal: Path, public: Path, manifest):
+    """Compare actual trees; the manifest is audit metadata only.
+
+    Manual commits and pushes therefore reconcile automatically instead of
+    creating phantom pending changes. Public-specific files remain EXCLUDED.
+    """
     local = collect_generic(personal)
-    prev = manifest.get("files", {})
+    remote = collect_generic(public)
     changed, new, deleted = [], [], []
-    for rel, p in sorted(local.items()):
-        h = sha256_file(p)
-        if rel not in prev:
+    for rel, source in sorted(local.items()):
+        target = remote.get(rel)
+        if target is None:
             new.append(rel)
-        elif prev[rel] != h:
+        elif sha256_file(source) != sha256_file(target):
             changed.append(rel)
-    for rel in prev:
-        if rel not in local and _managed(rel):
+    # Delete only files previously owned by this sync and still present remotely.
+    # Public-only adaptations are never inferred as deletions.
+    previous = manifest.get("files", {})
+    for rel in sorted(previous):
+        if rel not in local and rel in remote and _managed(rel):
             deleted.append(rel)
     return changed, new, deleted
 

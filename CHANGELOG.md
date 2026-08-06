@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.8.2 (2026-08-06)
+
+### Fixed
+- CI portavel: o validador de seguranca resolve regras relativamente ao repo e funciona em Python 3.11+.
+- Validador de seguranca elimina falsos positivos de definicoes de regex e bloqueia apenas achados HIGH/CRITICAL.
+- Auto-sync executa Git e PowerShell com argumentos estruturados, corrigindo `skip-no-remote` incorreto e caminhos com espacos.
+- Sync pessoal -> publico compara o conteudo real para reconciliar pushes manuais sem remover adaptacoes exclusivas do publico.
+- `setup.ps1` usa o workflow versionado em vez de regenera-lo durante a instalacao.
+
+### CI
+- Adicionadas validacoes de sintaxe Python, JavaScript, PowerShell e Shell, layout dos plugins, registro de skills e permissoes somente leitura.
 ## 1.8.1 (2026-08-06)
 
 ### Fixed
