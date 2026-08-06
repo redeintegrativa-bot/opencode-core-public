@@ -140,7 +140,12 @@ function Install-Plugins {
   }
   $pluginsTarget = Join-Path $Target "plugins"
   New-Item -ItemType Directory -Path $pluginsTarget -Force | Out-Null
-  Copy-Item -Path "$PluginsDir\*.js" -Destination $pluginsTarget -Force -ErrorAction SilentlyContinue
+  Copy-Item -Path "$PluginsDir\*" -Destination $pluginsTarget -Recurse -Force -ErrorAction Stop
+  # OpenCode auto-carrega todo .js na raiz; remova helpers deixados por versoes antigas.
+  foreach ($legacyHelper in @("notify.js", "python-helper.js")) {
+    $legacyPath = Join-Path $pluginsTarget $legacyHelper
+    if (Test-Path -LiteralPath $legacyPath) { Remove-Item -LiteralPath $legacyPath -Force }
+  }
   Write-Log "Plugins installed → $pluginsTarget"
 }
 
@@ -204,6 +209,8 @@ jobs:
           if [ -f hooks/validate_security.py ]; then
             python3 hooks/validate_security.py .
           fi
+      - name: Validate OpenCode plugin layout
+        run: python3 scripts/validate-plugins.py
       - name: Check SKILL.md files
         run: |
           for skill in skills/*/SKILL.md; do

@@ -1,4 +1,4 @@
-﻿name: CI
+name: CI
 
 on:
   push:
@@ -16,6 +16,8 @@ jobs:
           if [ -f hooks/validate_security.py ]; then
             python3 hooks/validate_security.py .
           fi
+      - name: Validate OpenCode plugin layout
+        run: python3 scripts/validate-plugins.py
       - name: Check SKILL.md files
         run: |
           for skill in skills/*/SKILL.md; do

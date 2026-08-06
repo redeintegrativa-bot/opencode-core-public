@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.8.1 (2026-08-06)
+
+### Fixed
+- Helpers `notify.js` e `python-helper.js` movidos para `plugins/lib/`, impedindo que o OpenCode 1.18.14 os execute como plugins e quebre a lista de providers com `Unexpected server error`.
+- Instaladores Windows/Linux agora preservam `plugins/lib/` e removem helpers legados da raiz da instalacao.
+- CI valida que a raiz contem apenas plugins com um unico export, que os helpers existem e que os instaladores mantem as protecoes contra regressao.
 ## 1.8.0 (2026-08-06)
 
 ### Added

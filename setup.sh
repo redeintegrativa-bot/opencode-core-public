@@ -206,7 +206,9 @@ install_plugins() {
 
   if [ -d "$PLUGINS_DIR" ]; then
     mkdir -p "$plugins_target"
-    cp "$PLUGINS_DIR"/*.js "$plugins_target/" 2>/dev/null || true
+    cp -R "$PLUGINS_DIR"/. "$plugins_target/"
+    # OpenCode auto-carrega todo .js na raiz; remova helpers deixados por versoes antigas.
+    rm -f "$plugins_target/notify.js" "$plugins_target/python-helper.js"
     log "Plugins installed → $plugins_target"
   else
     warn "Sem diretorio plugins/ no repo; pulando plugins"
@@ -238,6 +240,8 @@ jobs:
           else
             echo "Security hook not found, skipping"
           fi
+      - name: Validate OpenCode plugin layout
+        run: python3 scripts/validate-plugins.py
       - name: Check SKILL.md files
         run: |
           for skill in skills/*/SKILL.md; do

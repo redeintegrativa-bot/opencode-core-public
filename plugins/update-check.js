@@ -1,8 +1,8 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
 import { homedir } from "node:os"
-import { runPy } from "./python-helper.js"
-import { notify } from "./notify.js"
+import { runPy } from "./lib/python-helper.js"
+import { notify } from "./lib/notify.js"
 
 const FEATURE = "update_check"
 const FEATURES_FILE = join(homedir(), ".config", "opencode", "features.json")

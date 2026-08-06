@@ -1,8 +1,8 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync, appendFileSync } from "node:fs"
 import { join } from "node:path"
 import { homedir } from "node:os"
-import { runPy } from "./python-helper.js"
-import { notify } from "./notify.js"
+import { runPy } from "./lib/python-helper.js"
+import { notify } from "./lib/notify.js"
 
 const BASE = join(homedir(), ".config", "opencode")
 const STATE_DIR = join(BASE, "state")

@@ -73,6 +73,3 @@ export function notify(client, title, message, variant = "info") {
   windowsToast(title, message)
 }
 
-// Este arquivo eh um modulo utilitario (nao um plugin). Exporta um plugin
-// no-op para o opencode nao tentar carregar as helpers como plugin e logar erro.
-export const Notify = async () => ({})

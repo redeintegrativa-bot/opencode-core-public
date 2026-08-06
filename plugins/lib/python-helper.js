@@ -78,6 +78,3 @@ export async function runPy(args, options = {}) {
   })
 }
 
-// Este arquivo eh um modulo utilitario (nao um plugin). Exporta um plugin
-// no-op para o opencode nao tentar carregar as helpers como plugins e logar erro.
-export const PythonHelper = async () => ({})

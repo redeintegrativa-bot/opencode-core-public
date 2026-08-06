@@ -6,7 +6,7 @@ import {
 } from "node:fs"
 import { join } from "node:path"
 import { homedir } from "node:os"
-import { notify } from "./notify.js"
+import { notify } from "./lib/notify.js"
 
 const BASE = join(homedir(), ".config", "opencode")
 const FEATURES_FILE = join(BASE, "features.json")

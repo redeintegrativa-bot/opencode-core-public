@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
 import { homedir } from "node:os"
-import { runPy } from "./python-helper.js"
+import { runPy } from "./lib/python-helper.js"
 
 const FEATURE = "network_watch"
 const FEATURES_FILE = join(homedir(), ".config", "opencode", "features.json")
