@@ -245,7 +245,7 @@ def cmd_stage(personal, public):
         msg += f" (+{len(staged) - 8} arquivos)"
     c = run_git(public, "commit", "-m", msg)
     if c.returncode != 0:
-        err = (c.stderr or "").strip()
+        err = ((c.stderr or "") + "\n" + (c.stdout or "")).strip()
         if "nothing to commit" in err.lower() or "no changes added" in err.lower():
             print("[=] Conteudo ja identico no publico (sem novo commit).")
             return 0
@@ -263,9 +263,9 @@ def cmd_push(personal, public):
         print(f"[x] Repo publico nao encontrado: {public}")
         return 1
     # garante que o stage local esta commitado antes do push
-    changed, new, deleted = compute_pending(personal, public, manifest)
-    if (changed or new or deleted):
-        print("[i] Ha pendencias nao commitadas — rodando stage primeiro.")
+    st = run_git(public, "status", "--porcelain")
+    if st.returncode == 0 and st.stdout.strip():
+        print("[i] Ha alteracoes nao commitadas — rodando stage primeiro.")
         if cmd_stage(personal, public) != 0:
             return 1
     r = run_git(public, "push", "origin", "master")
