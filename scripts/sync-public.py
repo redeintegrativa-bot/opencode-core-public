@@ -48,6 +48,23 @@ BLOCKED_PARTS = {".git", "__pycache__", "node_modules", "dist", ".venv", "venv"}
 BLOCKED_NAMES = {"MEMORY.md", ".state.json"}
 BLOCKED_EXT = {".pyc", ".bak", ".tmp", ".log", ".jsonl", ".lock"}
 
+# Arquivos compartilhados em que o publico mantem versao adaptada propria
+# (paths canonicos `~/.config/opencode/`, Windows `python`, orchestrator V14,
+# registry mais novo, escrita atomica do session.py). Nunca espelhar a versao
+# pessoal por cima — senao o sync regride o publico.
+EXCLUDED = {
+    ".opencode/command/remember.md",
+    ".opencode/command/salvar.md",
+    "agents/core/orchestrator.md",
+    "agents/experts/gui-super-expert.md",
+    "memory/MEMORY.template.md",
+    "memory/session.py",
+    "skills/orchestrator/SKILL.md",
+    "skills/registry.json",
+    "skills/session-resume/SKILL.md",
+    "skills/session-save/SKILL.md",
+}
+
 
 def manifest_path() -> Path:
     return (
@@ -69,7 +86,7 @@ def collect_generic(root: Path):
 
     for rel in TOP_LEVEL_FILES:
         p = root / rel
-        if p.is_file():
+        if p.is_file() and rel not in EXCLUDED:
             out[rel] = p
 
     for d in TOP_LEVEL_DIRS:
@@ -88,12 +105,16 @@ def collect_generic(root: Path):
     for name in MEMORY_GENERIC:
         p = root / "memory" / name
         if p.is_file():
-            out[f"memory/{name}"] = p
+            rel = f"memory/{name}"
+            if rel not in EXCLUDED:
+                out[rel] = p
 
     return out
 
 
 def _blocked(rel: str) -> bool:
+    if rel in EXCLUDED:
+        return True
     parts = set(rel.split("/"))
     if parts & BLOCKED_PARTS:
         return True
@@ -152,6 +173,8 @@ def _managed(rel: str) -> bool:
     Arquivos fora da whitelist (ex.: AGENTS.md, que e' doc diferente por repo)
     deixam de ser rastreados no manifesto SEM serem apagados do publico.
     """
+    if rel in EXCLUDED:
+        return False
     if rel in TOP_LEVEL_FILES:
         return True
     name = rel.rsplit("/", 1)[-1]
