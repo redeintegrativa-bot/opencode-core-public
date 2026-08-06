@@ -1,12 +1,12 @@
 {
   "version": "1.0.0",
   "generated_at": "2026-07-30",
-  "total_skills": 49,
+  "total_skills": 50,
   "categories": {
-    "Core": 16,
+    "Core": 18,
     "Language": 4,
     "Learning": 2,
-    "Utility": 12,
+    "Utility": 13,
     "Workflow": 13
   },
   "skills": {
@@ -136,6 +136,28 @@
       "category": "Workflow",
       "slash_command": "/cleanup"
     },
+    "cloud-backup": {
+      "description": "Guia backup em nuvem do setup e receber updates do repo publico sem conta GitHub",
+      "keywords": [
+        "backup",
+        "nuvem",
+        "cloud",
+        "git",
+        "conta",
+        "sync",
+        "atualizar",
+        "sem conta"
+      ],
+      "agent": "System Coordinator",
+      "user_invokable": true,
+      "allowed_tools": [
+        "bash",
+        "read",
+        "glob"
+      ],
+      "category": "Utility",
+      "slash_command": null
+    },
     "code-review": {
       "description": "Code quality review and best practices validation",
       "keywords": [
@@ -210,27 +232,6 @@
       "category": "Learning",
       "slash_command": "/evolve"
     },
-    "fix": {
-      "description": "Bug fixing and patching",
-      "keywords": [
-        "fix",
-        "bug",
-        "repair",
-        "patch"
-      ],
-      "agent": "Coder",
-      "user_invokable": true,
-      "allowed_tools": [
-        "read",
-        "edit",
-        "write",
-        "grep",
-        "glob",
-        "bash"
-      ],
-      "category": "Workflow",
-      "slash_command": "/fix"
-    },
     "firecrawl": {
       "description": "Web scraping and crawling with Firecrawl (cloud or self-hosted) — LLM-ready markdown, schema-based structured extraction, site crawls, and web search",
       "keywords": [
@@ -253,6 +254,27 @@
       ],
       "category": "Core",
       "slash_command": null
+    },
+    "fix": {
+      "description": "Bug fixing and patching",
+      "keywords": [
+        "fix",
+        "bug",
+        "repair",
+        "patch"
+      ],
+      "agent": "Coder",
+      "user_invokable": true,
+      "allowed_tools": [
+        "read",
+        "edit",
+        "write",
+        "grep",
+        "glob",
+        "bash"
+      ],
+      "category": "Workflow",
+      "slash_command": "/fix"
     },
     "frontend-design": {
       "description": "Guidance for distinctive, intentional visual design — aesthetic direction, typography, palette, and layout that avoid templated defaults",
@@ -397,6 +419,30 @@
       ],
       "category": "Core",
       "slash_command": "/mcp"
+    },
+    "mcp-discovery": {
+      "description": "Descobrir e adicionar servidores MCP sob demanda consultando o catálogo mcpservers.org e configurando no opencode.jsonc",
+      "keywords": [
+        "mcp",
+        "mcpservers",
+        "discover",
+        "server",
+        "integracao",
+        "add-mcp",
+        "catalogo",
+        "on-demand"
+      ],
+      "agent": "MCP Integration Expert",
+      "user_invokable": true,
+      "allowed_tools": [
+        "Read",
+        "Write",
+        "Grep",
+        "Glob",
+        "Bash"
+      ],
+      "category": "Core",
+      "slash_command": "/mcp-find"
     },
     "metrics": {
       "description": "Session metrics and statistics dashboard",
@@ -641,6 +687,59 @@
       ],
       "category": "Workflow",
       "slash_command": "/security-scan"
+    },
+    "session-resume": {
+      "description": "Auto-resume entre sessões usando MEMORY.md persistente. Use /remember no final de cada sessão e carregue o contexto no início.",
+      "keywords": [
+        "session",
+        "resume",
+        "memory",
+        "continue",
+        "retomar",
+        "histórico",
+        "remember"
+      ],
+      "agent": "System Coordinator",
+      "user_invokable": true,
+      "allowed_tools": [
+        "read",
+        "bash",
+        "glob"
+      ],
+      "category": "Workflow",
+      "slash_command": null
+    },
+    "session-save": {
+      "description": "AUTO-TRIGGER — salva a sessão no store local e no repositório pessoal (backup + commit + push). Sempre ao final de conversa/tarefa ou com /salvar.",
+      "keywords": [
+        "save",
+        "salvar",
+        "gatilho",
+        "persistir",
+        "memory",
+        "git",
+        "backup",
+        "auto-save"
+      ],
+      "agent": "System Coordinator",
+      "category": "Core",
+      "auto_trigger": true,
+      "path": "skills/session-save/SKILL.md",
+      "slash_command": "/salvar"
+    },
+    "session-triage": {
+      "description": "Decide se e onde salvar uma informação (perfil, sessão, git pessoal, público). Critérios de retenção.",
+      "keywords": [
+        "save",
+        "decidir",
+        "triage",
+        "critérios",
+        "o que salvar"
+      ],
+      "agent": "System Coordinator",
+      "category": "Core",
+      "auto_trigger": true,
+      "path": "skills/session-triage/SKILL.md"
     },
     "simplify": {
       "description": "Review code for reuse, quality, and efficiency improvements",
@@ -941,83 +1040,6 @@
       ],
       "category": "Utility",
       "slash_command": "/xlsx"
-    },
-    "session-resume": {
-      "description": "Auto-resume entre sessões usando MEMORY.md persistente. Use /remember no final de cada sessão e carregue o contexto no início.",
-      "keywords": [
-        "session",
-        "resume",
-        "memory",
-        "continue",
-        "retomar",
-        "histórico",
-        "remember"
-      ],
-      "agent": "System Coordinator",
-      "user_invokable": true,
-      "allowed_tools": [
-        "read",
-        "bash",
-        "glob"
-      ],
-      "category": "Workflow",
-      "slash_command": null
-    },
-    "session-save": {
-      "description": "AUTO-TRIGGER — salva a sessão no store local e no repositório pessoal (backup + commit + push). Sempre ao final de conversa/tarefa ou com /salvar.",
-      "keywords": [
-        "save",
-        "salvar",
-        "gatilho",
-        "persistir",
-        "memory",
-        "git",
-        "backup",
-        "auto-save"
-      ],
-      "agent": "System Coordinator",
-      "category": "Core",
-      "auto_trigger": true,
-      "path": "skills/session-save/SKILL.md",
-      "slash_command": "/salvar"
-    },
-    "session-triage": {
-      "description": "Decide se e onde salvar uma informação (perfil, sessão, git pessoal, público). Critérios de retenção.",
-      "keywords": [
-        "save",
-        "decidir",
-        "triage",
-        "critérios",
-        "o que salvar"
-      ],
-      "agent": "System Coordinator",
-      "category": "Core",
-      "auto_trigger": true,
-      "path": "skills/session-triage/SKILL.md"
-    },
-    "mcp-discovery": {
-      "description": "Descobrir e adicionar servidores MCP sob demanda consultando o catálogo mcpservers.org e configurando no opencode.jsonc",
-      "keywords": [
-        "mcp",
-        "mcpservers",
-        "discover",
-        "server",
-        "integracao",
-        "add-mcp",
-        "catalogo",
-        "on-demand"
-      ],
-      "agent": "MCP Integration Expert",
-      "user_invokable": true,
-      "allowed_tools": [
-        "Read",
-        "Write",
-        "Grep",
-        "Glob",
-        "Bash"
-      ],
-      "category": "Core",
-      "slash_command": "/mcp-find"
     }
   },
   "routing": {

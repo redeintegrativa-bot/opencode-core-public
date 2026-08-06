@@ -59,10 +59,21 @@ async function isDirty(ctx, repo) {
   return r.out.split("\n").some((l) => l && !l.startsWith("??"))
 }
 
+async function hasRemote(ctx, repo) {
+  const r = await exec(ctx, `git -C ${repo} remote`)
+  return r.ok && r.out.trim().length > 0
+}
+
 async function autoPull(ctx) {
   const entry = { ts: new Date().toISOString(), action: "pull" }
   if (!existsSync(join(CORE_DIR, ".git"))) {
     entry.result = "skip-no-repo"
+    appendLog(entry)
+    return { pulled: false, changed: false }
+  }
+  if (!(await hasRemote(ctx, CORE_DIR))) {
+    entry.result = "skip-no-remote"
+    entry.detail = "sem remote configurado (backup local apenas)"
     appendLog(entry)
     return { pulled: false, changed: false }
   }
