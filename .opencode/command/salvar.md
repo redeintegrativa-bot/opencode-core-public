@@ -12,7 +12,10 @@ Salve as descobertas da conversa atual e finalize a sessão (salvamento contínu
    `python ~/.config/opencode/memory/session.py backup --target ~/opencode-core/memory`
 4. **Versionar**:
    `git -C ~/opencode-core add memory/MEMORY.md memory/sessions && git -C ~/opencode-core commit -m "Memória: sessão salva via gatilho" && git -C ~/opencode-core push`
-5. **Recursos genéricos** (se criou/alterou skill, comando ou script do framework): espelhar a versão genérica no repo público (nunca MEMORY.md real).
+5. **Recursos genéricos** (se criou/alterou skill, comando ou script do framework): espelhar a versão genérica no repo público (nunca MEMORY.md real):
+   - `python ~/opencode-core/scripts/sync-public.py --check` (ver pendências)
+   - Se houver e o usuário aprovar: `python ~/opencode-core/scripts/sync-public.py --push`
+   - Caso contrário: `python ~/opencode-core/scripts/sync-public.py --stage` (deixa pronto, push depois)
 
 Regras:
 - Não commitar a cada `log` — apenas no fluxo final (ou milestone).

@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.5.1 (2026-08-05)
+
+### Added
+- Memória persistente reativada no Windows: `memory/session.py` instalado via setup (`-Memory`), comandos `/remember` e `/salvar`
+- Plugin `auto-sync`: no `session.created` faz `pull --ff-only` no repo pessoal + redeploy silencioso; no `session.idle` (1x/sessão) roda `sync-public.py --stage` (commit local; **push só com aprovação**)
+- `scripts/sync-public.py`: espelha recursos genéricos do pessoal no público via manifesto SHA-256 (`--check/--stage/--push/--status`)
+- Plugin `self-improvement`: grava status da memória no `session-recovery.json`
+
+### Changed
+- session.py: fix `backup --from-target` (cria destino quando o store não existe) + stdout UTF-8; todos os comandos usam `python` (não `python3`)
+- AGENTS.md template: nova seção "Auto-Sync Pessoal → Público" + tabela do loop de auto-melhoria atualizada
+- sync-public: `AGENTS.md` fora da whitelist (são docs diferentes por repo)
+
+### Fixed
+- AGENTS.md do público restaurado (seed havia sobrescrito o template com o doc de estrutura do pessoal)
+
 ## 1.5.0 (2026-08-05)
 
 ### Added
