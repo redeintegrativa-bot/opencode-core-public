@@ -295,10 +295,12 @@ def cmd_push(personal, public):
     if not public.is_dir():
         print(f"[x] Repo publico nao encontrado: {public}")
         return 1
-    # garante que o stage local esta commitado antes do push
-    st = run_git(public, "status", "--porcelain")
-    if st.returncode == 0 and st.stdout.strip():
-        print("[i] Ha alteracoes nao commitadas — rodando stage primeiro.")
+    # garante que o stage local esta commitado antes do push. Verifica por
+    # hash de conteudo (compute_pending), nao por sujeira do working tree —
+    # arquivos commitados na versao antiga passam despercebidos ao status.
+    changed, new, deleted = compute_pending(personal, public, manifest)
+    if changed or new or deleted:
+        print(f"[i] Ha {describe((changed, new, deleted))} pendentes — rodando stage primeiro.")
         if cmd_stage(personal, public) != 0:
             return 1
     r = run_git(public, "push", "origin", "master")
