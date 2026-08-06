@@ -1,6 +1,6 @@
 {
   "$schema": "https://opencode.ai/tui.json",
-  "theme": "aguia-azul",
+  "theme": "hacker-green",
   "scroll_speed": 3,
   "scroll_acceleration": {
     "enabled": true

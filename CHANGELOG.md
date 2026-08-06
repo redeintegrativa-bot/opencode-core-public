@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.7.1 (2026-08-06)
+
+### Added
+- **Tema custom `hacker-green`** (`themes/hacker-green.json`): estilo tech-hacker com fundo escuro esverdeado confortável (`#0A120A` → `#1E3322`, sem preto puro), contraste alto, verde-fosforo `#00E070` só em acentos, texto quase-branco `#E8F5EC` — legível em longas sessões. Agora é o tema padrão no `tui.json`; `aguia-azul` e `opencode` continuam disponíveis no seletor (`<leader>t`).
+
+### Fixed
+- `python-helper.js`: exports defensivos + plugin no-op `PythonHelper` — eliminado erro `failed to load plugin` que aparecia a cada inicialização (módulo utilitário não era plugin).
+
 ## 1.7.0 (2026-08-06)
 
 ### Added
