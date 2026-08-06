@@ -35,7 +35,7 @@ TOP_LEVEL_DIRS = [
     "plugins", "docs", "knowledge", ".github",
 ]
 TOP_LEVEL_FILES = [
-    "AGENTS.md", "CHANGELOG.md", "VERSION", "README.md", "Makefile",
+    "CHANGELOG.md", "VERSION", "README.md", "Makefile",
     "opencode.json", "setup.ps1", "setup.sh", ".gitignore",
     "onboarding.py", "onboarding.sh", "pytest.ini", "requirements.txt",
 ]
@@ -284,11 +284,15 @@ def main():
     parser = argparse.ArgumentParser(description="Sync generico pessoal -> publico")
     parser.add_argument("--root", default=None, help="Repo pessoal (padrao: ~/opencode-core)")
     parser.add_argument("--public", default=None, help="Repo publico (padrao: ~/opencode-core-public)")
-    sub = parser.add_subparsers(dest="command", required=True)
+    sub = parser.add_subparsers(dest="command")
     sub.add_parser("check").set_defaults(func=cmd_check)
     sub.add_parser("stage").set_defaults(func=cmd_stage)
     sub.add_parser("push").set_defaults(func=cmd_push)
     sub.add_parser("status").set_defaults(func=cmd_status)
+    for name, fn in (("--check", cmd_check), ("--stage", cmd_stage),
+                     ("--push", cmd_push), ("--status", cmd_status)):
+        parser.add_argument(name, dest="flag", action="store_const", const=fn,
+                            help=argparse.SUPPRESS)
 
     args = parser.parse_args()
     personal, public = default_repos()
@@ -296,7 +300,10 @@ def main():
         personal = Path(args.root)
     if args.public:
         public = Path(args.public)
-    return args.func(personal, public)
+    func = getattr(args, "func", None) or getattr(args, "flag", None)
+    if func is None:
+        parser.error("informe um comando: check, stage, push ou status")
+    return func(personal, public)
 
 
 if __name__ == "__main__":
