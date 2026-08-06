@@ -7,7 +7,6 @@ Provides structured pass/fail results with detailed violation reporting.
 
 from __future__ import annotations
 
-import os
 import re
 import sys
 from pathlib import Path
@@ -17,7 +16,7 @@ from typing import Any
 class SecurityValidator:
     """Validates code against security rules defined in a markdown file."""
 
-    DEFAULT_RULES_PATH = str(Path(__file__).resolve().parent.parent / "rules" / "common" / "security.md")
+    DEFAULT_RULES_PATH = "/root/opencode-core/rules/common/security.md"
 
     # Compiled regex patterns for security checks
     SECRET_PATTERNS: list[re.Pattern[str]] = [
@@ -120,14 +119,13 @@ class SecurityValidator:
                     violations.append(self._violation("No hardcoded secrets", "CRITICAL", filename, i, line))
                     break
 
-            if "re.compile" not in line:
-                for pattern in self.EVAL_EXEC_PATTERN.finditer(line):
-                    violations.append(self._violation("No eval/exec calls", "CRITICAL", filename, i, line))
+            for pattern in self.EVAL_EXEC_PATTERN.finditer(line):
+                violations.append(self._violation("No eval/exec calls", "CRITICAL", filename, i, line))
 
-                for pattern in self.SHELL_INJECTION_PATTERNS:
-                    if pattern.search(line):
-                        violations.append(self._violation("No shell injection", "HIGH", filename, i, line))
-                        break
+            for pattern in self.SHELL_INJECTION_PATTERNS:
+                if pattern.search(line):
+                    violations.append(self._violation("No shell injection", "HIGH", filename, i, line))
+                    break
 
             for pattern in self.SQL_INJECTION_PATTERNS:
                 if pattern.search(line):
@@ -135,7 +133,7 @@ class SecurityValidator:
                     break
 
             for pattern in [self.HARDCODED_IP_PATTERN]:
-                if pattern.search(line) and "localhost" not in line.lower() and "127.0.0.1" not in line and "0.0.0.0" not in line:
+                if pattern.search(line) and "localhost" not in line.lower() and "127.0.0.1" not in line:
                     violations.append(self._violation("No hardcoded IPs", "MEDIUM", filename, i, line))
 
             for pattern in self.DEBUG_MODE_PATTERNS:
@@ -158,6 +156,10 @@ class SecurityValidator:
             has_rate_limit = re.search(r"(?:rate.?limit|throttl|limiter)", code, re.IGNORECASE) is not None
             if not has_rate_limit:
                 violations.append(self._violation("Rate limiting check on endpoints", "MEDIUM", filename, 1, "(entire file)"))
+
+        has_input = any(p.search(code) for p in self.INPUT_VALIDATION_PATTERNS)
+        if not has_input and len(code.strip()) > 0:
+            violations.append(self._violation("Input validation present", "LOW", filename, 1, "(entire file)"))
 
         self.violations.extend(violations)
         return violations
@@ -197,7 +199,7 @@ class SecurityValidator:
         skip_dirs = {".git", "node_modules", "__pycache__", ".venv", "venv", "vendor", ".tox", ".eggs"}
         violations: list[dict[str, Any]] = []
 
-        for root, dirs, files in os.walk(str(path)):
+        for root, dirs, files in path.walk():
             dirs[:] = [d for d in dirs if d not in skip_dirs]
             for fname in sorted(files):
                 fpath = Path(root) / fname

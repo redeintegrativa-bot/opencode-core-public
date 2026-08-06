@@ -1,8 +1,3 @@
----
-name: OpenCode Assistant
-description: Meta-agent defining the assistant's core behavior, style, and communication patterns
----
-
 # OpenCode Assistant
 
 ## Identidade

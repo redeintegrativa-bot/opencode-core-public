@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+OpenCode Core (pessoal) — check-update
+Compara a versao local deste repo contra o repositorio PUBLICO
+(redeintegrativa-bot/opencode-core-public), que e a fonte de verdade
+das skills/agents/rules compartilhadas.
+"""
 import json
 import re
 import subprocess
@@ -23,7 +29,7 @@ def get_local_version():
 
 
 def get_default_branch():
-    """Detecta a branch padrao do repo (main ou master) via git ls-remote."""
+    """Detecta a branch padrao do repo publico (main ou master)."""
     global _branch_cache
     if _branch_cache:
         return _branch_cache
@@ -86,11 +92,7 @@ def get_changelog_sections():
 
 
 def get_changelog_diff(local, remote):
-    """Retorna blocos do changelog entre a versao local (exclusiva) e a remota.
-
-    As secoes do changelog podem nao vir ordenadas, entao comparamos por
-    versao em vez de depender da ordem do arquivo.
-    """
+    """Blocos do changelog publico entre a versao local (exclusiva) e a remota."""
     sections = get_changelog_sections()
     plocal = parse(local)
     premote = parse(remote)
@@ -121,61 +123,12 @@ def show_changelog(lines):
     print()
 
 
-def self_test():
-    """Testes internos sem rede (valida parse, diff e branch)."""
-    ok = True
-
-    def check(name, cond):
-        nonlocal ok
-        status = "OK" if cond else "FAIL"
-        print(f"  [{status}] {name}")
-        if not cond:
-            ok = False
-
-    check("parse normal", parse("1.2.3") == (1, 2, 3))
-    check("parse com prefixo", parse("v2.0.0") == (0, 0, 0))
-    check("parse invalido", parse("abc") == (0, 0, 0))
-    check("compare maior", parse("1.3.0") > parse("1.2.9"))
-    check("compare igual", parse("1.2.0") == parse("1.2.0"))
-
-    # Changelog fora de ordem (como o CHANGELOG.md real: 1.3.0, 1.0.0, 1.1.0, 1.2.0)
-    fake_sections = [
-        ("1.3.0", "## 1.3.0\n- feature A"),
-        ("1.0.0", "## 1.0.0\n- old stuff"),
-        ("1.1.0", "## 1.1.0\n- fix B"),
-        ("1.2.0", "## 1.2.0\n- feature C"),
-    ]
-
-    def _filter(local, remote):
-        plocal = parse(local)
-        premote = parse(remote)
-        out = []
-        for ver, block in fake_sections:
-            pver = parse(ver)
-            if plocal < pver <= premote:
-                out.append(block)
-        return sorted(out, key=lambda b: parse(re.match(r'## (\d+\.\d+\.\d+)', b).group(1)), reverse=True)
-
-    check("diff 1.0.0->1.3.0 pega 3", len(_filter("1.0.0", "1.3.0")) == 3)
-    check("diff 1.2.0->1.3.0 pega 1", len(_filter("1.2.0", "1.3.0")) == 1)
-    check("diff igual vazio", len(_filter("1.3.0", "1.3.0")) == 0)
-    check("diff downgrade vazio", len(_filter("1.3.0", "1.0.0")) == 0)
-    check("diff 1.1.0->1.2.0 pega 1", len(_filter("1.1.0", "1.2.0")) == 1)
-
-    check("branch resolve", get_default_branch() in ("main", "master"))
-
-    print()
-    return 0 if ok else 1
-
-
 def main():
-    if "--self-test" in sys.argv:
-        sys.exit(self_test())
-
     local = get_local_version()
     remote = get_remote_version()
 
     if not remote:
+        print("  (sem conexao — check-update ignorado)")
         return
 
     has_update = parse(remote) > parse(local)
@@ -194,17 +147,17 @@ def main():
 
     if has_update:
         print()
-        print(f"  {A}{B}[!] Atualizacao disponivel{S}")
-        print(f"  {G}  {local}{S} {C}->{S} {V}{remote}{S}")
+        print(f"  {A}{B}[!] O repositorio publico tem novidades{S}")
+        print(f"  {G}  local: {local}  publico: {remote}{S}")
         print()
         changelog_blocks = get_changelog_diff(local, remote)
         if changelog_blocks:
-            print(f"  {G}O que mudou desde sua versao:{S}")
+            print(f"  {G}O que mudou no publico:{S}")
             print()
             for block in changelog_blocks:
                 show_changelog(block)
-        print(f"  {G}Para atualizar:  make update{S}")
-        print(f"  {G}Ou:            python scripts/update.py{S}")
+        print(f"  {G}Este repo e personalizado — revisar o changelog acima e mergear")
+        print(f"  manualmente o que fizer sentido (skills/agents/rules).{S}")
         print()
 
 

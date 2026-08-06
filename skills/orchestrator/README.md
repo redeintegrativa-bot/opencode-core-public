@@ -33,7 +33,7 @@ git clone https://github.com/eroslifestyle/Claude-Orchestrator-Plugin.git
 xcopy /E /I Claude-Orchestrator-Plugin "%USERPROFILE%\.claude\skills\orchestrator"
 
 # macOS/Linux
-cp -r Claude-Orchestrator-Plugin ~/.config/opencode/skills/orchestrator
+cp -r Claude-Orchestrator-Plugin ~/.claude/skills/orchestrator
 ```
 
 ---
@@ -49,7 +49,7 @@ cp -r Claude-Orchestrator-Plugin ~/.config/opencode/skills/orchestrator
 
 ### Enable Agent Teams (Optional)
 
-Add to `~/.config/opencode/settings.json`:
+Add to `~/.claude/settings.json`:
 
 ```json
 {
@@ -116,8 +116,8 @@ orchestrator/
 │   ├── health-check.md         # Diagnostic system
 │   └── observability.md        # Metrics and monitoring
 ├── agents/
-│   ├── core/                   # L0 Core agents (7)
-│   ├── experts/                # L1 Expert agents (23)
+│   ├── core/                   # L0 Core agents (6)
+│   ├── experts/                # L1 Expert agents (22)
 │   │   └── L2/                 # L2 Specialists (15)
 │   ├── system/                 # System protocols
 │   ├── config/                 # Configuration files
@@ -254,7 +254,7 @@ claude --teammate-mode tmux
 | Command not found | Ensure Claude Code is in PATH |
 | Agent Teams not working | Check `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` in settings.json |
 | MCP tools not loading | Run `ToolSearch(query="plugin_name")` before calling |
-| Permission denied | Check file permissions on `~/.config/opencode/skills/` |
+| Permission denied | Check file permissions on `~/.claude/skills/` |
 | Session not resuming | Agent Teams require respawning after restart |
 | `model: "sonnet"` causes 404 | Omit model parameter to inherit from parent |
 
@@ -277,7 +277,7 @@ Output shows status of all subsystems:
 
 Session logs stored at:
 ```
-~/.config/opencode/logs/orchestrator/session_{timestamp}.log
+~/.claude/logs/orchestrator/session_{timestamp}.log
 ```
 
 ---
@@ -366,4 +366,3 @@ SOFTWARE.
 
 **ORCHESTRATOR V12.0 DEEP AUDIT | FULLY INTEGRATED EDITION**
 *Score Target: 10/10 | All Systems Operational*
-

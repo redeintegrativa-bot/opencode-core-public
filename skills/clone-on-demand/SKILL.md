@@ -59,7 +59,7 @@ Automatically clone Git repositories when the orchestrator detects they are need
 User: "Analise o projeto opencode-crypto-platform"
 Orchestrator: Detecta que opencode-crypto-platform não está clonado
 Action: git clone --depth 1 https://github.com/redeintegrativa-bot/opencode-crypto-platform.git
-Result: PROJECT_PATH = /home/user/opencode-crypto-platform
+Result: PROJECT_PATH = C:\Users\decap\opencode-crypto-platform
 ```
 
 ### Clone with Branch
@@ -104,7 +104,7 @@ STEP 1 (PATH CHECK + CLONE):
 ## Windows Notes
 
 - Use `git clone` with full URL (not SCP syntax)
-- Paths use backslashes: `C:\Users\<username>\repo-name`
+- Paths use backslashes: `C:\Users\decap\repo-name`
 - SSH agents may need `eval $(ssh-agent)` before clone
 - For large repos, prefer `--depth 1` to save time and space
 
@@ -123,4 +123,5 @@ Known repositories in `redeintegrativa-bot` organization:
 | dotfiles | Personal configs | When config tasks needed |
 | community-link-finder | Link finder utility | When utility tasks needed |
 | maia-content-engine | Content engine | When content tasks needed |
-
+| Jarvis-pool | Project pool | When pool tasks needed |
+| Genesio-Backup-total | Project backups | When backup tasks needed |

@@ -83,12 +83,6 @@ The plan MUST follow this exact structure:
 | L | Large | 9-15 | 7-15 | 2 - 8 hr |
 | XL | Extra Large | 16+ | 16+ | 8+ hr |
 
-## 7. Task Registration
-
-After outputting the plan, register each task in the OpenCode task panel via `todowrite`:
-- Each task → `todowrite` with content, priority, and status `pending`
-- Grouped tasks → register together so the panel shows the full scope
-
 ## Rules
 
 - NEVER write code during planning - only analyze and plan

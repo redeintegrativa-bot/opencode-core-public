@@ -219,7 +219,7 @@ All metrics are written as **JSON Lines** (one JSON object per line):
 {"event":"session_end","session_id":"abc-123",...}
 ```
 
-**File Location:** `~/.config/opencode/logs/metrics.jsonl`
+**File Location:** `~/.claude/logs/metrics.jsonl`
 
 **Rotation:** Daily rotation with 7-day retention
 
@@ -250,11 +250,11 @@ Hooks are registered in `settings.json`:
 ```json
 {
   "hooks": {
-    "SessionStart": ["~/.config/opencode/scripts/observability-hook.sh"],
-    "PreToolUse": ["~/.config/opencode/scripts/observability-hook.sh"],
-    "PostToolUse": ["~/.config/opencode/scripts/observability-hook.sh"],
-    "PreCompact": ["~/.config/opencode/scripts/observability-hook.sh"],
-    "SessionEnd": ["~/.config/opencode/scripts/observability-hook.sh"]
+    "SessionStart": ["~/.claude/scripts/observability-hook.sh"],
+    "PreToolUse": ["~/.claude/scripts/observability-hook.sh"],
+    "PostToolUse": ["~/.claude/scripts/observability-hook.sh"],
+    "PreCompact": ["~/.claude/scripts/observability-hook.sh"],
+    "SessionEnd": ["~/.claude/scripts/observability-hook.sh"]
   }
 }
 ```
@@ -283,7 +283,7 @@ Hooks are registered in `settings.json`:
 ### Session Summary
 
 ```bash
-cat ~/.config/opencode/logs/metrics.jsonl | \
+cat ~/.claude/logs/metrics.jsonl | \
   jq -s 'group_by(.session_id) | map({
     session: .[0].session_id,
     duration: (map(select(.duration_total_ms) | .duration_total_ms) | first),
@@ -295,7 +295,7 @@ cat ~/.config/opencode/logs/metrics.jsonl | \
 ### Agent Usage Frequency
 
 ```bash
-cat ~/.config/opencode/logs/metrics.jsonl | \
+cat ~/.claude/logs/metrics.jsonl | \
   jq -s '[.[] | select(.agent)] | group_by(.agent) | map({
     agent: .[0].agent,
     invocations: length
@@ -305,7 +305,7 @@ cat ~/.config/opencode/logs/metrics.jsonl | \
 ### Error Rate by Type
 
 ```bash
-cat ~/.config/opencode/logs/metrics.jsonl | \
+cat ~/.claude/logs/metrics.jsonl | \
   jq -s '[.[] | select(.success==false)] | group_by(.error_type) | map({
     error: .[0].error_type,
     count: length
@@ -319,4 +319,3 @@ cat ~/.config/opencode/logs/metrics.jsonl | \
 | Version | Date | Changes |
 |---------|------|---------|
 | 1.0.0 | 2026-02-26 | Initial specification |
-

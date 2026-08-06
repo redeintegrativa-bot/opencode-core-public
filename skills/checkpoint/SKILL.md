@@ -28,7 +28,7 @@ Save a named checkpoint of current session progress for later resumption.
 
 2. **Ensure directory exists:**
    ```
-   ~/.config/opencode/sessions/checkpoints/
+   ~/.claude/sessions/checkpoints/
    ```
 
 3. **Gather state:**
@@ -40,7 +40,7 @@ Save a named checkpoint of current session progress for later resumption.
    - Blockers or open questions
    - Current branch (if in git repo)
 
-4. **Write file** to `~/.config/opencode/sessions/checkpoints/{name}_{YYYYMMDD_HHMM}.md`:
+4. **Write file** to `~/.claude/sessions/checkpoints/{name}_{YYYYMMDD_HHMM}.md`:
 
    ```markdown
    # Checkpoint: {name}
@@ -74,7 +74,7 @@ Save a named checkpoint of current session progress for later resumption.
 
 ### List Checkpoints
 
-1. Glob `~/.config/opencode/sessions/checkpoints/*.md`
+1. Glob `~/.claude/sessions/checkpoints/*.md`
 2. Display table: name, date, size, first line of task progress
 3. Sort by date descending (newest first)
 

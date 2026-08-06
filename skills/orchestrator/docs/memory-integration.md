@@ -1,8 +1,4 @@
 > Updated for V12.0 DEEP AUDIT: Memory now works alongside Rules Engine (Step 3) and Learning System (Step 9).
->
-> **Executável real:** o protocolo abaixo (MEMORY.md + sessões + backup) é implementado pelo
-> `memory/session.py` (CLI stdlib). Use `python3 memory/session.py <init|start|log|end|show|stats|compress|backup>`
-> ou a skill `session-resume` / comando `/remember`. Os snippets a seguir são a especificação de referência.
 
 # Memory Integration Module V12.0
 
@@ -31,7 +27,7 @@ The Memory Integration Module enables the Orchestrator V12.0 to maintain persist
 
 ### Settings
 
-Add to `~/.config/opencode/settings.json`:
+Add to `~/.claude/settings.json`:
 
 ```json
 {
@@ -66,7 +62,7 @@ Add to `~/.config/opencode/settings.json`:
 ### Directory Structure
 
 ```
-~/.config/opencode/
+~/.claude/
 ├── settings.json                    # Global settings
 ├── CLAUDE.md                        # Global instructions
 ├── MEMORY.md                        # Global memory (legacy)
@@ -85,10 +81,10 @@ Add to `~/.config/opencode/settings.json`:
 
 | Memory Type | Location | Priority |
 |-------------|----------|----------|
-| Global Instructions | `~/.config/opencode/CLAUDE.md` | 1 (lowest) |
-| Global Memory | `~/.config/opencode/MEMORY.md` | 2 |
-| Project Instructions | `~/.config/opencode/projects/{hash}/CLAUDE.md` | 3 |
-| Project Memory | `~/.config/opencode/projects/{hash}/memory/MEMORY.md` | 4 (highest) |
+| Global Instructions | `~/.claude/CLAUDE.md` | 1 (lowest) |
+| Global Memory | `~/.claude/MEMORY.md` | 2 |
+| Project Instructions | `~/.claude/projects/{hash}/CLAUDE.md` | 3 |
+| Project Memory | `~/.claude/projects/{hash}/memory/MEMORY.md` | 4 (highest) |
 
 ### Memory Hierarchy Visualization
 
@@ -99,25 +95,25 @@ Add to `~/.config/opencode/settings.json`:
 |                                                     |
 |  Priority 4 (HIGHEST)                               |
 |  +---------------------------------------------+   |
-|  | ~/.config/opencode/projects/{hash}/memory/MEMORY.md  |   |
+|  | ~/.claude/projects/{hash}/memory/MEMORY.md  |   |
 |  | Project-specific memory (session context)   |   |
 |  +---------------------------------------------+   |
 |                      | overrides                    |
 |  Priority 3                                         |
 |  +---------------------------------------------+   |
-|  | ~/.config/opencode/projects/{hash}/CLAUDE.md         |   |
+|  | ~/.claude/projects/{hash}/CLAUDE.md         |   |
 |  | Project instructions                         |   |
 |  +---------------------------------------------+   |
 |                      | overrides                    |
 |  Priority 2                                         |
 |  +---------------------------------------------+   |
-|  | ~/.config/opencode/MEMORY.md                          |   |
+|  | ~/.claude/MEMORY.md                          |   |
 |  | Global memory (cross-project patterns)       |   |
 |  +---------------------------------------------+   |
 |                      | overrides                    |
 |  Priority 1 (LOWEST)                                |
 |  +---------------------------------------------+   |
-|  | ~/.config/opencode/CLAUDE.md                          |   |
+|  | ~/.claude/CLAUDE.md                          |   |
 |  | Global instructions (always loaded)          |   |
 |  +---------------------------------------------+   |
 |                                                     |
@@ -770,4 +766,3 @@ class OrchestratorV10:
 
 *Memory Integration Module V12.0 - Orchestrator Extension*
 *Compatible with Orchestrator V8.0+ and V12.0*
-

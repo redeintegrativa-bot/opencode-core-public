@@ -190,7 +190,7 @@ Action: Run test suite for validation after changes
 
 ```
 V8.0:
-~/.config/opencode/skills/orchestrator/
+~/.claude/skills/orchestrator/
 ├── SKILL.md
 ├── routing-table.md
 ├── team-patterns.md
@@ -198,7 +198,7 @@ V8.0:
 └── skills-reference.md
 
 V10.0:
-~/.config/opencode/skills/orchestrator/
+~/.claude/skills/orchestrator/
 ├── SKILL.md (expanded)
 ├── memory-integration.md (NEW)
 ├── health-check.md (NEW)
@@ -265,4 +265,3 @@ V10.0:
 
 **ORCHESTRATOR V10.2 ULTRA | FULLY INTEGRATED EDITION**
 *Score: 10/10 | All Systems Operational*
-

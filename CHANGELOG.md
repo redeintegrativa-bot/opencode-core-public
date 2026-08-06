@@ -1,16 +1,5 @@
 # Changelog
 
-## 1.5.1 (2026-08-05)
-
-### Added
-- Comandos `/remember` e `/salvar` (gatilho session-save) adaptados para `python` + caminho absoluto
-- `setup.ps1`: flag `-Memory` instala a infra de memoria (session.py + template) em qualquer maquina
-- `self-improvement.js`: no `session.idle` captura `session.py status --short` e grava o estado da memoria em `session-recovery.json`
-
-### Changed
-- `memory/session.py`: fix no `backup --from-target` quando o store ainda nao existe (cria o destino) + stdout UTF-8 forçado (consoles Windows imprimem `→` sem quebrar)
-- Skills `session-resume`/`session-save`/`session-triage`, `MEMORY.template.md` e comandos: `python3` → `python ~/.config/opencode/memory/session.py` (Windows nao tem `python3`)
-
 ## 1.5.0 (2026-08-05)
 
 ### Added

@@ -14,7 +14,7 @@
 
 Check these files exist:
 ```
-~/.config/opencode/
+~/.claude/
   CLAUDE.md                          # Must contain orchestrator mandate
   VERSION.json                       # System version info
   skills/orchestrator/SKILL.md       # Orchestrator definition
@@ -71,4 +71,3 @@ Optional: Enable additional MCP servers (slack, firebase) by adding to the array
 - Run `/status` to verify system health
 - Run `/metrics` to see baseline metrics
 - Review VERSION.json for component versions
-

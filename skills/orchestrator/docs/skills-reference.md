@@ -11,7 +11,7 @@ Skills extend what Claude can do. Create a `SKILL.md` file with instructions, an
 | Location | Path | Applies to |
 |----------|------|------------|
 | Enterprise | See managed settings | All users in your organization |
-| Personal | `~/.config/opencode/skills/<skill-name>/SKILL.md` | All your projects |
+| Personal | `~/.claude/skills/<skill-name>/SKILL.md` | All your projects |
 | Project | `.claude/skills/<skill-name>/SKILL.md` | This project only |
 | Plugin | `<plugin>/skills/<skill-name>/SKILL.md` | Where plugin is enabled |
 
@@ -218,4 +218,3 @@ Permission syntax: `Skill(name)` for exact match, `Skill(name *)` for prefix mat
 Skill descriptions load into context (2% of context window, ~16K char fallback).
 Run `/context` to check for excluded skills warning.
 Override limit with `SLASH_COMMAND_TOOL_CHAR_BUDGET` environment variable.
-

@@ -5,8 +5,8 @@ description: Multi-agent system index with orchestrator, core agents, and 15 exp
 
 # SISTEMA AGENT MASTERCOPY V12.0
 
-> **Version:** 13.0
-> **Data:** 28 Jul 2026
+> **Versione:** 12.0 DEEP AUDIT
+> **Data:** 26 Febbraio 2026
 > **Architettura:** Multi-Agent Parallelo con Orchestrator + Expert Files + Anti-Direct Enforcement + Project Path Resolution
 
 ---
@@ -70,7 +70,7 @@ taskkill /F /IM cmd.exe /FI "WINDOWTITLE ne Administrator*" 2>NUL
 taskkill /F /IM powershell.exe /FI "WINDOWTITLE ne Administrator*" 2>NUL
 
 # BATCH 4: NUL KILLER V2.0 (Win32 API - UNICO metodo funzionante)
-python -c "import ctypes,os;[ctypes.windll.kernel32.DeleteFileW(f'\\\\?\\{os.path.abspath(d)}\\nul') for d in [os.path.expanduser('~/.config/opencode'),os.path.expanduser('~/.config/opencode/agents'),os.path.expanduser('~')]]"
+python -c "import ctypes,os;[ctypes.windll.kernel32.DeleteFileW(f'\\\\?\\{os.path.abspath(d)}\\nul') for d in [os.path.expanduser('~/.claude'),os.path.expanduser('~/.claude/agents'),os.path.expanduser('~')]]"
 ```
 
 ---
@@ -87,7 +87,7 @@ Su Windows:
 
 **Cleanup file nul - NUL KILLER V2.0 (Win32 API - UNICO metodo funzionante):**
 ```bash
-python -c "import ctypes,os;[ctypes.windll.kernel32.DeleteFileW(f'\\\\?\\{os.path.abspath(d)}\\nul') for d in [os.path.expanduser('~/.config/opencode'),os.path.expanduser('~/.config/opencode/agents'),os.path.expanduser('~')]]"
+python -c "import ctypes,os;[ctypes.windll.kernel32.DeleteFileW(f'\\\\?\\{os.path.abspath(d)}\\nul') for d in [os.path.expanduser('~/.claude'),os.path.expanduser('~/.claude/agents'),os.path.expanduser('~')]]"
 ```
 **NOTA:** `rm -f`, `del`, `Remove-Item` NON funzionano su device names Windows. Solo Win32 DeleteFileW.
 
@@ -137,7 +137,6 @@ OGNI RICHIESTA → ORCHESTRATOR V7.0 → DELEGA → AGENT SPECIALIZZATI
         │ • Architect Expert                    │
         │ • Integration Expert (API)            │
         │ • DevOps Expert (CI/CD)               │
-        │ • Framework Evolution Expert (Audit)  │
         │ • Languages Expert (Python/JS/C#)     │
         │ • Tester Expert (QA/Debug)            │
         │ • AI Integration Expert (LLM)         │
@@ -156,9 +155,9 @@ OGNI RICHIESTA → ORCHESTRATOR V7.0 → DELEGA → AGENT SPECIALIZZATI
 
 ---
 
-## 👥 AGENT DISPONIBILI (45 Totali)
+## 👥 AGENT DISPONIBILI (44 Totali)
 
-### Core Agents (7)
+### Core Agents (6)
 | Agent | File | Ruolo | Model | Istanze |
 |-------|------|-------|-------|---------|
 | Orchestrator | `core/orchestrator.md` | Coordinamento V7.0 SLIM | - | 1 |
@@ -167,7 +166,6 @@ OGNI RICHIESTA → ORCHESTRATOR V7.0 → DELEGA → AGENT SPECIALIZZATI
 | Reviewer | `core/reviewer.md` | Validazione | sonnet | N parallele |
 | Documenter | `core/documenter.md` | Documentazione | haiku | 1-2 |
 | System Coordinator | `core/system_coordinator.md` | Resource/Token management | haiku | 1 |
-| OpenCode Assistant | `core/opencode-assistant.md` | Meta-agent: direct, concise, PT-BR | - | 1 |
 
 ### Expert Agents (23)
 | Expert | File | Specializzazione | Model |
@@ -181,7 +179,6 @@ OGNI RICHIESTA → ORCHESTRATOR V7.0 → DELEGA → AGENT SPECIALIZZATI
 | Architect Expert | `experts/architect_expert.md` | Architecture, Design Patterns | opus |
 | Integration Expert | `experts/integration_expert.md` | API, REST, Webhook, cTrader | sonnet |
 | DevOps Expert | `experts/devops_expert.md` | DevOps, CI/CD, Deploy, Docker | haiku |
-| Framework Evolution | `experts/framework_evolution_expert.md` | Ecosystem audit, config drift, structural integrity | sonnet |
 | Languages Expert | `experts/languages_expert.md` | Python, JavaScript, C# | sonnet |
 | AI Integration | `experts/ai_integration_expert.md` | AI/LLM, Model Selection, Fine-tuning | sonnet |
 | Claude Systems | `experts/claude_systems_expert.md` | Claude Ecosystem, Cost Optimization | sonnet |
@@ -191,10 +188,9 @@ OGNI RICHIESTA → ORCHESTRATOR V7.0 → DELEGA → AGENT SPECIALIZZATI
 | Reverse Engineering | `experts/reverse_engineering_expert.md` | Binary Analysis, IDA Pro, Ghidra | sonnet |
 | Offensive Security | `experts/offensive_security_expert.md` | Pentesting, Exploit Development | sonnet |
 | MQL Decompilation | `experts/mql_decompilation_expert.md` | MetaTrader reverse engineering, .ex4/.ex5 | sonnet |
-| Browser Automation | `experts/browser_automation_expert.md` | Playwright, E2E, web scraping | sonnet |
-| MCP Integration | `experts/mcp_integration_expert.md` | MCP Protocol, tool discovery | sonnet |
-| Notification | `experts/notification_expert.md` | Slack, Discord, messaging | sonnet |
-| Payment Integration | `experts/payment_integration_expert.md` | Stripe, PayPal, checkout | sonnet |
+| MCP Design Specialist | `experts/mcp_design_specialist.md` | Canva design operations, brand kits | haiku |
+| MCP Web Specialist | `experts/mcp_web_specialist.md` | Web operations, content extraction | haiku |
+| MCP UI/UX Specialist | `experts/mcp_ui_ux_specialist.md` | UI/UX processing, screenshots | haiku |
 
 ### L2 Sub-Agents (15)
 Vedi: [INDEX.md](INDEX.md) sezione L2 SUB-AGENTS per lista completa.
@@ -244,7 +240,7 @@ T6: Risposta finale
 |------------|--------|
 | Task indipendenti | Lancia in PARALLELO |
 | Task dipendenti | Lancia in SEQUENZA |
-| Stesso modulo | 2 agent alla volta |
+| Stesso modulo | 1 agent alla volta |
 | Moduli diversi | N agent paralleli |
 
 ---
@@ -252,18 +248,17 @@ T6: Risposta finale
 ## 📁 STRUTTURA FILE
 
 ```
-agents/
+C:\Users\LeoDg\.claude\agents\
 ├── CLAUDE.md                 # Questo file (indice principale)
 ├── INDEX.md                  # Indice navigazione
 │
-├── core/                     # Agent fondamentali (7)
+├── core/                     # Agent fondamentali (6)
 │   ├── orchestrator.md       # 🎯 Coordinatore centrale
 │   ├── analyzer.md           # 🔍 Analisi codebase
 │   ├── coder.md              # 👨‍💻 Implementazione
 │   ├── reviewer.md           # ✅ Code review
 │   ├── documenter.md         # 📝 Documentazione
-│   ├── system_coordinator.md # 💰 Resource/Token management
-│   └── opencode-assistant.md # 🤖 Meta-agent
+│   └── system_coordinator.md # 💰 Resource/Token management
 │
 ├── experts/                  # Agent specializzati (23)
 │   ├── gui-super-expert.md       # 🎨 PyQt5/Qt/UI
@@ -275,20 +270,23 @@ agents/
 │   ├── architect_expert.md       # 🏗️ Architettura/Design
 │   ├── integration_expert.md     # 🔌 API/REST/Webhook
 │   ├── devops_expert.md          # 🚀 DevOps/CI/CD
-│   ├── framework_evolution_expert.md # 🔄 Framework evolution/audit
 │   ├── languages_expert.md       # 💻 Python/JS/C#
 │   ├── ai_integration_expert.md  # 🤖 AI/LLM Integration
 │   ├── claude_systems_expert.md  # 🎛️ Claude Ecosystem
 │   ├── mobile_expert.md          # 📱 iOS/Android/Flutter
 │   ├── n8n_expert.md             # 🔄 N8N/Workflow
-│   ├── social_identity_expert.md # 🔑 OAuth/OIDC/Social
-│   ├── browser_automation_expert.md # 🌐 Playwright/E2E
-│   ├── mcp_integration_expert.md # 🔌 MCP Protocol
-│   ├── notification_expert.md    # 🔔 Slack/Discord
-│   ├── payment_integration_expert.md # 💳 Stripe/PayPal
-│   ├── offensive_security_expert.md # 💥 Pentest/Exploit
-│   ├── reverse_engineering_expert.md # 🔍 Binary/IDA
-│   └── mql_decompilation_expert.md # ⚙️ .ex4/.ex5 RE
+│   └── social_identity_expert.md # 🔑 OAuth/OIDC/Social
+│
+├── workflows/                # Workflow predefiniti
+│   ├── bugfix.md             # Workflow bug fixing
+│   ├── feature.md            # Workflow nuove feature
+│   ├── refactoring.md        # Workflow refactoring
+│   └── OPTIMIZED.md          # Workflow ottimizzato
+│
+├── templates/                # Template output
+│   ├── task.md               # Template task
+│   ├── review.md             # Template review
+│   └── integration.md        # Template integrazione
 │
 ├── system/                   # Componenti sistema (8)
 │   ├── AGENT_REGISTRY.md     # Registry agenti
@@ -299,6 +297,18 @@ agents/
 │   ├── PARALLEL_COORDINATOR.md # Coordinamento parallelo
 │   ├── TASK_DECOMPOSITION.md # Scomposizione task
 │   └── COMPLETION_NOTIFIER.md # Notifiche completamento
+│
+├── docs/                     # Documentazione
+│   ├── README.md             # Documentazione generale
+│   ├── SYSTEM_ARCHITECTURE.md # Architettura
+│   ├── INTEGRATION_REPORT.md # Report integrazione
+│   ├── quickstart.md         # Guida rapida
+│   ├── getting-started.md    # Getting started
+│   ├── quick-reference.md    # Quick reference
+│   ├── prompt-library.md     # Libreria prompt
+│   ├── implementation-details.md # Dettagli implementazione
+│   ├── deploy-checklist.md   # Checklist deploy
+│   └── changelog.md          # Changelog
 │
 └── config/                   # Configurazione (3)
     ├── routing.md            # Tabelle routing
@@ -441,4 +451,4 @@ Output <promise>DONE</promise> quando test passano."
 
 ---
 
-**Ultimo aggiornamento:** 28 Jul 2026 - V13.0 - 45 agents total (7 L0 + 23 L1 + 15 L2)
+**Ultimo aggiornamento:** 26 Febbraio 2026 - V12.0 DEEP AUDIT - 43 agents total (6 L0 + 22 L1 + 15 L2)

@@ -528,7 +528,7 @@ install_skill_files() {
     fi
 }
 
-# Copy agent files to ~/.config/opencode/agents/agents/
+# Copy agent files to ~/.claude/agents/agents/
 install_agent_files() {
     print_header "Installing Agent Definitions"
 
@@ -830,4 +830,3 @@ main() {
 
 # Run main function
 main "$@"
-

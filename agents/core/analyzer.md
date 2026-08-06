@@ -47,7 +47,7 @@ Produci report strutturati per l'Orchestrator seguendo il PROTOCOL.md.
 ```bash
 # Usa 2>NUL, MAI 2>/dev/null su Windows (crea file nul!)
 taskkill /F /IM python.exe 2>NUL
-rm -f ~/.config/opencode/nul 2>NUL
+rm -f ~/.claude/nul 2>NUL
 ```
 **Violazione = Eccessivo consumo CPU/RAM o file bloccanti = INACCETTABILE**
 
@@ -294,4 +294,3 @@ Se hai N operazioni indipendenti (Read, Edit, Grep, Task, Bash), lanciale **TUTT
 | N sotto-task indipendenti | N Task in 1 messaggio |
 
 **VIOLAZIONE = TASK FALLITO. ENFORCEMENT: ASSOLUTO.**
-

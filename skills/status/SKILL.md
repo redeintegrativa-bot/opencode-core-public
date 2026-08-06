@@ -19,39 +19,37 @@ Display a compact system status dashboard for the orchestrator.
 
 1. **Gather data** (in parallel where possible):
 
-   **Agents:** Glob `~/.config/opencode/agents/**/*.md` and count by tier:
+   **Agents:** Glob `~/.claude/agents/**/*.md` and count by tier:
    - Core (L0): files directly in agents/
    - Expert (L1): files in agents/experts/
-    - Specialist (L2): files in agents/experts/L2/
-    - System: files in agents/system/
+   - Specialist (L2): files in agents/specialists/
 
-   **Skills:** Glob `~/.config/opencode/skills/*/SKILL.md` and count
+   **Skills:** Glob `~/.claude/skills/*/SKILL.md` and count
 
-   **Rules:** Glob `~/.config/opencode/rules/*.md` and list names
+   **Rules:** Glob `~/.claude/rules/*.md` and list names
 
-   **Memory:** Read `~/.config/opencode/projects/*/memory/MEMORY.md` - check if exists, get line count
+   **Memory:** Read `~/.claude/projects/*/memory/MEMORY.md` - check if exists, get line count
 
-   **Learnings:** Read `~/.config/opencode/learnings/instincts.json` if exists:
+   **Learnings:** Read `~/.claude/learnings/instincts.json` if exists:
    - Count total instincts
    - Count high-confidence (confidence >= 0.8)
 
    **MCP Plugins:** Count available MCP tool prefixes (mcp__*) from tool list
 
-   **Sessions:** Glob `~/.config/opencode/sessions/**/*.md` and count
+   **Sessions:** Glob `~/.claude/sessions/**/*.md` and count
 
 2. **Display dashboard:**
 
    ```
    ============================================
-    OpenCode Core - System Status
+    ORCHESTRATOR V11.0 - System Status
    ============================================
 
     Agents
-      Core (L0):       9
-      Expert (L1):     22
-      Specialist (L2): 15
-      System:          9
-      Total:           55
+      Core (L0):       6
+      Expert (L1):     19
+      Specialist (L2): 18
+      Total:           43
 
     Skills
       Loaded:          {count}
@@ -59,6 +57,10 @@ Display a compact system status dashboard for the orchestrator.
 
     Rules
       Active sets:     {list}
+
+    Memory
+      Status:          Loaded
+      Size:            {lines} lines
 
     Learnings
       Total instincts: {count}
@@ -74,6 +76,7 @@ Display a compact system status dashboard for the orchestrator.
    ```
 
 3. **Health indicators** (append if issues detected):
+   - WARN if no memory file found
    - WARN if 0 agents detected
    - WARN if 0 skills detected
    - OK if everything normal

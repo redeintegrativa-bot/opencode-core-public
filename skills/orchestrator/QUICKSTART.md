@@ -16,8 +16,8 @@ irm https://raw.githubusercontent.com/eroslifestyle/Claude-Orchestrator-Plugin/m
 
 **What it does:**
 - Creates backup of existing `~/.claude` if needed
-- Downloads and extracts the plugin to `~/.config/opencode/skills/orchestrator`
-- Copies agent definitions to `~/.config/opencode/agents/`
+- Downloads and extracts the plugin to `~/.claude/skills/orchestrator`
+- Copies agent definitions to `~/.claude/agents/`
 - Optionally configures settings.json for Agent Teams
 
 ---
@@ -32,8 +32,8 @@ curl -fsSL https://raw.githubusercontent.com/eroslifestyle/Claude-Orchestrator-P
 
 **What it does:**
 - Creates backup of existing `~/.claude` if needed
-- Downloads and extracts the plugin to `~/.config/opencode/skills/orchestrator`
-- Copies agent definitions to `~/.config/opencode/agents/`
+- Downloads and extracts the plugin to `~/.claude/skills/orchestrator`
+- Copies agent definitions to `~/.claude/agents/`
 - Optionally configures settings.json for Agent Teams
 
 ---
@@ -48,12 +48,12 @@ cd ~ && git clone https://github.com/eroslifestyle/Claude-Orchestrator-Plugin.gi
 
 # Option 2: Clone to temp and copy
 git clone https://github.com/eroslifestyle/Claude-Orchestrator-Plugin.git /tmp/orchestrator
-cp -r /tmp/orchestrator ~/.config/opencode/skills/orchestrator
+cp -r /tmp/orchestrator ~/.claude/skills/orchestrator
 ```
 
 **Step 2:** Configure settings (optional but recommended)
 
-Create or edit `~/.config/opencode/settings.json`:
+Create or edit `~/.claude/settings.json`:
 
 ```json
 {
@@ -77,7 +77,7 @@ Create or edit `~/.config/opencode/settings.json`:
 
 **Linux/macOS:**
 ```bash
-ls -la ~/.config/opencode/skills/orchestrator/
+ls -la ~/.claude/skills/orchestrator/
 ```
 
 **Windows PowerShell:**
@@ -98,7 +98,7 @@ VERSION.json       # Version info
 ### Check Agent Teams Setting
 
 ```bash
-cat ~/.config/opencode/settings.json
+cat ~/.claude/settings.json
 ```
 
 Should contain:
@@ -165,7 +165,7 @@ Agent Teams allow multiple agents to work in parallel on complex tasks.
 
 ### Prerequisites
 
-1. Verify setting in `~/.config/opencode/settings.json`:
+1. Verify setting in `~/.claude/settings.json`:
    ```json
    {
      "env": {
@@ -197,7 +197,7 @@ Agent Teams allow multiple agents to work in parallel on complex tasks.
 
 ### "Skill not found"
 
-- Verify installation path: `~/.config/opencode/skills/orchestrator/SKILL.md`
+- Verify installation path: `~/.claude/skills/orchestrator/SKILL.md`
 - Restart Claude Code
 
 ### "Agent Teams not working"
@@ -207,7 +207,7 @@ Agent Teams allow multiple agents to work in parallel on complex tasks.
 
 ### "Permission denied"
 
-- Ensure write permissions to `~/.config/opencode/`
+- Ensure write permissions to `~/.claude/`
 - Run installer with appropriate privileges
 
 ### "Git clone fails"
@@ -247,4 +247,3 @@ Agent Teams allow multiple agents to work in parallel on complex tasks.
 ---
 
 *Orchestrator Plugin v10.2 - Making Claude Code a team of experts*
-

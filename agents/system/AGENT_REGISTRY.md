@@ -5,11 +5,11 @@ description: Centralized registry for agent routing and keyword mapping
 
 # AGENT REGISTRY V2.0 - Registro Centralizzato Competenze
 
-> **Versione:** 7.0 - L2 Sub-Agents + Core Expansion
-> **Data:** 28 Jul 2026
+> **Versione:** 6.0 - L2 Sub-Agents Integration
+> **Data:** 2 Febbraio 2026
 > **Scopo:** Mappatura COMPLETA task → agent per routing automatico (3 livelli)
 > **Usato da:** orchestrator.md per selezione agent
-> **Totale Agent:** 45 (7 Core + 23 L1 Expert + 15 L2 Specialist)
+> **Totale Agent:** 43 (6 Core + 22 L1 Expert + 15 L2 Specialist)
 
 ---
 
@@ -31,7 +31,6 @@ description: Centralized registry for agent routing and keyword mapping
 │  Python/JS/TypeScript/C#/Rust → languages_expert                           │
 │  Architettura/design/pattern/scaling → architect_expert                     │
 │  DevOps/CI/CD/Docker/K8s → devops_expert                                    │
-│  Framework/ecosistema/audit/struttura → framework_evolution_expert           │
 │  N8N/automazione/workflow/low-code → n8n_expert                             │
 │  AI/LLM/Claude/GPT/RAG → ai_integration_expert                              │
 │  OAuth/Google/Apple/Facebook login → social_identity_expert                 │
@@ -53,7 +52,6 @@ description: Centralized registry for agent routing and keyword mapping
 
 | Agent | File | Trigger Keywords | Quando Usare | Model |
 |-------|------|------------------|--------------|-------|
-| **opencode-assistant** | `core/opencode-assistant.md` | assistente, help, /help, comportamento | Meta agent: diretto, conciso, PT-BR | - |
 | **orchestrator** | `core/orchestrator.md` | - | Entry point OGNI task | opus |
 | **analyzer** | `core/analyzer.md` | analizza, struttura, dipendenze, audit | Prima di implementare | haiku |
 | **coder** | `core/coder.md` | implementa, scrivi, crea, aggiungi | Implementazione codice | haiku/sonnet |
@@ -124,12 +122,6 @@ description: Centralized registry for agent routing and keyword mapping
 | Agent | File | Keywords | Competenze Specifiche | Model |
 |-------|------|----------|----------------------|-------|
 | **devops_expert** | `experts/devops_expert.md` | DevOps, CI/CD, Docker, Kubernetes, terraform, AWS, Azure, monitoring | IaC, CI/CD Pipelines, Container Orchestration, Observability, SRE | sonnet |
-
-#### Framework Evolution
-
-| Agent | File | Keywords | Competenze Specifiche | Model |
-|-------|------|----------|----------------------|-------|
-| **framework_evolution_expert** | `experts/framework_evolution_expert.md` | audit, ecosystem, health, drift, config, consistency, orphan, routing, registry | Ecosystem Health Scan, Config Drift Detection, Cross-Reference Healing, Structural Improvement | sonnet |
 
 #### Automation
 
@@ -393,14 +385,6 @@ Questo ordine quando serve implementazione completa.
 - **NUOVO:** Mappatura L1 → L2 con keywords specifiche
 - **NUOVO:** Routing automatico L1 → L2 documentato
 - Aggiornamento totale agent: 43 (6 Core + 22 L1 Expert + 15 L2 Specialist)
-
-### V7.0 - 28 Jul 2026
-- **NUOVO:** opencode-assistant come 7° Core Agent
-- Aggiornamento totale agent: 44 (7 Core + 22 L1 Expert + 15 L2 Specialist)
-
-### V7.1 - 28 Jul 2026
-- **NUOVO:** framework_evolution_expert come 23° L1 Expert
-- Aggiornamento totale agent: 45 (7 Core + 23 L1 Expert + 15 L2 Specialist)
 
 ### V1.0 - 25 Gennaio 2026
 - Creazione registry completo 15 expert + 4 core

@@ -24,7 +24,7 @@ description: Coordination system for parallel agent execution
 - **Error Recovery:** Automatic failure handling and retry mechanisms
 
 ### Integration
-- **Zero Setup:** Works immediately with existing agents in ~/.config/opencode/agents/
+- **Zero Setup:** Works immediately with existing agents in ~/.claude/agents/
 - **Protocol Compliance:** Full compatibility with system/PROTOCOL.md
 - **Expert Routing:** Intelligent routing to specialized agents
 - **Resource Management:** Memory and token optimization
@@ -332,7 +332,7 @@ ERROR_HANDLING = {
 ### Seamless Integration
 The parallel coordinator integrates with existing agents without any changes:
 
-1. **Agent Discovery:** Automatically scans ~/.config/opencode/agents/ structure
+1. **Agent Discovery:** Automatically scans ~/.claude/agents/ structure
 2. **Protocol Compliance:** Uses existing PROTOCOL.md format
 3. **Expert Routing:** Leverages existing agent expertise mapping
 4. **Zero Configuration:** Works immediately with current setup
@@ -459,7 +459,7 @@ qa_pipeline = [
 ### Quick Start
 ```bash
 # The system is ready to use immediately
-cd ~/.config/opencode/agents/system/
+cd ~/.claude/agents/system/
 # All configuration files are present
 # No additional setup required
 ```
@@ -508,6 +508,6 @@ coordinator = ParallelCoordinator(config)
 **Status:** Production Ready
 **Version:** 6.0
 **Date:** 31 January 2026
-**Compatibility:** Full integration with existing ~/.config/opencode/agents/ structure
+**Compatibility:** Full integration with existing ~/.claude/agents/ structure
 
-The parallel coordination system is now ready for immediate use with all existing agents in your ~/.config/opencode/agents/ directory.
+The parallel coordination system is now ready for immediate use with all existing agents in your ~/.claude/agents/ directory.

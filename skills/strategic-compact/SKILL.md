@@ -31,10 +31,10 @@ Save current session state before context window compaction so critical context 
 
 2. **Ensure target directory exists:**
    ```
-   ~/.config/opencode/sessions/
+   ~/.claude/sessions/
    ```
 
-3. **Write checkpoint file** to `~/.config/opencode/sessions/checkpoint_{YYYY-MM-DD}_{HHMM}.md` with this structure:
+3. **Write checkpoint file** to `~/.claude/sessions/checkpoint_{YYYY-MM-DD}_{HHMM}.md` with this structure:
 
    ```markdown
    # Session Checkpoint - {date} {time}

@@ -43,7 +43,7 @@ Before running tests, verify:
 claude --version
 
 # 2. Verify settings.json location
-cat ~/.config/opencode/settings.json
+cat ~/.claude/settings.json
 
 # 3. Check Agent Teams is enabled
 echo $CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS  # Should be "1"
@@ -102,14 +102,14 @@ ANTHROPIC_BASE_URL = "https://api.z.ai/api/anthropic" (if using GLM5 proxy)
 **Description:** Verify Agent Teams feature is enabled via settings.json.
 
 **Execution Steps:**
-1. Read `~/.config/opencode/settings.json`
+1. Read `~/.claude/settings.json`
 2. Check for `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS: "1"` in env block
 3. Verify Teammate mode is configurable
 
 **Command/Tool:**
 ```bash
 # Read settings.json
-cat ~/.config/opencode/settings.json | grep -A5 "env"
+cat ~/.claude/settings.json | grep -A5 "env"
 ```
 
 **Expected Result:**
@@ -131,19 +131,19 @@ cat ~/.config/opencode/settings.json | grep -A5 "env"
 **Description:** Verify teams and tasks storage directories exist and are writable.
 
 **Execution Steps:**
-1. Check `~/.config/opencode/teams/` directory exists
-2. Check `~/.config/opencode/tasks/` directory exists
+1. Check `~/.claude/teams/` directory exists
+2. Check `~/.claude/tasks/` directory exists
 3. Test write permissions in both directories
 
 **Command/Tool:**
 ```bash
 # Check directories
-ls -la ~/.config/opencode/teams/
-ls -la ~/.config/opencode/tasks/
+ls -la ~/.claude/teams/
+ls -la ~/.claude/tasks/
 
 # Test write permission
-touch ~/.config/opencode/teams/.write_test && rm ~/.config/opencode/teams/.write_test && echo "teams: OK"
-touch ~/.config/opencode/tasks/.write_test && rm ~/.config/opencode/tasks/.write_test && echo "tasks: OK"
+touch ~/.claude/teams/.write_test && rm ~/.claude/teams/.write_test && echo "teams: OK"
+touch ~/.claude/tasks/.write_test && rm ~/.claude/tasks/.write_test && echo "tasks: OK"
 ```
 
 **Expected Result:**
@@ -161,17 +161,17 @@ tasks: OK
 **Description:** Verify skills directory structure is valid.
 
 **Execution Steps:**
-1. List all skills in `~/.config/opencode/skills/`
+1. List all skills in `~/.claude/skills/`
 2. Verify each skill has valid SKILL.md with YAML frontmatter
 3. Count total skills loaded
 
 **Command/Tool:**
 ```bash
 # List skills
-ls -la ~/.config/opencode/skills/
+ls -la ~/.claude/skills/
 
 # Check SKILL.md files
-for dir in ~/.config/opencode/skills/*/; do
+for dir in ~/.claude/skills/*/; do
   if [ -f "$dir/SKILL.md" ]; then
     echo "$dir: OK"
   else
@@ -182,9 +182,9 @@ done
 
 **Expected Result:**
 ```
-~/.config/opencode/skills/orchestrator/: OK
-~/.config/opencode/skills/commit/: OK
-~/.config/opencode/skills/review-pr/: OK
+~/.claude/skills/orchestrator/: OK
+~/.claude/skills/commit/: OK
+~/.claude/skills/review-pr/: OK
 ...
 ```
 
@@ -258,10 +258,10 @@ HTTP 200 or 401 (auth required) - connectivity OK
 **Command/Tool:**
 ```bash
 # Check memory file
-ls -la ~/.config/opencode/projects/c--Users-LeoDg/memory/MEMORY.md
+ls -la ~/.claude/projects/c--Users-LeoDg/memory/MEMORY.md
 
 # Check file size
-wc -c ~/.config/opencode/projects/c--Users-LeoDg/memory/MEMORY.md
+wc -c ~/.claude/projects/c--Users-LeoDg/memory/MEMORY.md
 ```
 
 **Expected Result:**
@@ -340,8 +340,8 @@ Orchestrator should reference memory content if MEMORY.md exists
 **Command/Tool:**
 ```bash
 # Check all memory paths
-ls -la ~/.config/opencode/projects/c--Users-LeoDg/memory/MEMORY.md 2>/dev/null || echo "Not found"
-ls -la ~/.config/opencode/MEMORY.md 2>/dev/null || echo "Not found"
+ls -la ~/.claude/projects/c--Users-LeoDg/memory/MEMORY.md 2>/dev/null || echo "Not found"
+ls -la ~/.claude/MEMORY.md 2>/dev/null || echo "Not found"
 ```
 
 **Expected Result:**
@@ -392,7 +392,7 @@ Subagent prompt should include:
 **Command/Tool:**
 ```bash
 # After completing 3+ tasks, check memory modification time
-stat ~/.config/opencode/projects/c--Users-LeoDg/memory/MEMORY.md
+stat ~/.claude/projects/c--Users-LeoDg/memory/MEMORY.md
 ```
 
 **Expected Result:**
@@ -417,7 +417,7 @@ Session summary prepended to memory
 **Command/Tool:**
 ```bash
 # Check for backup file
-ls -la ~/.config/opencode/projects/c--Users-LeoDg/memory/MEMORY.md.bak
+ls -la ~/.claude/projects/c--Users-LeoDg/memory/MEMORY.md.bak
 ```
 
 **Expected Result:**
@@ -442,7 +442,7 @@ No timestamped backups like MEMORY_20260221.md.bak
 **Command/Tool:**
 ```bash
 # Check memory size
-SIZE=$(wc -c < ~/.config/opencode/projects/c--Users-LeoDg/memory/MEMORY.md)
+SIZE=$(wc -c < ~/.claude/projects/c--Users-LeoDg/memory/MEMORY.md)
 if [ $SIZE -gt 30000 ]; then
   echo "Memory exceeds threshold - compression should activate"
 else
@@ -503,10 +503,10 @@ SESSION METRICS:
 **Command/Tool:**
 ```bash
 # Check log directory
-ls -la ~/.config/opencode/logs/
+ls -la ~/.claude/logs/
 
 # Check log format (if exists)
-head -1 ~/.config/opencode/logs/orchestrator.log 2>/dev/null | python -m json.tool
+head -1 ~/.claude/logs/orchestrator.log 2>/dev/null | python -m json.tool
 ```
 
 **Expected Result:**
@@ -889,7 +889,7 @@ Request team creation for parallel review task
 
 **Expected Result:**
 ```
-Team config at ~/.config/opencode/teams/{team-name}/config.json
+Team config at ~/.claude/teams/{team-name}/config.json
 Teammates spawned and active
 ```
 
@@ -909,7 +909,7 @@ Teammates spawned and active
 **Command/Tool:**
 ```
 Use TeamCreate tool or orchestrator team creation
-Check ~/.config/opencode/teams/{team-name}/config.json for member list
+Check ~/.claude/teams/{team-name}/config.json for member list
 ```
 
 **Expected Result:**
@@ -933,7 +933,7 @@ Each with unique name and role
 
 **Command/Tool:**
 ```
-Check task list at ~/.config/opencode/tasks/{team-name}/
+Check task list at ~/.claude/tasks/{team-name}/
 Verify all teammates can read/write tasks
 ```
 
@@ -1733,7 +1733,7 @@ PASS: >= 52/58 tests pass (90%)
 |------|-----------------|------------|
 | HC-001 | Agent Teams disabled | Set env var in settings.json |
 | HC-002 | Feature flag missing | Add `"CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"` |
-| HC-003 | Directory not writable | Fix permissions on ~/.config/opencode/ |
+| HC-003 | Directory not writable | Fix permissions on ~/.claude/ |
 | RT-001 | Agents not loaded | Check routing-table.md syntax |
 | TEAM-001 | Team creation fails | Verify storage directories exist |
 | MCP-001 | Tools not found | Run ToolSearch before using |
@@ -1742,12 +1742,12 @@ PASS: >= 52/58 tests pass (90%)
 
 ```bash
 # Full system check
-cat ~/.config/opencode/settings.json | grep -A10 "env"
-ls -la ~/.config/opencode/teams/ ~/.config/opencode/tasks/
-cat ~/.config/opencode/skills/orchestrator/SKILL.md | head -20
+cat ~/.claude/settings.json | grep -A10 "env"
+ls -la ~/.claude/teams/ ~/.claude/tasks/
+cat ~/.claude/skills/orchestrator/SKILL.md | head -20
 
 # Memory check
-wc -c ~/.config/opencode/projects/*/memory/MEMORY.md
+wc -c ~/.claude/projects/*/memory/MEMORY.md
 
 # MCP check
 # Use ListMcpResourcesTool in Claude Code
@@ -1766,4 +1766,3 @@ wc -c ~/.config/opencode/projects/*/memory/MEMORY.md
 ---
 
 **End of Orchestrator V12.0 Test Suite**
-

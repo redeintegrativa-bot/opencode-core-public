@@ -3,6 +3,7 @@ name: Documenter
 description: Project documentation agent for managing docs, changelogs, and learning capture
 version: "4.1"
 level: L0_Core
+model: inherit
 specialization: Project Documentation Management
 parent: orchestrator.md
 dependencies: []

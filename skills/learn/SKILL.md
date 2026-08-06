@@ -22,7 +22,7 @@ Instincts start weak (0.3) and grow stronger with repeated confirmation (max 0.9
 ## Algorithm
 
 1. **Parse input**: Extract the pattern description and optional tags from user input
-2. **Read instincts file**: Load `~/.config/opencode/learnings/instincts.json`
+2. **Read instincts file**: Load `~/.claude/learnings/instincts.json`
    - If file is empty or missing, initialize with default structure
 3. **Check for duplicates**: Compare new pattern against existing instincts
    - Fuzzy match: if 60%+ of significant words (4+ chars) overlap, treat as existing

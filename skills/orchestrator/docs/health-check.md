@@ -72,8 +72,8 @@ Verifies if Agent Teams feature is properly enabled and configured.
 |-------|-------------|--------------|
 | Feature Flag | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` | OK / DISABLED |
 | Teammate Mode | In-process vs tmux availability | OK / LIMITED |
-| Storage Directory | `~/.config/opencode/teams/` exists and writable | OK / ERROR |
-| Task Storage | `~/.config/opencode/tasks/` exists and writable | OK / ERROR |
+| Storage Directory | `~/.claude/teams/` exists and writable | OK / ERROR |
+| Task Storage | `~/.claude/tasks/` exists and writable | OK / ERROR |
 
 **Diagnostic Protocol:**
 ```python
@@ -171,7 +171,7 @@ Verifies existence and validity of MEMORY.md file.
 
 | Check | Description | Expected Value |
 |-------|-------------|----------------|
-| File Exists | `~/.config/opencode/projects/*/MEMORY.md` | True |
+| File Exists | `~/.claude/projects/*/MEMORY.md` | True |
 | File Valid | Parses as valid markdown | True |
 | Contains Profile Info | Has Claude profile configuration | True |
 | Last Modified | Recent update (within 30 days) | Date |
@@ -224,7 +224,7 @@ Verifies loaded skills and their configuration.
 
 | Check | Description | Status Codes |
 |-------|-------------|--------------|
-| Skills Directory | `~/.config/opencode/skills/` exists | OK / MISSING |
+| Skills Directory | `~/.claude/skills/` exists | OK / MISSING |
 | Skill Count | Number of loaded skills | Count |
 | Orchestrator Skill | Main orchestrator skill loaded | OK / MISSING |
 | Skill Syntax | Valid SKILL.md files | OK / ERROR |
@@ -441,7 +441,7 @@ RAW DATA (JSON)
 
 | Issue | Recovery Action |
 |-------|-----------------|
-| `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` not set | Add to `~/.config/opencode/settings.json`: `{"env": {"CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"}}` |
+| `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` not set | Add to `~/.claude/settings.json`: `{"env": {"CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"}}` |
 | `ANTHROPIC_API_KEY` missing | Set environment variable OR run `claude` to complete OAuth flow |
 | Invalid `ANTHROPIC_BASE_URL` | Remove or correct URL in environment |
 
@@ -449,9 +449,9 @@ RAW DATA (JSON)
 
 | Issue | Recovery Action |
 |-------|-----------------|
-| Storage directories not writable | Check permissions on `~/.config/opencode/` |
+| Storage directories not writable | Check permissions on `~/.claude/` |
 | Feature disabled but needed | Enable via settings.json (see above) |
-| Teammate spawn failures | Check session logs in `~/.config/opencode/logs/` |
+| Teammate spawn failures | Check session logs in `~/.claude/logs/` |
 
 ### MCP Server Issues
 
@@ -473,7 +473,7 @@ RAW DATA (JSON)
 
 | Issue | Recovery Action |
 |-------|-----------------|
-| Skills directory missing | Create `~/.config/opencode/skills/` directory |
+| Skills directory missing | Create `~/.claude/skills/` directory |
 | Invalid SKILL.md | Add YAML frontmatter to skill file |
 | Skill not loading | Check file permissions and encoding |
 
@@ -729,13 +729,13 @@ RECOVERY ACTIONS
 --------------------------------------------------------------------------------
 
 Issue: Agent Teams disabled
-Action: Add to ~/.config/opencode/settings.json:
+Action: Add to ~/.claude/settings.json:
   {"env": {"CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"}}
 
 Issue: Storage permission denied
-Action: Fix permissions on ~/.config/opencode/ directory:
+Action: Fix permissions on ~/.claude/ directory:
   Windows: icacls "%USERPROFILE%\.claude" /grant %USERNAME%:F
-  Linux/Mac: chmod -R u+rw ~/.config/opencode/
+  Linux/Mac: chmod -R u+rw ~/.claude/
 
 Issue: Claude Web connectivity timeout
 Action: Check firewall rules and network stability
@@ -816,4 +816,3 @@ if results['overall_status'] != 'OK':
 - [Agent Team Lifecycle](../SKILL.md#agent-team-lifecycle)
 - [MCP Plugin Integration](../SKILL.md#mcp-plugin-integration)
 - [Error Recovery System](../SKILL.md#error-recovery-system)
-

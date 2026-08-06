@@ -5,13 +5,13 @@ description: Complete navigation index for the multi-agent system with all 43 ag
 
 # AGENTS INDEX
 
-> **Version:** 13.0
-> **Total Agents:** 45 (7 Core + 23 L1 Experts + 15 L2 Specialists)
-> **Last Updated:** 28 Jul 2026
+> **Version:** 12.0 DEEP AUDIT
+> **Total Agents:** 43 (6 Core + 22 L1 Experts + 15 L2 Specialists)
+> **Last Updated:** 26 Febbraio 2026
 
 ---
 
-## CORE AGENTS (7)
+## CORE AGENTS (6)
 
 | Agent | Role | Model | Description |
 |-------|------|-------|-------------|
@@ -21,7 +21,6 @@ description: Complete navigation index for the multi-agent system with all 43 ag
 | **reviewer.md** | Quality Validation | sonnet | Code review, best practices, security checks |
 | **documenter.md** | Documentation | haiku | Manages project docs, todolist, worklog |
 | **system_coordinator.md** | Resource Manager | haiku | Token tracking, metrics, file maintenance, cleanup |
-| **opencode-assistant.md** | Meta Agent | - | Direct, concise assistant behavior, Portuguese BR, action-first |
 
 ---
 
@@ -35,7 +34,6 @@ description: Complete navigation index for the multi-agent system with all 43 ag
 | **claude_systems_expert.md** | Claude Ecosystem Optimizer | Haiku/Sonnet/Opus, cost efficiency, API patterns |
 | **database_expert.md** | Database Architect | SQL, NoSQL, schema design, performance |
 | **devops_expert.md** | DevOps & SRE Architect | CI/CD, IaC, Kubernetes, monitoring |
-| **framework_evolution_expert.md** | Framework Evolution Principal | ecosystem health, audit, config drift, structural integrity |
 | **gui-super-expert.md** | GUI/UX Expert | PyQt5, design systems, accessibility |
 | **integration_expert.md** | API Integration Master | Telegram, WhatsApp, MetaTrader, TradingView |
 | **languages_expert.md** | Multi-Language Expert | Python, JavaScript, C#, idioms, best practices |
@@ -95,22 +93,20 @@ description: Complete navigation index for the multi-agent system with all 43 ag
 ```
 ORCHESTRATOR (opus)
     |
-    +-- CORE AGENTS (7)
-    |   +-- opencode-assistant (meta)
+    +-- CORE AGENTS (6)
     |   +-- analyzer (haiku)
     |   +-- coder (sonnet)
     |   +-- reviewer (sonnet)
     |   +-- documenter (haiku)
     |   +-- system_coordinator (haiku)
     |
-    +-- L1 EXPERTS (23)
+    +-- L1 EXPERTS (22)
     |   +-- ai_integration_expert
     |   +-- architect_expert
     |   +-- browser_automation_expert
     |   +-- claude_systems_expert
     |   +-- database_expert
     |   +-- devops_expert
-    |   +-- framework_evolution_expert
     |   +-- gui-super-expert
     |   +-- integration_expert
     |   +-- languages_expert
@@ -202,7 +198,6 @@ agents/
     reviewer.md
     documenter.md
     system_coordinator.md
-    opencode-assistant.md
   experts/
     ai_integration_expert.md
     architect_expert.md
@@ -210,7 +205,6 @@ agents/
     claude_systems_expert.md
     database_expert.md
     devops_expert.md
-    framework_evolution_expert.md
     gui-super-expert.md
     integration_expert.md
     languages_expert.md
@@ -243,9 +237,29 @@ agents/
       social-oauth-specialist.md
       test-unit-specialist.md
       trading-risk-calculator.md
+  docs/
+    README.md
+    getting-started.md
+    quickstart.md
+    quick-reference.md
+    orchestrator-examples.md
+    orchestrator-advanced.md
+    SYSTEM_ARCHITECTURE.md
+    implementation-details.md
+    prompt-library.md
+    deploy-checklist.md
   config/
     routing.md
     standards.md
+  workflows/
+    bugfix.md
+    feature.md
+    refactoring.md
+    OPTIMIZED.md
+  templates/
+    task.md
+    review.md
+    integration.md
 ```
 
 ---
@@ -254,11 +268,14 @@ agents/
 
 | Category | Count |
 |----------|-------|
-| **Total Agents** | 45 |
-| Core Agents (L0) | 7 |
-| L1 Experts | 23 |
+| **Total Agents** | 43 |
+| Core Agents (L0) | 6 |
+| L1 Experts | 22 |
 | L2 Specialists | 15 |
 | L1 Recent Additions | 4 |
+| Workflows | 4 |
+| Templates | 3 |
+| Docs | 10+ |
 
 ---
 
@@ -267,10 +284,11 @@ agents/
 - `system/PROTOCOL.md` - Communication protocol (MANDATORY)
 - `system/AGENT_REGISTRY.md` - Routing configuration
 - `system/COMMUNICATION_HUB.md` - Message format
-- `skills/orchestrator/docs/README.md` - System overview (orchestrator skill docs)
+- `docs/README.md` - System overview
+- `docs/getting-started.md` - Quick start guide
 
 ---
 
 **Status:** Production Ready
-**Version:** 13.0
-**Quality:** 100% organized - 45 agents verified
+**Version:** 12.0 DEEP AUDIT
+**Quality:** 100% organized - 43 agents verified

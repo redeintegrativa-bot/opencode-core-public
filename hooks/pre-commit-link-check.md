@@ -18,13 +18,13 @@ Automatically validate internal markdown links before each commit to prevent bro
 
 ```bash
 # Validate all markdown files in current directory
-python ~/.config/opencode/scripts/validate-links.py
+python ~/.claude/scripts/validate-links.py
 
 # Validate specific directory
-python ~/.config/opencode/scripts/validate-links.py ./docs
+python ~/.claude/scripts/validate-links.py ./docs
 
 # Verbose mode (show all links)
-python ~/.config/opencode/scripts/validate-links.py --verbose .
+python ~/.claude/scripts/validate-links.py --verbose .
 ```
 
 ### Option 2: Git Pre-Commit Hook (Native)
@@ -82,7 +82,7 @@ repos:
     hooks:
       - id: markdown-link-check
         name: Markdown Link Check
-        entry: ~/.config/opencode/scripts/validate-links.sh
+        entry: ~/.claude/scripts/validate-links.sh
         language: script
         files: \.md$
         pass_filenames: true
@@ -123,7 +123,7 @@ jobs:
           python-version: '3.11'
 
       - name: Validate links
-        run: python ~/.config/opencode/scripts/validate-links.py --verbose .
+        run: python ~/.claude/scripts/validate-links.py --verbose .
 
       - name: Report results
         if: failure()
@@ -139,19 +139,19 @@ jobs:
 
 ```bash
 # Validate all markdown files in current directory
-python ~/.config/opencode/scripts/validate-links.py
+python ~/.claude/scripts/validate-links.py
 
 # Validate specific directory
-python ~/.config/opencode/scripts/validate-links.py ./docs
+python ~/.claude/scripts/validate-links.py ./docs
 
 # Validate specific file
-python ~/.config/opencode/scripts/validate-links.py ./README.md
+python ~/.claude/scripts/validate-links.py ./README.md
 
 # Verbose mode (show all links)
-python ~/.config/opencode/scripts/validate-links.py --verbose .
+python ~/.claude/scripts/validate-links.py --verbose .
 
 # Fix mode (remove broken links)
-python ~/.config/opencode/scripts/validate-links.py --fix .
+python ~/.claude/scripts/validate-links.py --fix .
 ```
 
 ### Bash Script (Unix/Linux)
@@ -266,7 +266,7 @@ ALGORITHM PreCommit(changed_files):
 
 If Python is not installed, use the bash script:
 ```bash
-chmod +x ~/.config/opencode/scripts/validate-links.sh
+chmod +x ~/.claude/scripts/validate-links.sh
 ./validate-links.sh --verbose .
 ```
 
@@ -304,7 +304,7 @@ git commit --no-verify -m "your message"
 markdown-link-check:
   stage: test
   script:
-    - python ~/.config/opencode/scripts/validate-links.py .
+    - python ~/.claude/scripts/validate-links.py .
   only:
     changes:
       - "**/*.md"
@@ -315,7 +315,7 @@ markdown-link-check:
 ```yaml
 # azure-pipelines.yml
 - script: |
-    python ~/.config/opencode/scripts/validate-links.py .
+    python ~/.claude/scripts/validate-links.py .
   displayName: 'Validate Markdown Links'
   condition: contains(variables['Build.SourceVersionMessage'], '.md')
 ```
@@ -346,4 +346,3 @@ markdown-link-check:
 - Internal link validation
 - Git pre-commit integration
 - CI/CD examples
-
