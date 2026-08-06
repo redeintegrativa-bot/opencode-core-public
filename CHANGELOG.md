@@ -3,8 +3,14 @@
 ## 1.7.0 (2026-08-06)
 
 ### Added
-- **Status panel na sidebar (TUI)**: novo plugin `plugins/status-panel.tsx` registrado no slot `sidebar_content` do TUI, mostrando em tempo real Auto-sync, Update, Serviços e Memória (lê `state/*.jsonl` + `features.json`). Config via `tui.json` (ordem 450).
-- `tui.json` e `package.json` (deps `@opentui/*` + `@opencode-ai/plugin`) entram no sync público e no `setup.ps1` (copia `.tsx`, `tui.json`, `package.json`; opencode roda `bun install` no startup).
+- **Tema custom `aguia-azul`** (`themes/aguia-azul.json`): paleta escura azul-elétrico + âmbar suave (Aquário/Urano + sol), contraste alto, com variantes dark/light para text, markdown, syntax e diff.
+- **`tui.json`**: configuração de TUI do opencode — tema `aguia-azul`, `scroll_acceleration`, `diff_style: auto`, `mouse`, `attention` (notificação de desktop + som suave em volume 0.3) e keybinds (`<leader>t` temas, `<leader>n` nova sessão, `<leader>l` sessões, cópia com `ctrl+shift+c`).
+- **Plugin `ui-ux`** (`plugins/ui-ux.js`): toasts transitórios via `client.tui.showToast` — "Tarefa concluída" (`session.idle`), "Erro na sessão" (`session.error`), "Erro em <ferramenta>" (`tool.execute.after`) e "Memória salva" (`command.executed` salvar/remember). Sem console.log; throttle anti-spam de 30s; desligável por flag `ui_ux_toasts: false` em `features.json`.
+
+### Changed
+- `setup.ps1`: novas funções `Install-Themes` (copia `themes/*.json`) e `Install-Tui` (copia `tui.json`) + switch `-Themes`.
+- `sync-public.py`: whitelist inclui `themes/` e `tui.json` no espelhamento pessoal → público.
+- Agente `gui-super-expert` localizado para PT-BR (estava em italiano).
 
 ## 1.6.1 (2026-08-06)
 

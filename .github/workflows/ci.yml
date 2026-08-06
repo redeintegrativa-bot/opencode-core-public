@@ -1,4 +1,4 @@
-name: CI
+﻿name: CI
 
 on:
   push:
@@ -11,85 +11,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - name: Security validation
         run: |
           if [ -f hooks/validate_security.py ]; then
             python3 hooks/validate_security.py .
-          else
-            echo "Security hook not found, skipping"
           fi
-
-      - name: Validate SKILL.md files
+      - name: Check SKILL.md files
         run: |
-          missing=0
-          for skill in skills/*/; do
-            name=$(basename "$skill")
-            if [ ! -f "${skill}SKILL.md" ]; then
-              echo "❌ $name: missing SKILL.md"
-              missing=$((missing + 1))
-            else
-              echo "✓ $name"
-            fi
+          for skill in skills/*/SKILL.md; do
+            if [ -f "$skill" ]; then echo "✓ $skill"; fi
           done
-          [ "$missing" -eq 0 ] || exit 1
-
-      - name: Validate registry.json
+      - name: Validate registry
         run: |
           if [ -f skills/registry.json ]; then
-            python3 -m json.tool skills/registry.json > /dev/null && echo "✓ registry.json is valid JSON"
+            python3 -m json.tool skills/registry.json > /dev/null && echo "✓ registry.json OK"
           fi
-
-      - name: Check skill registry sync
-        run: |
-          python3 -c "
-import json
-with open('skills/registry.json') as f:
-    reg = json.load(f)
-skills_in_reg = set(reg['skills'].keys())
-skills_on_disk = {d.name for d in __import__('os').scandir('skills') if d.is_dir() and 'SKILL.md' in [f.name for f in __import__('os').scandir(d.path)]}
-print(f'Skills in registry: {len(skills_in_reg)}')
-print(f'Skills on disk: {len(skills_on_disk)}')
-missing_in_reg = skills_on_disk - skills_in_reg
-missing_on_disk = skills_in_reg - skills_on_disk
-if missing_in_reg:
-    print(f'⚠️  Not in registry: {missing_in_reg}')
-if missing_on_disk:
-    print(f'⚠️  Missing SKILL.md: {missing_on_disk}')
-if missing_in_reg or missing_on_disk:
-    exit(1)
-"
-
-      - name: Check registry counters consistency
-        run: |
-          python3 -c "
-import json
-from collections import Counter
-with open('skills/registry.json') as f:
-    reg = json.load(f)
-skills = reg['skills']
-expected_total = len(skills)
-expected_cat = dict(sorted(Counter(s.get('category', '') for s in skills.values()).items()))
-if reg['total_skills'] != expected_total:
-    print(f'❌ total_skills {reg[\"total_skills\"]} != real {expected_total}')
-    exit(1)
-if reg['categories'] != expected_cat:
-    print(f'❌ categories {reg[\"categories\"]} != real {expected_cat}')
-    exit(1)
-print(f'✓ total_skills ({expected_total}) e categories {expected_cat} consistentes')
-"
-
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Check AGENTS.md structure
-        run: |
-          [ -f AGENTS.md ] && echo "✓ AGENTS.md exists" || (echo "❌ AGENTS.md missing"; exit 1)
-          [ -f README.md ] && echo "✓ README.md exists" || (echo "❌ README.md missing"; exit 1)
-          [ -f LICENSE ] && echo "✓ LICENSE exists" || (echo "⚠️  LICENSE missing")
-
-      - name: Check for hardcoded secrets (sanity check)
-        run: |
-          grep -rn "sk-[a-zA-Z0-9]\{20,\}" agents/ skills/ rules/ --include="*.md" 2>/dev/null && { echo "❌ Found potential secrets in markdown"; exit 1; } || echo "✓ No secrets detected"

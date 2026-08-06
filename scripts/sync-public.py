@@ -32,11 +32,11 @@ from pathlib import Path
 TOP_LEVEL_DIRS = [
     "skills", "agents", "rules", "hooks", "templates", "patterns",
     "providers", "services", "workflows", "scripts", ".opencode",
-    "plugins", "docs", "knowledge", ".github",
+    "plugins", "themes", "docs", "knowledge", ".github",
 ]
 TOP_LEVEL_FILES = [
     "CHANGELOG.md", "VERSION", "README.md", "Makefile",
-    "opencode.json", "setup.ps1", "setup.sh",
+    "opencode.json", "setup.ps1", "setup.sh", "tui.json",
     "onboarding.py", "onboarding.sh", "pytest.ini", "requirements.txt",
 ]
 # AGENTS.md e .gitignore sao docs por-repo (nao sincronizados),

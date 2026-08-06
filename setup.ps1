@@ -11,6 +11,7 @@
 #   .\setup.ps1 -Workflows   # Apenas workflows
 #   .\setup.ps1 -Commands    # Apenas comandos
 #   .\setup.ps1 -Plugins     # Apenas plugins
+#   .\setup.ps1 -Themes      # Apenas temas
 #   .\setup.ps1 -Memory      # Apenas infra de memoria (session.py + template)
 #   .\setup.ps1 -SkipUpdateCheck  # Não verifica atualizações no início
 #   .\setup.ps1 -Help        # Esta mensagem
@@ -24,6 +25,7 @@ param(
   [switch]$Workflows,
   [switch]$Commands,
   [switch]$Plugins,
+  [switch]$Themes,
   [switch]$Memory,
   [switch]$CI,
   [switch]$All,
@@ -40,6 +42,7 @@ $WorkflowsDir = Join-Path $RepoDir "workflows"
 $ServicesDir = Join-Path $RepoDir "services"
 $CommandsDir = Join-Path $RepoDir ".opencode\command"
 $PluginsDir = Join-Path $RepoDir "plugins"
+$ThemesDir = Join-Path $RepoDir "themes"
 $MemoryDir = Join-Path $RepoDir "memory"
 
 function Write-Log { Write-Host "✓ $($args[0])" -ForegroundColor Green }
@@ -137,20 +140,31 @@ function Install-Plugins {
   }
   $pluginsTarget = Join-Path $Target "plugins"
   New-Item -ItemType Directory -Path $pluginsTarget -Force | Out-Null
-  Copy-Item -Path "$PluginsDir\*.js"  -Destination $pluginsTarget -Force -ErrorAction SilentlyContinue
-  Copy-Item -Path "$PluginsDir\*.tsx" -Destination $pluginsTarget -Force -ErrorAction SilentlyContinue
-
-  # TUI plugin config + deps do config dir
-  if (Test-Path (Join-Path $RepoDir "tui.json")) {
-    Copy-Item -Path (Join-Path $RepoDir "tui.json") -Destination $Target -Force
-    Write-Log "TUI config (tui.json) installed"
-  }
-  if (Test-Path (Join-Path $RepoDir "package.json")) {
-    Copy-Item -Path (Join-Path $RepoDir "package.json") -Destination $Target -Force
-    Write-Log "package.json (deps TUI) installed → opencode roda bun install no startup"
-  }
-
+  Copy-Item -Path "$PluginsDir\*.js" -Destination $pluginsTarget -Force -ErrorAction SilentlyContinue
   Write-Log "Plugins installed → $pluginsTarget"
+}
+
+function Install-Themes {
+  param($Target)
+  if (-not (Test-Path $ThemesDir)) {
+    Write-Warn "Sem diretorio themes\ no repo; pulando temas"
+    return
+  }
+  $themesTarget = Join-Path $Target "themes"
+  New-Item -ItemType Directory -Path $themesTarget -Force | Out-Null
+  Copy-Item -Path "$ThemesDir\*.json" -Destination $themesTarget -Force -ErrorAction SilentlyContinue
+  Write-Log "Themes installed → $themesTarget"
+}
+
+function Install-Tui {
+  param($Target)
+  $tuiSrc = Join-Path $RepoDir "tui.json"
+  if (-not (Test-Path $tuiSrc)) {
+    Write-Warn "Sem tui.json no repo; pulando config TUI"
+    return
+  }
+  Copy-Item -Path $tuiSrc -Destination (Join-Path $Target "tui.json") -Force -ErrorAction SilentlyContinue
+  Write-Log "TUI config installed → $(Join-Path $Target 'tui.json')"
 }
 
 function Install-Memory {
@@ -253,12 +267,12 @@ Show-Banner
 if (-not $SkipUpdateCheck) { Check-Update }
 
 if ($Help) {
-  Write-Host "Uso: .\setup.ps1 [-Skills] [-Agents] [-Rules] [-Hooks] [-Workflows] [-Commands] [-Plugins] [-Memory] [-CI] [-All] [-SkipUpdateCheck]"
+  Write-Host "Uso: .\setup.ps1 [-Skills] [-Agents] [-Rules] [-Hooks] [-Workflows] [-Commands] [-Plugins] [-Themes] [-Memory] [-CI] [-All] [-SkipUpdateCheck]"
   exit 0
 }
 
 $target = Get-ConfigDir
-$mode = if ($All -or (-not $Skills -and -not $Agents -and -not $Rules -and -not $Hooks -and -not $Workflows -and -not $Commands -and -not $Plugins -and -not $Memory -and -not $CI)) { "all" } else { "partial" }
+$mode = if ($All -or (-not $Skills -and -not $Agents -and -not $Rules -and -not $Hooks -and -not $Workflows -and -not $Commands -and -not $Plugins -and -not $Themes -and -not $Memory -and -not $CI)) { "all" } else { "partial" }
 
 New-Item -ItemType Directory -Path $target -Force | Out-Null
 
@@ -269,11 +283,13 @@ if ($mode -eq "all" -or $Hooks)     { Install-Hooks $target }
 if ($mode -eq "all" -or $Workflows) { Install-Workflows $target }
 if ($mode -eq "all" -or $Commands)  { Install-Commands $target }
 if ($mode -eq "all" -or $Plugins)   { Install-Plugins $target }
+if ($mode -eq "all" -or $Themes)    { Install-Themes $target }
 if ($mode -eq "all" -or $Memory)    { Install-Memory $target }
 if ($mode -eq "all" -or $CI)        { Install-GitHubActions }
 
-# Always install services and CI if all
+# Sempre instala TUI config (tema + toasts) no modo completo
 if ($mode -eq "all") {
+  Install-Tui $target
   Install-Services $target
   Install-GitHubActions
 }

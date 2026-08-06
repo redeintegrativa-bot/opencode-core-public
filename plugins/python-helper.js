@@ -52,6 +52,10 @@ export async function resolvePython() {
 }
 
 export async function runPy(args, options = {}) {
+  // Quando o opencode carrega este arquivo como plugin, invoca cada export
+  // como factory com um contexto (objeto). Nesse caso retorna um hooks
+  // object valido em vez de tentar executar.
+  if (!Array.isArray(args)) return {}
   const py = await resolvePython()
   if (!py) {
     return { ok: false, stdout: "", stderr: "python not found", code: 1 }
@@ -73,3 +77,7 @@ export async function runPy(args, options = {}) {
     )
   })
 }
+
+// Este arquivo eh um modulo utilitario (nao um plugin). Exporta um plugin
+// no-op para o opencode nao tentar carregar as helpers como plugins e logar erro.
+export const PythonHelper = async () => ({})
