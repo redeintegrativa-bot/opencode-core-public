@@ -7,6 +7,7 @@ import {
 } from "node:fs"
 import { join } from "node:path"
 import { homedir } from "node:os"
+import { runPy } from "./python-helper.js"
 
 const BASE = join(homedir(), ".config", "opencode")
 const STATE_DIR = join(BASE, "state")
@@ -56,7 +57,7 @@ function extractKeywords(text) {
 async function getMemoryStatus(ctx) {
   try {
     if (!existsSync(MEMORY_SCRIPT)) return null
-    const proc = await ctx.$`python "${MEMORY_SCRIPT}" status --short`
+    const proc = await runPy([`${MEMORY_SCRIPT}`, "status", "--short"])
     const out = String(proc.stdout || "").trim()
     const mem = {}
     for (const line of out.split("\n")) {
@@ -88,35 +89,14 @@ function rebuildLegacyFallback() {
 
 async function runEvolveCheck(ctx) {
   try {
-    const proc = await ctx.$`python "${EVOLVE_SCRIPT}" --check`
+    const proc = await runPy([`${EVOLVE_SCRIPT}`, "--check"])
     const out = String(proc.stdout || "").trim()
-    if (ctx.client && ctx.client.app) {
-      await ctx.client.app.log({
-        body: {
-          service: "self-improvement",
-          level: "info",
-          message: "Auto-evolve check (10 sessions)",
-          extra: { output: out.slice(0, 2000) },
-        },
-      })
-    }
     appendLine(KNOWLEDGE_LOG, {
       type: "evolve_check",
       ts: new Date().toISOString(),
       suggestions: out.slice(0, 4000),
     })
-  } catch (err) {
-    if (ctx.client && ctx.client.app) {
-      await ctx.client.app.log({
-        body: {
-          service: "self-improvement",
-          level: "warn",
-          message: "Auto-evolve check failed",
-          extra: { error: String(err).slice(0, 500) },
-        },
-      })
-    }
-  }
+  } catch {}
 }
 
 export const SelfImprovement = async (ctx) => {
@@ -151,11 +131,18 @@ export const SelfImprovement = async (ctx) => {
       }
 
       if (event.type === "session.error") {
+        const raw = props.error
+        let errText = ""
+        if (typeof raw === "string") errText = raw
+        else if (raw && typeof raw === "object") {
+          errText = raw.message || raw.error || raw.name || JSON.stringify(raw)
+        } else if (raw != null) errText = String(raw)
+        if (!errText || errText === "[object Object]") return
         appendLine(FALLBACK_JSONL, {
           type: "session_error",
           ts: now,
           sessionID,
-          error: String(props.error || "").slice(0, 500),
+          error: errText.slice(0, 500),
         })
       }
     },

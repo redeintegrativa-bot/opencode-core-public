@@ -1,7 +1,7 @@
-import { spawn } from "node:child_process"
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
 import { homedir } from "node:os"
+import { runPy } from "./python-helper.js"
 
 const FEATURE = "network_watch"
 const FEATURES_FILE = join(homedir(), ".config", "opencode", "features.json")
@@ -47,14 +47,8 @@ function runWatch(ctx, reason) {
   if (!shouldRun()) return
   writeLastWatch(new Date().toISOString())
 
-  const proc = spawn("python", [SCANNER, "--watch"], {
-    cwd: BASE,
-    windowsHide: true,
-  })
-  let out = ""
-  proc.stdout.on("data", (d) => { out += d })
-  proc.stderr.on("data", (d) => { out += d })
-  proc.on("close", (code) => {
+  runPy([`${SCANNER}`, "--watch"], { cwd: BASE, timeout: 120000 }).then((proc) => {
+    const out = proc.stdout
     let summary = null
     try {
       const jsonStart = out.indexOf("{")
@@ -63,18 +57,8 @@ function runWatch(ctx, reason) {
       }
     } catch {}
 
-    if (ctx.client && ctx.client.app) {
-      ctx.client.app.log({
-        body: {
-          service: "network-watch",
-          level: summary ? "info" : "warn",
-          message: `Scan de rede (${reason})${code === 0 ? "" : " - erro"}`,
-          extra: {
-            code,
-            summary: summary || { raw: out.slice(-1000) },
-          },
-        },
-      })
+    if (summary) {
+      writeFileSync(STATE_FILE, JSON.stringify({ last: new Date().toISOString(), summary }, null, 2), "utf8")
     }
   })
 }

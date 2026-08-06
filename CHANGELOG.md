@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.6.0 (2026-08-06)
+
+### Fixed
+- **Plugins quebrados no Windows**: `ctx.$`/`spawn("python", ...)` não achavam `python` no PATH do bun → `bun: command not found: python` em toda sessão (auto-sync falhava 5x seguidas). Novo `plugins/python-helper.js` resolve python robustamente (`OPENCODE_PYTHON` → `python` → `py -3` → caminhos `%LOCALAPPDATA%\Python*`) e roda via `execFile`. Aplicado em `self-improvement`, `auto-sync`, `update-check` e `network-watch`.
+
+### Changed
+- **Console limpo**: removidos todos os `client.app.log` dos plugins (não renderizavam toast, mas poluíam logs). Plugins agora gravam só em `state/*.jsonl`.
+- **Session-resume silencioso**: protocolo de início passa a usar `session.py status --short` e NÃO despeja o `MEMORY.md` no chat (no máximo 1 linha de resumo). Ajustado AGENTS.md, skill `session-resume` e orquestrador STEP 0.
+- `session.error` handler grava mensagem útil (não mais `[object Object]`).
+
+### Cleanup
+- `state/session-history.jsonl`: deduplicado (28 → 8, 1 por sessão)
+- `state/fallback-log.jsonl`: removidas entradas inválidas
+- `state/session-recovery.json`: caracteres corrompidos removidos
+- `state/sync-pending.json`: pendência velha `fail` removida
+
 ## 1.5.1 (2026-08-05)
 
 ### Added

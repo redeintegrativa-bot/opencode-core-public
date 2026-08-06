@@ -1,7 +1,7 @@
-import { spawn } from "node:child_process"
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
 import { homedir } from "node:os"
+import { runPy } from "./python-helper.js"
 
 const FEATURE = "update_check"
 const FEATURES_FILE = join(homedir(), ".config", "opencode", "features.json")
@@ -62,17 +62,11 @@ function runCheck(ctx, repoDir, reason) {
   const checker = join(repoDir, "scripts", "check-update.py")
   if (!existsSync(checker)) return
 
-  const proc = spawn("python", [checker, "--json"], {
-    cwd: repoDir,
-    windowsHide: true,
-  })
-  let out = ""
-  proc.stdout.on("data", (d) => { out += d })
-  proc.stderr.on("data", (d) => { out += d })
-  proc.on("close", (code) => {
+  runPy([`${checker}`, "--json"], { cwd: repoDir }).then((proc) => {
+    const out = proc.stdout.trim()
     let data = null
     try {
-      data = JSON.parse(out.trim().split("\n").pop() || "")
+      data = JSON.parse(out.split("\n").pop() || "")
     } catch {}
 
     if (data && data.has_update) {
@@ -86,17 +80,6 @@ function runCheck(ctx, repoDir, reason) {
         presented: false,
       }
       writeFileSync(ALERT_FILE, JSON.stringify(alert, null, 2), "utf8")
-
-      if (ctx.client && ctx.client.app) {
-        ctx.client.app.log({
-          body: {
-            service: "update-check",
-            level: "info",
-            message: `Novidades disponiveis: ${data.local} -> ${data.remote}. Aguardando revisao do usuario (nao aplicado).`,
-            extra: { changelog: alert.changelog.slice(0, 2000) },
-          },
-        })
-      }
     }
   })
 }

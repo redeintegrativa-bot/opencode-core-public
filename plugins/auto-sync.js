@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync, appendFileSync } from "node:fs"
 import { join } from "node:path"
 import { homedir } from "node:os"
+import { runPy } from "./python-helper.js"
 
 const BASE = join(homedir(), ".config", "opencode")
 const STATE_DIR = join(BASE, "state")
@@ -111,16 +112,16 @@ async function autoStage(ctx, sessionID) {
     appendLog(entry)
     return
   }
-  const proc = await exec(ctx, `python ${SYNC_SCRIPT} --stage`)
+  const proc = await runPy([`${SYNC_SCRIPT}`, "--stage"], { cwd: CORE_DIR })
   entry.result = proc.ok ? "ok" : "fail"
-  entry.out = proc.out.slice(0, 400)
+  entry.out = (proc.stdout + " " + proc.stderr).slice(0, 400)
   appendLog(entry)
 
   writePending({
     sessionID,
     ts: entry.ts,
     result: entry.result,
-    message: proc.out,
+    message: (proc.stdout + " " + proc.stderr).slice(0, 400),
   })
 }
 
