@@ -5,7 +5,7 @@ agent: build
 # OpenCode Core - /remember <resumo>
 Salve a sessão atual na memória persistente e versione no git pessoal.
 
-1. Rode `python ~/.config/opencode/memory/session.py status --short` para conferir a sessão ativa.
+1. Rode `python ~/.config/opencode/memory/session.py status --short --quiet` (sem output; leia `state/session-status.json` se precisar) para conferir a sessão ativa.
 2. Finalize a sessão:
    `python ~/.config/opencode/memory/session.py end --summary "<resumo>" [--decision "<decisão>" ...] [--file "<arquivo>" ...]`
 3. Espelhe no repo pessoal (`~/opencode-core`):

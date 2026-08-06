@@ -339,6 +339,11 @@ def cmd_status(args):
     data = SessionStore(args.root, args.local).status()
     if args.short:
         s = data
+        if args.quiet:
+            cache = Path.home() / ".config" / "opencode" / "state" / "session-status.json"
+            cache.parent.mkdir(parents=True, exist_ok=True)
+            cache.write_text(json.dumps(s, ensure_ascii=False), encoding="utf-8")
+            return 0
         print(f"store: {s['store']}", flush=True)
         print(f"sessions_total: {s['sessions_total']}", flush=True)
         print(f"memory_bytes: {s['memory_bytes']}", flush=True)
@@ -391,6 +396,7 @@ def main():
 
     status_p = sub.add_parser("status", help="Show full store status (JSON by default)")
     status_p.add_argument("--short", action="store_true", help="Compact text summary")
+    status_p.add_argument("--quiet", action="store_true", help="No output; cache result to state/session-status.json")
     status_p.set_defaults(func=cmd_status)
 
     comp_p = sub.add_parser("compress", help="Prune old sessions and trim MEMORY.md")

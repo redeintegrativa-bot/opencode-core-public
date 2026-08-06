@@ -22,10 +22,10 @@ Previne retrabalho: ao abrir uma sessão, carrega o contexto anterior; ao fechar
 ### 1. Início de sessão (SILENCIOSO)
 
 ```
-python ~/.config/opencode/memory/session.py status --short
+python ~/.config/opencode/memory/session.py status --short --quiet
 ```
 
-- Leia o status e o `MEMORY.md` internamente (via Read/Bash) **sem despejar o conteúdo no chat**.
+- O comando NÃO imprime nada: o resultado vai para `state/session-status.json`. Leia esse cache (ou o `MEMORY.md`) internamente via Read/Bash **sem despejar o conteúdo no chat**.
 - Se não houver `MEMORY.md`, rode `python ~/.config/opencode/memory/session.py init` silenciosamente.
 - Não imprima o MEMORY.md completo nem blocos longos. No máximo, uma linha: "Retomando de <projeto>: <tema da última sessão>".
 - Console deve permanecer limpo, no formato padrão do opencode.

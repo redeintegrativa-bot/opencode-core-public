@@ -57,14 +57,10 @@ function extractKeywords(text) {
 async function getMemoryStatus(ctx) {
   try {
     if (!existsSync(MEMORY_SCRIPT)) return null
-    const proc = await runPy([`${MEMORY_SCRIPT}`, "status", "--short"])
-    const out = String(proc.stdout || "").trim()
-    const mem = {}
-    for (const line of out.split("\n")) {
-      const idx = line.indexOf(":")
-      if (idx > 0) mem[line.slice(0, idx).trim()] = line.slice(idx + 1).trim()
-    }
-    return mem
+    const cache = join(BASE, "state", "session-status.json")
+    await runPy([`${MEMORY_SCRIPT}`, "status", "--short", "--quiet"])
+    if (!existsSync(cache)) return null
+    return JSON.parse(readFileSync(cache, "utf8"))
   } catch {
     return null
   }
