@@ -10,7 +10,7 @@
   "attention": {
     "enabled": true,
     "notifications": true,
-    "sound": true,
+    "sound": false,
     "volume": 0.3,
     "sound_pack": "opencode.default"
   },
@@ -20,6 +20,13 @@
     "theme_list": "<leader>t",
     "session_new": "<leader>n",
     "session_list": "<leader>l",
-    "messages_copy": ["<leader>y", "ctrl+shift+c"]
+    "messages_copy": [
+      "<leader>y",
+      "ctrl+shift+c"
+    ]
+  },
+  "prompt": {
+    "max_width": 120,
+    "max_height": 10
   }
 }
