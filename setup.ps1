@@ -11,6 +11,7 @@
 #   .\setup.ps1 -Workflows   # Apenas workflows
 #   .\setup.ps1 -Commands    # Apenas comandos
 #   .\setup.ps1 -Plugins     # Apenas plugins
+#   .\setup.ps1 -SkipUpdateCheck  # Não verifica atualizações no início
 #   .\setup.ps1 -Help        # Esta mensagem
 # =============================================================================
 
@@ -24,6 +25,7 @@ param(
   [switch]$Plugins,
   [switch]$CI,
   [switch]$All,
+  [switch]$SkipUpdateCheck,
   [switch]$Help
 )
 
@@ -219,10 +221,10 @@ function Show-Summary {
 # Main
 # ---------------------------------------------------------------------------
 Show-Banner
-Check-Update
+if (-not $SkipUpdateCheck) { Check-Update }
 
 if ($Help) {
-  Write-Host "Uso: .\setup.ps1 [-Skills] [-Agents] [-Rules] [-Hooks] [-Workflows] [-Commands] [-Plugins] [-CI] [-All]"
+  Write-Host "Uso: .\setup.ps1 [-Skills] [-Agents] [-Rules] [-Hooks] [-Workflows] [-Commands] [-Plugins] [-CI] [-All] [-SkipUpdateCheck]"
   exit 0
 }
 

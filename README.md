@@ -101,9 +101,9 @@ O `update.py` detecta sozinho se o repo é um clone git (`git pull`) ou não (do
 
 | Diretório | Finalidade |
 |-----------|-----------|
-| `agents/` | Definições de 56 agentes (L0 core, L1 experts, L2 specialists, system) |
-| `skills/` | 37 skills (code-review, debugging, plan, tdd, security, perplexity, etc.) |
-| `rules/` | 117 regras de segurança e boas práticas por linguagem |
+| `agents/` | Definições de agentes (L0 core, L1 experts, L2 specialists, system) |
+| `skills/` | Skills com foco em cada área (code-review, debugging, plan, tdd, security, etc.) — veja a lista completa em `skills/registry.json` |
+| `rules/` | Regras de segurança e boas práticas por linguagem |
 | `hooks/` | Scripts de validação e segurança (pré-commit, secrets scan) |
 | `workflows/` | Workflows padronizados (bugfix, feature, refactoring) |
 | `services/` | Serviços compartilhados (scoring, learning, ranking) |

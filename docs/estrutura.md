@@ -5,7 +5,7 @@ Pense nele como um canivete suico: tem ferramentas pra tudo que voce precisar.
 
 ---
 
-## `agents/` — Os ajudantes (43)
+## `agents/` — Os ajudantes
 
 **O que sao:** Cada agente e um "especialista" que o OpenCode chama quando precisa.
 Voce nao precisa escolher um agente — o OpenCode escolhe automaticamente.
@@ -13,15 +13,15 @@ Voce nao precisa escolher um agente — o OpenCode escolhe automaticamente.
 **Exemplo:** Se voce pedir "revisa esse codigo", o OpenCode ativa o agente **Reviewer**,
 que le o codigo e aponta problemas como um colega senior faria.
 
-| Pasta | Quantos | Pra que serve |
-|-------|---------|---------------|
-| `agents/core/` | 8 | Essenciais: orquestrador, programador, revisor, etc. |
-| `agents/experts/` | 20+ | Especialistas: seguranca, banco de dados, DevOps, etc. |
-| `agents/specialists/` | 15 | Super especialistas: autenticacao, testes, layout, etc. |
+| Pasta | Pra que serve |
+|-------|---------------|
+| `agents/core/` | Essenciais: orquestrador, programador, revisor, etc. |
+| `agents/experts/` | Especialistas: seguranca, banco de dados, DevOps, etc. |
+| `agents/specialists/` | Super especialistas: autenticacao, testes, layout, etc. |
 
 ---
 
-## `skills/` — Comandos rapidos (37)
+## `skills/` — Comandos rapidos
 
 **O que sao:** Atalhos pra tarefas comuns. So digitar `/comando` no chat.
 
@@ -31,12 +31,13 @@ que le o codigo e aponta problemas como um colega senior faria.
 - `/plan` — planeja uma implementacao
 - `/scaffold` — cria projeto do zero
 - `/database` — ajuda com banco de dados
+- `/update-core` — atualiza o core
 
-**Lista completa:** `skills/registry.json`
+**Lista completa e contagem:** `skills/registry.json`
 
 ---
 
-## `rules/` — Regras de seguranca (110)
+## `rules/` — Regras de seguranca
 
 **O que sao:** Instrucoes que o OpenCode segue automaticamente.
 Nao precisa fazer nada — elas ja estao ativas.

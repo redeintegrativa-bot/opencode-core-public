@@ -138,12 +138,12 @@ def reinstall_components():
     log("Reinstalando componentes no seu config...", C)
     try:
         if os.name != "nt":
-            subprocess.run(["bash", str(setup), "--all"],
+            subprocess.run(["bash", str(setup), "--skip-update-check", "--all"],
                            check=True, cwd=str(REPO_DIR), timeout=120)
         else:
             subprocess.run(
                 ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass",
-                 "-File", str(setup), "-All"],
+                 "-File", str(setup), "-All", "-SkipUpdateCheck"],
                 check=True, cwd=str(REPO_DIR), timeout=120)
         log("Reinstall concluido.", V)
         return True

@@ -60,6 +60,25 @@ if missing_in_reg or missing_on_disk:
     exit(1)
 "
 
+      - name: Check registry counters consistency
+        run: |
+          python3 -c "
+import json
+from collections import Counter
+with open('skills/registry.json') as f:
+    reg = json.load(f)
+skills = reg['skills']
+expected_total = len(skills)
+expected_cat = dict(sorted(Counter(s.get('category', '') for s in skills.values()).items()))
+if reg['total_skills'] != expected_total:
+    print(f'❌ total_skills {reg[\"total_skills\"]} != real {expected_total}')
+    exit(1)
+if reg['categories'] != expected_cat:
+    print(f'❌ categories {reg[\"categories\"]} != real {expected_cat}')
+    exit(1)
+print(f'✓ total_skills ({expected_total}) e categories {expected_cat} consistentes')
+"
+
   lint:
     runs-on: ubuntu-latest
     steps:

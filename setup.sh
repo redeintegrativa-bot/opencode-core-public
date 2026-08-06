@@ -301,8 +301,16 @@ check_update() {
 # Main
 # ---------------------------------------------------------------------------
 main() {
+  local skip_update=""
+  if [ "$1" = "--skip-update-check" ]; then
+    skip_update="1"
+    shift
+  fi
+
   show_banner
-  check_update
+  if [ -z "$skip_update" ]; then
+    check_update
+  fi
 
   local os
   os=$(detect_os)
@@ -324,7 +332,7 @@ main() {
 
   case "$mode" in
     --help|-h)
-      echo "Uso: ./setup.sh [--skills|--agents|--rules|--hooks|--workflows|--commands|--plugins|--ci|--all]"
+      echo "Uso: ./setup.sh [--skip-update-check] [--skills|--agents|--rules|--hooks|--workflows|--commands|--plugins|--ci|--all]"
       exit 0
       ;;
     --ci)

@@ -3,12 +3,12 @@
   "generated_at": "2026-07-28",
   "total_skills": 42,
   "categories": {
-    "Core": 14,
-    "Utility": 7,
-    "Workflow": 13,
+    "Core": 16,
     "Language": 4,
     "Learning": 2,
-    "Scaffolding": 1
+    "Scaffolding": 1,
+    "Utility": 7,
+    "Workflow": 12
   },
   "skills": {
     "api-design": {
