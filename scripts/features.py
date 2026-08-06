@@ -34,9 +34,30 @@ FEATURES = {
         "description": "Avisa quando o repositorio publico tem novidades (a cada 6h)",
         "requires": ["opencode-core/scripts/check-update.py", "opencode-core-public/scripts/check-update.py"],
     },
+    "ui_ux_toasts": {
+        "name": "Notificacoes da sessao",
+        "description": "Toasts de tarefa concluida, memoria salva, erros de sessao e ferramenta",
+        "requires": ["opencode-core/plugins/ui-ux.js"],
+    },
+    "windows_toast": {
+        "name": "Toast do Windows",
+        "description": "Notificacoes tambem como toast do sistema (silencioso) em paralelo ao terminal",
+        "requires": ["opencode-core/scripts/windows-toast.ps1"],
+    },
+    "toast_sounds": {
+        "name": "Sons no terminal",
+        "description": "Som distinto por tipo de notificacao (melodia de tons)",
+        "requires": ["opencode-core/scripts/play-sound.ps1"],
+    },
 }
 
-DEFAULTS = {"network_watch": False, "update_check": False}
+DEFAULTS = {
+    "network_watch": False,
+    "update_check": False,
+    "ui_ux_toasts": True,
+    "windows_toast": True,
+    "toast_sounds": True,
+}
 
 
 def load():

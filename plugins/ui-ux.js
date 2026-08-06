@@ -6,6 +6,7 @@ import {
 } from "node:fs"
 import { join } from "node:path"
 import { homedir } from "node:os"
+import { notify } from "./notify.js"
 
 const BASE = join(homedir(), ".config", "opencode")
 const FEATURES_FILE = join(BASE, "features.json")
@@ -42,18 +43,14 @@ function writeLastToast(ts) {
 }
 
 function toast(client, title, message, variant = "info") {
-  if (!client?.tui?.showToast) return
+  if (!isFeatureEnabled()) return
   const now = Date.now()
   if (now - readLastToast() < MIN_TOAST_INTERVAL_MS) return
   writeLastToast(now)
-  client.tui.showToast({
-    body: { title, message, variant },
-  })
+  notify(client, title, message, variant)
 }
 
 export const UiUx = async ({ client }) => {
-  if (!isFeatureEnabled()) return {}
-
   let lastActivityAt = 0
 
   return {
@@ -80,7 +77,7 @@ export const UiUx = async ({ client }) => {
       if (type === "command.executed") {
         const name = event.properties?.name || event.data?.name || event.properties?.command || ""
         if (String(name).includes("salvar") || String(name).includes("remember")) {
-          toast(client, "Memória salva", "Sessão registrada na memória persistente.", "success")
+          toast(client, "Memória salva", "Sessão registrada na memória persistente.", "memory")
         }
       }
     },

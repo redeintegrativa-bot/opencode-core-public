@@ -2,6 +2,7 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync, appendFileSync } fr
 import { join } from "node:path"
 import { homedir } from "node:os"
 import { runPy } from "./python-helper.js"
+import { notify } from "./notify.js"
 
 const BASE = join(homedir(), ".config", "opencode")
 const STATE_DIR = join(BASE, "state")
@@ -134,6 +135,10 @@ async function autoStage(ctx, sessionID) {
     result: entry.result,
     message: (proc.stdout + " " + proc.stderr).slice(0, 400),
   })
+
+  if (proc.ok && /Stage pronto/i.test(proc.stdout)) {
+    notify(ctx.client, "Sync público com novidades", "Mudanças prontas para push. Aprovar o push quando quiser.", "sync")
+  }
 }
 
 export const AutoSync = async (ctx) => {

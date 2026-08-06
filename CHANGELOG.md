@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.8.0 (2026-08-06)
+
+### Added
+- **Canal unificado de notificacoes** (`plugins/notify.js`): uma funcao `notify()` dispara em paralelo o toast da TUI, um som distinto no terminal e um toast do Windows silencioso. Cada canal e independente e controlado ao vivo por `features.json` (sem reiniciar o opencode).
+- **Sons por tipo de notificacao** (`scripts/play-sound.ps1`): melodia diferente para tarefa concluida, memoria salva, erro de ferramenta, erro de sessao, update disponivel e push pendente. Tons sine (WAV 44.1k stereo) em memoria via SoundPlayer, sem depender de console.
+- **Toast do Windows silencioso** (`scripts/windows-toast.ps1`): notificacao do sistema com audio desligado (o som fica no terminal), AppId "OpenCode", com fallback de balloon.
+- **Controle de funcoes pelo dashboard**: endpoints `GET/POST /api/features` no Network Dashboard (127.0.0.1:8080) + secao de toggles no painel para ligar/desligar Monitor de rede, Verificar updates, Notificacoes da sessao, Toast do Windows e Sons no terminal. (dashboard e do projeto local, nao do repo).
+- **Flags novas em `features.py`**: `ui_ux_toasts`, `windows_toast`, `toast_sounds` (default ON) alem das existentes `network_watch`/`update_check`.
+
+### Changed
+- `ui-ux.js`, `update-check.js`, `auto-sync.js`, `network-watch.js` passam a usar o `notify()`; verificacao de feature movida para dentro dos handlers (toggle ao vivo).
+- `update-check.js`: quando ha update do core, notifica (TUI + som + Windows) alem de gravar `update-alert.json`.
+- `auto-sync.js`: quando o `--stage` gera mudancas, notifica que ha push pendente de aprovacao.
+
 ## 1.7.1 (2026-08-06)
 
 ### Added

@@ -65,16 +65,17 @@ function runWatch(ctx, reason) {
 
 export const NetworkWatch = async (ctx) => {
   ensureState()
-  if (!isFeatureEnabled(FEATURE)) return {}
 
   return {
     event: async ({ event }) => {
+      if (!isFeatureEnabled(FEATURE)) return
       const props = event.properties || event.data || {}
       if (event.type === "session.idle" || event.type === "session.updated") {
         runWatch(ctx, "idle")
       }
     },
     "chat.message": async (input) => {
+      if (!isFeatureEnabled(FEATURE)) return
       runWatch(ctx, `nova mensagem (${input?.agent || "?"})`)
     },
   }

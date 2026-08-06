@@ -2,6 +2,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
 import { homedir } from "node:os"
 import { runPy } from "./python-helper.js"
+import { notify } from "./notify.js"
 
 const FEATURE = "update_check"
 const FEATURES_FILE = join(homedir(), ".config", "opencode", "features.json")
@@ -80,17 +81,18 @@ function runCheck(ctx, repoDir, reason) {
         presented: false,
       }
       writeFileSync(ALERT_FILE, JSON.stringify(alert, null, 2), "utf8")
+      notify(ctx.client, "Update disponível", `Nova versão ${data.remote} do core. Rode /update-core para aplicar.`, "update")
     }
   })
 }
 
 export const UpdateCheck = async (ctx) => {
   ensureState()
-  if (!isFeatureEnabled(FEATURE)) return {}
 
   return {
     event: async ({ event }) => {
       if (event.type !== "session.idle") return
+      if (!isFeatureEnabled(FEATURE)) return
       const last = readLast()
       if (!shouldRun(last)) return
       const repoDir = findRepo()
@@ -99,6 +101,7 @@ export const UpdateCheck = async (ctx) => {
       runCheck(ctx, repoDir, "idle")
     },
     "chat.message": async (input) => {
+      if (!isFeatureEnabled(FEATURE)) return
       const last = readLast()
       if (!shouldRun(last)) return
       const repoDir = findRepo()
