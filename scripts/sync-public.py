@@ -36,9 +36,11 @@ TOP_LEVEL_DIRS = [
 ]
 TOP_LEVEL_FILES = [
     "CHANGELOG.md", "VERSION", "README.md", "Makefile",
-    "opencode.json", "setup.ps1", "setup.sh", ".gitignore",
+    "opencode.json", "setup.ps1", "setup.sh",
     "onboarding.py", "onboarding.sh", "pytest.ini", "requirements.txt",
 ]
+# AGENTS.md e .gitignore sao docs por-repo (nao sincronizados),
+# como faziam o sync-public gerar pendencia infinita ao divergir.
 MEMORY_GENERIC = ["session.py", "MEMORY.template.md", ".gitignore"]
 
 # Partes de caminho que nunca devem ir para o publico
