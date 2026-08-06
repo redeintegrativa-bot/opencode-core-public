@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.6.1 (2026-08-06)
+
+### Added
+- Skill `cloud-backup`: guia para usuários sem conta GitHub terem backup em nuvem do setup e continuarem recebendo updates do repo público (GitHub/GitLab/Codeberg/Bitbucket, nuvem de arquivos, zip agendado, ou só updates). Registrada no registry (total 50).
+- `docs/backup-sem-github.md`: documentação espelhada no público.
+
+### Fixed
+- Plugin `auto-sync`: detecta ausência de `remote` no repo pessoal e loga `skip-no-remote` em vez de `fail` — setup funciona sem nenhuma conta git, sem ruído.
+
 ## 1.6.0 (2026-08-06)
 
 ### Fixed
