@@ -144,6 +144,20 @@ def save_manifest(manifest):
 # ---------------------------------------------------------------------------
 # Pendencia
 # ---------------------------------------------------------------------------
+def _managed(rel: str) -> bool:
+    """True se sync-public e' responsavel por `rel` (whitelist vigente).
+
+    Arquivos fora da whitelist (ex.: AGENTS.md, que e' doc diferente por repo)
+    deixam de ser rastreados no manifesto SEM serem apagados do publico.
+    """
+    if rel in TOP_LEVEL_FILES:
+        return True
+    name = rel.rsplit("/", 1)[-1]
+    if name in MEMORY_GENERIC and rel.startswith("memory/"):
+        return True
+    return any(rel == d or rel.startswith(d + "/") for d in TOP_LEVEL_DIRS)
+
+
 def compute_pending(personal: Path, public: Path, manifest):
     local = collect_generic(personal)
     prev = manifest.get("files", {})
@@ -155,7 +169,7 @@ def compute_pending(personal: Path, public: Path, manifest):
         elif prev[rel] != h:
             changed.append(rel)
     for rel in prev:
-        if rel not in local:
+        if rel not in local and _managed(rel):
             deleted.append(rel)
     return changed, new, deleted
 
