@@ -137,7 +137,19 @@ function Install-Plugins {
   }
   $pluginsTarget = Join-Path $Target "plugins"
   New-Item -ItemType Directory -Path $pluginsTarget -Force | Out-Null
-  Copy-Item -Path "$PluginsDir\*.js" -Destination $pluginsTarget -Force -ErrorAction SilentlyContinue
+  Copy-Item -Path "$PluginsDir\*.js"  -Destination $pluginsTarget -Force -ErrorAction SilentlyContinue
+  Copy-Item -Path "$PluginsDir\*.tsx" -Destination $pluginsTarget -Force -ErrorAction SilentlyContinue
+
+  # TUI plugin config + deps do config dir
+  if (Test-Path (Join-Path $RepoDir "tui.json")) {
+    Copy-Item -Path (Join-Path $RepoDir "tui.json") -Destination $Target -Force
+    Write-Log "TUI config (tui.json) installed"
+  }
+  if (Test-Path (Join-Path $RepoDir "package.json")) {
+    Copy-Item -Path (Join-Path $RepoDir "package.json") -Destination $Target -Force
+    Write-Log "package.json (deps TUI) installed → opencode roda bun install no startup"
+  }
+
   Write-Log "Plugins installed → $pluginsTarget"
 }
 

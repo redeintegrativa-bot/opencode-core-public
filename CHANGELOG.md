@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.7.0 (2026-08-06)
+
+### Added
+- **Status panel na sidebar (TUI)**: novo plugin `plugins/status-panel.tsx` registrado no slot `sidebar_content` do TUI, mostrando em tempo real Auto-sync, Update, Serviços e Memória (lê `state/*.jsonl` + `features.json`). Config via `tui.json` (ordem 450).
+- `tui.json` e `package.json` (deps `@opentui/*` + `@opencode-ai/plugin`) entram no sync público e no `setup.ps1` (copia `.tsx`, `tui.json`, `package.json`; opencode roda `bun install` no startup).
+
 ## 1.6.1 (2026-08-06)
 
 ### Added

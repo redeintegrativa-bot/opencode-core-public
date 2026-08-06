@@ -1,0 +1,11 @@
+{
+  "$schema": "https://opencode.ai/tui.json",
+  "plugin": [
+    [
+      "./plugins/status-panel.tsx",
+      {
+        "order": 450
+      }
+    ]
+  ]
+}
