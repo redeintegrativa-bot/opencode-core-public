@@ -2,13 +2,23 @@ import { spawn } from "node:child_process"
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
 import { homedir } from "node:os"
-import { isFeatureEnabled } from "./features.js"
 
 const FEATURE = "network_watch"
+const FEATURES_FILE = join(homedir(), ".config", "opencode", "features.json")
 const BASE = join(homedir(), "network-dashboard")
 const SCANNER = join(BASE, "scanner.py")
 const STATE_FILE = join(BASE, "data", "last-watch.json")
 const MIN_INTERVAL_MS = 15 * 60 * 1000
+
+function isFeatureEnabled(feature) {
+  try {
+    if (!existsSync(FEATURES_FILE)) return false
+    const data = JSON.parse(readFileSync(FEATURES_FILE, "utf8"))
+    return data[feature] === true
+  } catch {
+    return false
+  }
+}
 
 function ensureState() {
   mkdirSync(join(BASE, "data"), { recursive: true })

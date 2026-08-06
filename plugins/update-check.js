@@ -2,9 +2,20 @@ import { spawn } from "node:child_process"
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
 import { homedir } from "node:os"
-import { isFeatureEnabled } from "./features.js"
 
 const FEATURE = "update_check"
+const FEATURES_FILE = join(homedir(), ".config", "opencode", "features.json")
+
+function isFeatureEnabled(feature) {
+  try {
+    if (!existsSync(FEATURES_FILE)) return false
+    const data = JSON.parse(readFileSync(FEATURES_FILE, "utf8"))
+    return data[feature] === true
+  } catch {
+    return false
+  }
+}
+
 const STATE_DIR = join(homedir(), ".config", "opencode", "state")
 const STATE_FILE = join(STATE_DIR, "update-check.json")
 const ALERT_FILE = join(STATE_DIR, "update-alert.json")
@@ -88,31 +99,6 @@ function runCheck(ctx, repoDir, reason) {
       }
     }
   })
-}
-
-export function getPendingAlert() {
-  try {
-    if (!existsSync(ALERT_FILE)) return null
-    const a = JSON.parse(readFileSync(ALERT_FILE, "utf8"))
-    if (a.applied) return null
-    return a
-  } catch {
-    return null
-  }
-}
-
-export function markAlertApplied() {
-  try {
-    const a = JSON.parse(readFileSync(ALERT_FILE, "utf8"))
-    a.applied = true
-    writeFileSync(ALERT_FILE, JSON.stringify(a, null, 2), "utf8")
-  } catch {}
-}
-
-export function clearAlert() {
-  try {
-    writeFileSync(ALERT_FILE, JSON.stringify({ applied: true, cleared: true, ts: new Date().toISOString() }, null, 2), "utf8")
-  } catch {}
 }
 
 export const UpdateCheck = async (ctx) => {
