@@ -17,6 +17,7 @@ const RECOVERY_FILE = join(STATE_DIR, "session-recovery.json")
 const COUNTER_FILE = join(STATE_DIR, ".session-counter")
 const LEGACY_FALLBACK = join(BASE, "fallback-log.json")
 const EVOLVE_SCRIPT = join(BASE, "scripts", "evolve-agent.py")
+const MEMORY_SCRIPT = join(BASE, "memory", "session.py")
 
 const CHECK_INTERVAL = 10
 
@@ -50,6 +51,22 @@ function writeCounter(n) {
 function extractKeywords(text) {
   if (!text) return []
   return AGENT_NAMES.filter((a) => text.toLowerCase().includes(a))
+}
+
+async function getMemoryStatus(ctx) {
+  try {
+    if (!existsSync(MEMORY_SCRIPT)) return null
+    const proc = await ctx.$`python "${MEMORY_SCRIPT}" status --short`
+    const out = String(proc.stdout || "").trim()
+    const mem = {}
+    for (const line of out.split("\n")) {
+      const idx = line.indexOf(":")
+      if (idx > 0) mem[line.slice(0, idx).trim()] = line.slice(idx + 1).trim()
+    }
+    return mem
+  } catch {
+    return null
+  }
 }
 
 function rebuildLegacyFallback() {
@@ -114,13 +131,12 @@ export const SelfImprovement = async (ctx) => {
       if (event.type === "session.idle") {
         appendLine(SESSION_LOG, { type: "session", ts: now, sessionID, directory })
         try {
+          const mem = await getMemoryStatus(ctx)
+          const recovery = { lastSession: sessionID, ts: now, directory, resumed: false }
+          if (mem) recovery.memory = mem
           writeFileSync(
             RECOVERY_FILE,
-            JSON.stringify(
-              { lastSession: sessionID, ts: now, directory, resumed: false },
-              null,
-              2
-            ),
+            JSON.stringify(recovery, null, 2),
             "utf8"
           )
         } catch {}

@@ -36,17 +36,17 @@ No salvamento contínuo, **não** commitar a cada log — isso enche o históric
 
 1. **Registrar descobertas** (fatos retrabalháveis, decisões, mudanças):
    ```
-   python3 memory/session.py log "<descoberta/decisão>"
+   python ~/.config/opencode/memory/session.py log "<descoberta/decisão>"
    ```
 
 2. **Encerrar/atualizar sessão**:
    ```
-   python3 memory/session.py end --summary "<resumo>" [--decision "<decisão>" --file "<arquivo>"]
+   python ~/.config/opencode/memory/session.py end --summary "<resumo>" [--decision "<decisão>" --file "<arquivo>"]
    ```
 
 3. **Espelhar no repositório pessoal**:
    ```
-   python3 memory/session.py backup --target <caminho-do-repo-pessoal>/memory
+   python ~/.config/opencode/memory/session.py backup --target <caminho-do-repo-pessoal>/memory
    ```
 
 4. **Versionar no git pessoal**:

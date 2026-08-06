@@ -290,6 +290,7 @@ class SessionStore:
         else:
             src, dst = self.base, target
         src.mkdir(parents=True, exist_ok=True)
+        dst.mkdir(parents=True, exist_ok=True)
         shutil.copy2(src / MEMORY_NAME, dst / MEMORY_NAME)
         for rel in [STATE_FILE, MEMORY_NAME + BACKUP_SUFFIX]:
             s = src / rel
@@ -360,6 +361,9 @@ def cmd_backup(args):
 
 
 def main():
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
     parser = argparse.ArgumentParser(description="Session memory CLI - persistent cross-session history")
     parser.add_argument("--root", default=os.getcwd(), help="Project root used for hashing/store location")
     parser.add_argument("--local", action="store_true", help="Use <root>/memory/ instead of the global store")

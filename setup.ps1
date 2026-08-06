@@ -11,6 +11,7 @@
 #   .\setup.ps1 -Workflows   # Apenas workflows
 #   .\setup.ps1 -Commands    # Apenas comandos
 #   .\setup.ps1 -Plugins     # Apenas plugins
+#   .\setup.ps1 -Memory      # Apenas infra de memoria (session.py + template)
 #   .\setup.ps1 -SkipUpdateCheck  # Não verifica atualizações no início
 #   .\setup.ps1 -Help        # Esta mensagem
 # =============================================================================
@@ -23,6 +24,7 @@ param(
   [switch]$Workflows,
   [switch]$Commands,
   [switch]$Plugins,
+  [switch]$Memory,
   [switch]$CI,
   [switch]$All,
   [switch]$SkipUpdateCheck,
@@ -38,6 +40,7 @@ $WorkflowsDir = Join-Path $RepoDir "workflows"
 $ServicesDir = Join-Path $RepoDir "services"
 $CommandsDir = Join-Path $RepoDir ".opencode\command"
 $PluginsDir = Join-Path $RepoDir "plugins"
+$MemoryDir = Join-Path $RepoDir "memory"
 
 function Write-Log { Write-Host "✓ $($args[0])" -ForegroundColor Green }
 function Write-Warn { Write-Host "! $($args[0])" -ForegroundColor Yellow }
@@ -138,6 +141,20 @@ function Install-Plugins {
   Write-Log "Plugins installed → $pluginsTarget"
 }
 
+function Install-Memory {
+  param($Target)
+  if (-not (Test-Path $MemoryDir)) {
+    Write-Warn "Sem diretorio memory\ no repo; pulando infra de memoria"
+    return
+  }
+  $memTarget = Join-Path $Target "memory"
+  New-Item -ItemType Directory -Path $memTarget -Force | Out-Null
+  Copy-Item -Path (Join-Path $MemoryDir "session.py") -Destination $memTarget -Force -ErrorAction SilentlyContinue
+  Copy-Item -Path (Join-Path $MemoryDir "MEMORY.template.md") -Destination $memTarget -Force -ErrorAction SilentlyContinue
+  Write-Log "Memory infra installed (session.py + template) → $memTarget"
+  Write-Info "Inicie a memoria: python $memTarget\session.py --root <projeto> init"
+}
+
 function Install-GitHubActions {
   $actionsDir = Join-Path $RepoDir ".github\workflows"
   New-Item -ItemType Directory -Path $actionsDir -Force | Out-Null
@@ -224,12 +241,12 @@ Show-Banner
 if (-not $SkipUpdateCheck) { Check-Update }
 
 if ($Help) {
-  Write-Host "Uso: .\setup.ps1 [-Skills] [-Agents] [-Rules] [-Hooks] [-Workflows] [-Commands] [-Plugins] [-CI] [-All] [-SkipUpdateCheck]"
+  Write-Host "Uso: .\setup.ps1 [-Skills] [-Agents] [-Rules] [-Hooks] [-Workflows] [-Commands] [-Plugins] [-Memory] [-CI] [-All] [-SkipUpdateCheck]"
   exit 0
 }
 
 $target = Get-ConfigDir
-$mode = if ($All -or (-not $Skills -and -not $Agents -and -not $Rules -and -not $Hooks -and -not $Workflows -and -not $Commands -and -not $Plugins -and -not $CI)) { "all" } else { "partial" }
+$mode = if ($All -or (-not $Skills -and -not $Agents -and -not $Rules -and -not $Hooks -and -not $Workflows -and -not $Commands -and -not $Plugins -and -not $Memory -and -not $CI)) { "all" } else { "partial" }
 
 New-Item -ItemType Directory -Path $target -Force | Out-Null
 
@@ -240,6 +257,7 @@ if ($mode -eq "all" -or $Hooks)     { Install-Hooks $target }
 if ($mode -eq "all" -or $Workflows) { Install-Workflows $target }
 if ($mode -eq "all" -or $Commands)  { Install-Commands $target }
 if ($mode -eq "all" -or $Plugins)   { Install-Plugins $target }
+if ($mode -eq "all" -or $Memory)    { Install-Memory $target }
 if ($mode -eq "all" -or $CI)        { Install-GitHubActions }
 
 # Always install services and CI if all

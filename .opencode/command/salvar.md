@@ -2,29 +2,19 @@
 description: GATILHO DE SALVAMENTO — salva a sessão no store local E no repositório pessoal (git). Use ao final de qualquer interação ou quando o usuário pedir para salvar.
 agent: build
 ---
+# OpenCode Core - /salvar (gatilho session-save)
+Salve as descobertas da conversa atual e finalize a sessão (salvamento contínuo + versão).
 
-Execute o gatilho completo de salvamento da sessão atual. Siga SEMPRE estes passos:
+1. **Registre descobertas pendentes** com `python ~/.config/opencode/memory/session.py log "<texto>"` para cada fato novo não salvo (decisões, mudanças, erros corrigidos). Use a skill `session-triage` para decidir o que merece memória.
+2. **Finalize a sessão**:
+   `python ~/.config/opencode/memory/session.py end --summary "<resumo geral>" [--decision "<decisão>" ...] [--file "<arquivo>" ...]`
+3. **Espelhe no repo pessoal** (`~/opencode-core`):
+   `python ~/.config/opencode/memory/session.py backup --target ~/opencode-core/memory`
+4. **Versionar**:
+   `git -C ~/opencode-core add memory/MEMORY.md memory/sessions && git -C ~/opencode-core commit -m "Memória: sessão salva via gatilho" && git -C ~/opencode-core push`
+5. **Recursos genéricos** (se criou/alterou skill, comando ou script do framework): espelhar a versão genérica no repo público (nunca MEMORY.md real).
 
-1. **Descobertas**: se houve fatos não óbvios na conversa, registre primeiro:
-   ```
-   python3 memory/session.py log "<descoberta/decisão>"
-   ```
-
-2. **Encerrar a sessão** com resumo:
-   ```
-   python3 memory/session.py end --summary "$ARGUMENTS" [--decision "<decisão>" --file "<arquivo>"]
-   ```
-
-3. **Espelhar no repositório pessoal** (o usuário define o caminho com `--target`; se não souber, peça):
-   ```
-   python3 memory/session.py backup --target <caminho-do-repo-pessoal>/memory
-   ```
-
-4. **Versionar no git pessoal** (commitar e enviar):
-   ```
-   git add memory/MEMORY.md && git commit -m "Memória: sessão salva via gatilho" && git push
-   ```
-
-5. **Espelhar recursos genéricos no repo público**: se algum recurso do framework foi criado/alterado (skill, comando, session.py, template), copie a versão genérica para o repo público e faça commit + push.
-
-Depois, confirme ao usuário: id da sessão, local do store e o que foi enviado. Se algo falhar, informe claramente o que ficou pendente.
+Regras:
+- Não commitar a cada `log` — apenas no fluxo final (ou milestone).
+- Nunca commitar tokens/segredos nem `MEMORY.md` no repo público.
+- Usar sempre `python`, nunca `python3` (não existe neste Windows).

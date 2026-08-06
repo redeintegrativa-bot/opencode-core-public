@@ -22,11 +22,11 @@ Previne retrabalho: ao abrir uma sessão, carrega o contexto anterior; ao fechar
 ### 1. Início de sessão
 
 ```
-python3 memory/session.py show
+python ~/.config/opencode/memory/session.py show
 ```
 
 - Leia o `MEMORY.md` exibido (Ambiente, Projetos, última `## Sessão`).
-- Se não houver `MEMORY.md`, rode `python3 memory/session.py init`.
+- Se não houver `MEMORY.md`, rode `python ~/.config/opencode/memory/session.py init`.
 - Resuma ao usuário onde paramos, sem re-explicar o que já está na memória.
 
 ### 2. Durante a sessão
@@ -34,13 +34,13 @@ python3 memory/session.py show
 Registre descobertas relevantes (decisões, descobertas não óbvias):
 
 ```
-python3 memory/session.py log "<descoberta/decisão>"
+python ~/.config/opencode/memory/session.py log "<descoberta/decisão>"
 ```
 
 ### 3. Final de sessão
 
 ```
-python3 memory/session.py end \
+python ~/.config/opencode/memory/session.py end \
   --summary "<resumo geral>" \
   --decision "<decisão>" \
   --file "<arquivo tocado>"
@@ -51,8 +51,8 @@ python3 memory/session.py end \
 
 ### 4. Manutenção
 
-- `python3 memory/session.py stats` — estado do store.
-- `python3 memory/session.py compress --keep 60` — podar sessões antigas.
+- `python ~/.config/opencode/memory/session.py stats` — estado do store.
+- `python ~/.config/opencode/memory/session.py compress --keep 60` — podar sessões antigas.
 
 ## Regras
 
