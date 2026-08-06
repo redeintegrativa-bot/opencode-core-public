@@ -40,32 +40,16 @@ version: 12.0
 | reverse engineer, binary, disassemble, IDA, Ghidra | reverse_engineering_expert.md | inherit | L1 |
 | decompile, .ex4, .ex5, EA protection | mql_decompilation_expert.md | inherit | L1 |
 
-### MCP Plugin Keywords
+### MCP & Ferramentas Externas
 
-| Keyword | Plugin | Agent |
-|---------|--------|-------|
-| web-reader, fetch URL, read website | web-reader | Integration Expert |
-| web-search, search web, cerca | web-search-prime | Integration Expert |
-| canva, design, graphic | canva | GUI Super Expert |
-| screenshot analyze, UI diff, image analyze | zai-mcp-server | AI Integration Expert |
-| technical diagram, flowchart | zai-mcp-server | AI Integration Expert |
-| advanced image, vision analysis | 4_5v_mcp | AI Integration Expert |
+| Keyword | Rota |
+|---------|------|
+| MCP, servidor MCP, tool discovery, modelo context protocol | mcp_integration_expert |
+| busca web, web search, web-reader, fetch URL | mcp_integration_expert (ou websearch) |
+| clang, LSP, code intelligence | languages_expert |
+| swift, LSP iOS | mobile_expert |
 
-### LSP Plugin Keywords (Code Intelligence)
-
-| Keyword | Plugin | Agent |
-|---------|--------|-------|
-| c, cpp, c++, clang, llvm, header, pointer | clangd-lsp | Languages Expert |
-| java, jvm, jar, maven, gradle, spring | jdtls-lsp | Languages Expert |
-| swift, ios, xcode, swiftui, cocoa | swift-lsp | Mobile Expert |
-
-### Additional MCP/Skill Plugin Keywords
-
-| Keyword | Plugin | Agent |
-|---------|--------|-------|
-| firebase, firestore, realtime DB, cloud function, firebase auth | firebase-mcp | Database Expert |
-| huggingface, hf, model hub, dataset, transformers | huggingface-skills | AI Integration Expert |
-| playground, interactive, demo, explorer | playground-skill | GUI Super Expert |
+> Nota: servidores MCP externos e LSP só são roteados se configurados no `opencode.jsonc` (runtime). Sem a config, as keywords acima caem nos agentes L1 correspondentes.
 
 ### L2 Sub-Agent Mapping
 

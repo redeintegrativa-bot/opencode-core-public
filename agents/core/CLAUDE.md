@@ -155,7 +155,7 @@ OGNI RICHIESTA → ORCHESTRATOR V7.0 → DELEGA → AGENT SPECIALIZZATI
 
 ---
 
-## 👥 AGENT DISPONIBILI (44 Totali)
+## 👥 AGENT DISPONIBILI (43 Totali)
 
 ### Core Agents (6)
 | Agent | File | Ruolo | Model | Istanze |
@@ -167,7 +167,7 @@ OGNI RICHIESTA → ORCHESTRATOR V7.0 → DELEGA → AGENT SPECIALIZZATI
 | Documenter | `core/documenter.md` | Documentazione | haiku | 1-2 |
 | System Coordinator | `core/system_coordinator.md` | Resource/Token management | haiku | 1 |
 
-### Expert Agents (23)
+### Expert Agents (22)
 | Expert | File | Specializzazione | Model |
 |--------|------|------------------|-------|
 | GUI Super Expert | `experts/gui-super-expert.md` | PyQt5, Qt, Widget, Layout | sonnet |
@@ -188,9 +188,10 @@ OGNI RICHIESTA → ORCHESTRATOR V7.0 → DELEGA → AGENT SPECIALIZZATI
 | Reverse Engineering | `experts/reverse_engineering_expert.md` | Binary Analysis, IDA Pro, Ghidra | sonnet |
 | Offensive Security | `experts/offensive_security_expert.md` | Pentesting, Exploit Development | sonnet |
 | MQL Decompilation | `experts/mql_decompilation_expert.md` | MetaTrader reverse engineering, .ex4/.ex5 | sonnet |
-| MCP Design Specialist | `experts/mcp_design_specialist.md` | Canva design operations, brand kits | haiku |
-| MCP Web Specialist | `experts/mcp_web_specialist.md` | Web operations, content extraction | haiku |
-| MCP UI/UX Specialist | `experts/mcp_ui_ux_specialist.md` | UI/UX processing, screenshots | haiku |
+| Browser Automation | `experts/browser_automation_expert.md` | Playwright, e2e, web scraping | sonnet |
+| MCP Integration | `experts/mcp_integration_expert.md` | Model Context Protocol, tool discovery | sonnet |
+| Notification | `experts/notification_expert.md` | Slack, Discord, alerts, messaging | sonnet |
+| Payment Integration | `experts/payment_integration_expert.md` | Stripe, PayPal, checkout, subscription | sonnet |
 
 ### L2 Sub-Agents (15)
 Vedi: [INDEX.md](INDEX.md) sezione L2 SUB-AGENTS per lista completa.
