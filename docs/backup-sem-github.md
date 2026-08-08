@@ -45,7 +45,7 @@ máquina for formatada.
 
 ```bash
 # sem customizações — clone direto do público:
-git clone https://github.com/<mantenedor>/opencode-core-public.git ~/opencode-core
+git clone https://github.com/<mantenedor>/opencode-core-public.git ~/opencode-core-public
 
 # com customizações — adicione o público como upstream:
 git -C ~/opencode-core remote add upstream https://github.com/<mantenedor>/opencode-core-public.git

@@ -1,13 +1,13 @@
 {
   "version": "1.0.0",
-  "generated_at": "2026-07-30",
-  "total_skills": 50,
+  "generated_at": "2026-08-08",
+  "total_skills": 52,
   "categories": {
     "Core": 18,
-    "Language": 4,
+    "Workflow": 14,
+    "Utility": 14,
     "Learning": 2,
-    "Utility": 13,
-    "Workflow": 13
+    "Language": 4
   },
   "skills": {
     "api-design": {
@@ -1040,6 +1040,44 @@
       ],
       "category": "Utility",
       "slash_command": "/xlsx"
+    },
+    "project-health": {
+      "description": "Read-only unified local repository health diagnostic",
+      "keywords": [
+        "status",
+        "saude",
+        "diagnostico",
+        "projetos",
+        "git"
+      ],
+      "agent": "Analyzer",
+      "user_invokable": true,
+      "allowed_tools": [
+        "read",
+        "bash"
+      ],
+      "category": "Utility",
+      "slash_command": null
+    },
+    "safe-deploy": {
+      "description": "Safe preview-first deployment with route validation and explicit production approval",
+      "keywords": [
+        "deploy",
+        "publicar",
+        "preview",
+        "producao",
+        "vercel",
+        "validacao"
+      ],
+      "agent": "DevOps Expert",
+      "user_invokable": true,
+      "allowed_tools": [
+        "read",
+        "glob",
+        "bash"
+      ],
+      "category": "Workflow",
+      "slash_command": "/deploy"
     }
   },
   "routing": {
@@ -1226,7 +1264,11 @@
     "novidades": "update-core",
     "changelog": "update-core",
     "opencode-core": "update-core",
-    "update-core": "update-core"
+    "update-core": "update-core",
+    "deploy": "safe-deploy",
+    "publicar": "safe-deploy",
+    "preview": "safe-deploy",
+    "diagnostico": "project-health"
   },
   "metadata": {
     "orchestrator_version": "13.0",
@@ -1274,7 +1316,8 @@
       "/webapp-test": "webapp-testing",
       "/xlsx": "xlsx",
       "/mcp-find": "mcp-discovery",
-      "/update-core": "update-core"
+      "/update-core": "update-core",
+      "/deploy": "safe-deploy"
     }
   }
 }
