@@ -20,6 +20,7 @@ import json
 import os
 import re
 import shutil
+import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -308,7 +309,17 @@ def cmd_init(args):
 
 
 def cmd_start(args):
-    SessionStore(args.root, args.local).start_session()
+    store = SessionStore(args.root, args.local)
+    store.start_session()
+    capability = Path(__file__).resolve().parents[1] / "scripts" / "capability-profile.py"
+    if capability.is_file():
+        try:
+            result = subprocess.run([sys.executable, str(capability), "--write", "--json"], capture_output=True, text=True, timeout=15, check=True)
+            profile = json.loads(result.stdout)
+            env = profile.get("platform", {})
+            store.log_entry("Perfil da sessao: usuario={} dispositivo={} sistema={} termux={} proot={} rede_limitada={}".format(os.environ.get("OPENCODE_SESSION_USER") or os.environ.get("USER", "unknown"), profile.get("device_id", "unknown"), env.get("system", "unknown"), env.get("termux", False), env.get("proot", False), profile.get("constraints", {}).get("network_limited", False)))
+        except (OSError, subprocess.SubprocessError, json.JSONDecodeError):
+            pass
     return 0
 
 
