@@ -39,6 +39,11 @@ version: 12.0
 | offensive security, pentest, exploit, red team | offensive_security_expert.md | inherit | L1 |
 | reverse engineer, binary, disassemble, IDA, Ghidra | reverse_engineering_expert.md | inherit | L1 |
 | decompile, .ex4, .ex5, EA protection | mql_decompilation_expert.md | inherit | L1 |
+| gestão de projeto, roadmap, cronograma, microaportes, reunião, PM | project_manager_expert.md | inherit | L1 |
+| estratégia, market fit, posicionamento, oferta, segmentação, público-alvo | strategy_expert.md | inherit | L1 |
+| marketing, mídia, tráfego, funil, webinar, anúncio, Meta Ads, criativos, CPL, CAC | marketing_expert.md | inherit | L1 |
+| vendas, CRM, pipeline, WhatsApp, fechamento, qualificação, atribuição, SLA | sales_crm_expert.md | inherit | L1 |
+| conteúdo, copy, landing page, anúncio, Instagram, carrossel, CTA, storytelling | content_copy_expert.md | inherit | L1 |
 
 ### MCP & Ferramentas Externas
 
@@ -99,6 +104,11 @@ version: 12.0
 | claude-* / prompt-* / ai-* | claude_systems_expert |
 | arch-* / design-* | architect_expert |
 | devops-* / deploy-* / ci-* | devops_expert |
+| pm-* / roadmap-* / project-* | project_manager_expert |
+| strategy-* / market-* / positioning-* | strategy_expert |
+| marketing-* / media-* / funnel-* / campaign-* | marketing_expert |
+| sales-* / crm-* / whatsapp-* / pipeline-* | sales_crm_expert |
+| content-* / copy-* / cta-* / landing-* | content_copy_expert |
 
 ---
 

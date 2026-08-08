@@ -142,6 +142,16 @@ description: Centralized registry for agent routing and keyword mapping
 |-------|------|----------|----------------------|-------|
 | **social_identity_expert** | `experts/social_identity_expert.md` | OAuth, Google login, Apple login, Facebook, Microsoft, OIDC, PKCE | OAuth2/OIDC Providers, PKCE, Account Linking, Token Validation | sonnet |
 
+#### Business & Sales
+
+| Agent | File | Keywords | Competenze Specifiche | Model |
+|-------|------|----------|----------------------|-------|
+| **project_manager_expert** | `experts/project_manager_expert.md` | gestão de projeto, roadmap, cronograma, microaportes, reunião, critério de aceite, PM, entregas, prazos | Roadmap executável, dependências, decisões destravadas, riscos comerciais, atas | inherit |
+| **strategy_expert** | `experts/strategy_expert.md` | estratégia, market fit, posicionamento, oferta, segmentação, público-alvo, ticket, proposta de valor | Product-Market Fit por segmento, posicionamento premium, oferta prioritária | inherit |
+| **marketing_expert** | `experts/marketing_expert.md` | marketing, mídia, tráfego, funil, webinar, anúncio, Meta Ads, Google Ads, criativos, CPL, CAC | Aquisição de leads, funil ticket alto, reativação de base, matriz de criativos | inherit |
+| **sales_crm_expert** | `experts/sales_crm_expert.md` | vendas, CRM, pipeline, WhatsApp, fechamento, qualificação, atribuição, SLA, objeção, motivo de perda | Operação de vendas, atribuição lead→proposta→pagamento, automações seguras | inherit |
+| **content_copy_expert** | `experts/content_copy_expert.md` | conteúdo, copy, landing page, anúncio, webinar, Instagram, carrossel, CTA, storytelling, prova social | Copy de conversão, calendário por canal, CTA único, promessa profissional | inherit |
+
 ---
 
 ## L2 SUB-AGENTS (Specialisti di Secondo Livello)

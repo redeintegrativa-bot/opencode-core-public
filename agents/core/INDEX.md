@@ -45,6 +45,11 @@ description: Complete navigation index for the multi-agent system with all 43 ag
 | **notification_expert.md** | Messaging Platforms Expert | Slack, Discord, push notifications, alerts |
 | **offensive_security_expert.md** | Penetration Testing Specialist | pentest, red team, exploit development, OWASP |
 | **payment_integration_expert.md** | Payment Gateway Specialist | Stripe, PayPal, checkout, subscriptions |
+| **project_manager_expert.md** | Gestão de Projetos | roadmap, cronograma, microaportes, aceite |
+| **strategy_expert.md** | Estratégia Comercial | market fit, posicionamento, oferta |
+| **marketing_expert.md** | Marketing & Aquisição | funil, mídia, webinar, CPL/CAC |
+| **sales_crm_expert.md** | Vendas & CRM | pipeline, WhatsApp, atribuição |
+| **content_copy_expert.md** | Conteúdo & Copy | landing page, anúncio, CTA |
 | **reverse_engineering_expert.md** | Binary Analysis Expert | IDA Pro, Ghidra, malware, firmware |
 | **security_unified_expert.md** | Security Architect | AppSec, IAM, encryption, cyber defense |
 | **social_identity_expert.md** | OAuth/OIDC Specialist | Google, Facebook, Apple, social login |

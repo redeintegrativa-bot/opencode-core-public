@@ -1,15 +1,9 @@
 ---
-description: Mostra o estado da memória persistente e da sessão ativa
-agent: build
+description: Mostra a saude Git dos projetos locais sem modificar nada.
+agent: analyzer
 ---
 
-Mostre o estado da memória persistente do projeto atual.
-
-Execute, a partir da raiz do projeto:
-
-```
-python3 memory/session.py stats
-python3 memory/session.py show
-```
-
-Resuma ao usuário: local do store, sessão ativa (se houver), tamanho do MEMORY.md e o contexto da última sessão gravada.
+1. Localize o OpenCode Core em `OPENCODE_CORE_DIR`, `~/opencode-core` ou `~/opencode-core-public`.
+2. Execute `python scripts/project-health.py --root ~/projects`.
+3. Resuma projetos pendentes, branch e ultimo commit.
+4. Nao execute commit, push, pull, testes ou deploy.

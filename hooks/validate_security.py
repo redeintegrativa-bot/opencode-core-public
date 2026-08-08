@@ -253,10 +253,17 @@ def _print_report(report: dict[str, Any]) -> None:
         for rule, count in sorted(report["rule_breakdown"].items()):
             print(f"    {rule}: {count}")
     print("-" * 60)
-    if report["passed"]:
+    if report["passed"] and not report["violations"]:
         print("  RESULT: PASS — No violations found.")
+    elif report["passed"]:
+        print("  RESULT: PASS WITH WARNINGS — Review non-blocking findings.\n")
+        for v in report["violations"]:
+            print(f"  [{v['severity']}] {v['rule']}")
+            print(f"    File: {v['file']}:{v['line']}")
+            print(f"    Code: {v['code']}")
+            print()
     else:
-        print("  RESULT: FAIL — Violations detected.\n")
+        print("  RESULT: FAIL — Blocking violations detected.\n")
         for v in report["violations"]:
             print(f"  [{v['severity']}] {v['rule']}")
             print(f"    File: {v['file']}:{v['line']}")
